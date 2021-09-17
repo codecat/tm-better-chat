@@ -1,0 +1,10 @@
+[meta]
+name = "Better Chat"
+author = "Miss"
+category = "Better Suite"
+
+siteid = 134
+version = "1.0"
+
+[script]
+imports = [ "Icons.as", "Formatting.as" ]
