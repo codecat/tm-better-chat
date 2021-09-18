@@ -14,7 +14,9 @@ class ChatLine
 		string author;
 		string text;
 
-		trace(line);
+		if (Setting_TraceToLog) {
+			trace(line);
+		}
 
 		// Extract author & message contents
 		auto parse = Regex::Match(line, "^\\[\\$<([^\\$]+)\\$>\\] (.*)"); //TODO: This regex only works for basic uplay player names!
@@ -68,7 +70,7 @@ class ChatLine
 		for (uint i = 0; i < parseText.Length; i++) {
 			string word = parseText[i];
 
-			auto emote = FindEmote(word);
+			auto emote = Emotes::Find(word);
 			if (emote !is null) {
 				AddElement(ElementText(buffer));
 				buffer = "";

@@ -1,80 +1,77 @@
-class Emote
+namespace Emotes
 {
-	Resources::Texture@ m_texture;
-	vec2 m_pos;
-	vec2 m_size;
+	dictionary g_emotes;
 
-	Emote(const Json::Value &in js, Resources::Texture@ texture)
+	Emote@ Find(const string &in name)
 	{
-		@m_texture = texture;
-
-		auto jsPos = js["pos"];
-		m_pos.x = jsPos[0];
-		m_pos.y = jsPos[1];
-
-		auto jsSize = js["size"];
-		m_size.x = jsSize[0];
-		m_size.y = jsSize[1];
+		Emote@ ret;
+		if (!g_emotes.Get(name, @ret)) {
+			return null;
+		}
+		return ret;
 	}
 
-	void Render(float maxheight = 24)
+	void LoadFromJson(const Json::Value &in js)
 	{
-		auto dl = UI::GetWindowDrawList();
+		if (js.GetType() != Json::Type::Object) {
+			error("Unable to load emotes: Json is invalid");
+			return;
+		}
 
-		vec2 size = m_size;
-		size *= maxheight / m_size.y;
+		//TODO: Check the texture path for a URL
+		string texturePath = js["texture"];
 
-		UI::Dummy(size);
-		vec4 rect = UI::GetItemRect();
+		auto texture = Resources::GetTexture(texturePath);
+		if (texture is null) {
+			error("Unable to load emotes texture: \"" + texturePath + "\"");
+			return;
+		}
 
-		vec4 uv;
-		uv.x = m_pos.x;
-		uv.y = m_pos.y;
-		uv.z = m_size.x;
-		uv.w = m_size.y;
-		dl.AddImage(m_texture, vec2(Math::Round(rect.x), Math::Round(rect.y)), size, 0xFFFFFFFF, uv);
-	}
-}
+		auto jsEmotes = js["emotes"];
+		if (jsEmotes.GetType() != Json::Type::Object) {
+			error("Unable to load emotes: Json emotes object is invalid");
+			return;
+		}
 
-dictionary g_emotes;
-
-Emote@ FindEmote(const string &in name)
-{
-	Emote@ ret;
-	if (!g_emotes.Get(name, @ret)) {
-		return null;
-	}
-	return ret;
-}
-
-void LoadEmotes()
-{
-	IO::FileSource fileEmotes("Emotes.json");
-
-	auto jsInfo = Json::Parse(fileEmotes.ReadToEnd());
-	if (jsInfo.GetType() != Json::Type::Object) {
-		error("Unable to load emotes: Json is invalid");
-		return;
+		auto keys = jsEmotes.GetKeys();
+		for (uint i = 0; i < keys.Length; i++) {
+			string key = keys[i];
+			auto jsEmote = jsEmotes[key];
+			g_emotes.Set(key, @Emote(jsEmote, texture));
+		}
 	}
 
-	string texturePath = jsInfo["texture"];
-	//TODO: Check for URL?
-	auto texture = Resources::GetTexture(texturePath);
-	if (texture is null) {
-		error("Unable to load emotes texture: \"" + texturePath + "\"");
-		return;
+	class LoadFromURLUserdata
+	{
+		string m_url;
+
+		LoadFromURLUserdata(const string &in url)
+		{
+			m_url = url;
+		}
 	}
 
-	auto jsEmotes = jsInfo["emotes"];
-	if (jsEmotes.GetType() != Json::Type::Object) {
-		error("Unable to load emotes: Json emotes object is invalid");
-		return;
+	void LoadFromURLAsync(ref@ urlUserdata)
+	{
+		auto url = cast<LoadFromURLUserdata>(urlUserdata).m_url;
+
+		warn("TODO: Load from URL: \"" + url + "\"");
 	}
 
-	auto keys = jsEmotes.GetKeys();
-	for (uint i = 0; i < keys.Length; i++) {
-		string key = keys[i];
-		auto jsEmote = jsEmotes[key];
-		g_emotes.Set(key, @Emote(jsEmote, texture));
+	void LoadFromURL(const string &in url)
+	{
+		startnew(LoadFromURLAsync, LoadFromURLUserdata(url));
+	}
+
+	void LoadFromFileSource(const string &in path)
+	{
+		IO::FileSource fileEmotes(path);
+		auto jsInfo = Json::Parse(fileEmotes.ReadToEnd());
+		LoadFromJson(jsInfo);
+	}
+
+	void Load()
+	{
+		LoadFromFileSource("Emotes.json");
 	}
 }

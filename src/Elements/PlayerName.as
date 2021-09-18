@@ -17,10 +17,25 @@ class ElementPlayerName : Element
 
 		if (UI::BeginPopupContextItem(tostring(m_line.m_id) + " " + m_text)) {
 			UI::Text(m_text);
+
 			UI::Separator();
+
+			if (UI::Selectable(Icons::Star + " Favorite", false)) {
+				warn("TODO: Implement me"); //TODO
+			}
+
+			if (UI::Selectable(Icons::Ban + " Block", false)) {
+				warn("TODO: Implement me"); //TODO
+			}
+
+			UI::Separator();
+
 			if (m_accountID != "" && UI::Selectable(Icons::ExternalLinkSquare + " Open on Trackmania.io", false)) {
 				OpenBrowserURL("https://trackmania.io/#/player/" + m_accountID);
 			}
+
+			UI::Separator();
+
 			if (UI::Selectable(Icons::Clipboard + " Copy name", false)) {
 				IO::SetClipboard(m_text);
 			}
