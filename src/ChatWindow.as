@@ -10,6 +10,8 @@ class ChatWindow : IChatMessageReceiver
 	string m_input;
 	uint64 m_inputShownTime;
 
+	uint m_startIndex = 0;
+
 	void Initialize()
 	{
 	}
@@ -17,6 +19,7 @@ class ChatWindow : IChatMessageReceiver
 	void Clear()
 	{
 		m_lines.RemoveRange(0, m_lines.Length);
+		m_startIndex = 0;
 	}
 
 	void ShowInput()
@@ -48,13 +51,14 @@ class ChatWindow : IChatMessageReceiver
 
 	bool OnKeyPress(bool down, VirtualKey key)
 	{
-		if (down && key == VirtualKey::F4) {
-			m_visible = !m_visible;
-		}
+		if (down) {
+			if (key == VirtualKey::F4) {
+				m_visible = !m_visible;
+			}
 
-		if (down && key == VirtualKey::Return) {
-			print("Return pressed");
-			ShowInput();
+			if (key == VirtualKey::Return) {
+				ShowInput();
+			}
 		}
 
 		return false;
@@ -95,11 +99,26 @@ class ChatWindow : IChatMessageReceiver
 		bool shouldHideInput = false;
 
 		UI::Begin("Better Chat", windowFlags);
-		for (uint i = 0; i < m_lines.Length; i++) {
-			m_lines[i].Render();
+
+		// Starting index for lines when the overlay is not shown so that we don't render (too many) hidden lines
+		int startIndex = m_startIndex;
+		if (UI::IsOverlayShown()) {
+			startIndex = 0;
 		}
+
+		// Render each line
+		for (uint i = startIndex; i < m_lines.Length; i++) {
+			m_lines[i].Render();
+			float scrollOffset = UI::GetCursorPos().y - UI::GetScrollY();
+			if (!UI::IsOverlayShown() && scrollOffset < -100) {
+				m_startIndex = i;
+			}
+		}
+
+		// Automatically scroll down if overlay is not visible or if the user is at the bottom of the scrolling area
 		if (!UI::IsOverlayShown() || (UI::GetScrollY() >= UI::GetScrollMaxY())) {
 			UI::SetScrollHereY(1.0f);
+			m_startIndex = 0;
 		}
 		vec2 windowPos = UI::GetWindowPos();
 		vec2 windowSize = UI::GetWindowSize();
