@@ -98,8 +98,11 @@ class ChatLine
 
 	void Render()
 	{
-		UI::Tag(Time::FormatString("%H:%M:%S", m_time));
-		UI::SameLine();
+		if (Setting_ShowTimestamp) {
+			UI::Tag(Time::FormatString("%H:%M:%S", m_time));
+			UI::SameLine();
+		}
+
 		for (uint i = 0; i < m_elements.Length; i++) {
 			auto element = m_elements[i];
 			element.Render();
