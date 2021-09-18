@@ -55,6 +55,7 @@ class ChatWindow : IChatMessageReceiver
 		if (!UI::IsOverlayShown()) {
 			UI::PushStyleColor(UI::Col::WindowBg, vec4(0, 0, 0, 0.75));
 			windowFlags |= UI::WindowFlags::NoDecoration;
+			windowFlags |= UI::WindowFlags::NoInputs;
 		}
 
 		if (UI::Begin("Better Chat", windowFlags)) {
