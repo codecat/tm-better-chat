@@ -108,7 +108,7 @@ class ChatWindow : IChatMessageReceiver
 
 		// Decide on start index
 		uint startIndex = 0;
-		if (!UI::IsOverlayShown()) {
+		if (Setting_LimitOnHiddenOverlay && !UI::IsOverlayShown()) {
 			int numLines = int(windowSize.y / m_chatLineFrameHeight) + 1;
 			if (uint(numLines) < m_lines.Length) {
 				startIndex = m_lines.Length - numLines;
@@ -165,7 +165,35 @@ class ChatWindow : IChatMessageReceiver
 		}
 	}
 
+	//TODO: Remove this entire menu, it doesn't make sense in this class
 	void RenderMenu()
 	{
+		if (UI::BeginMenu("Better Chat Debug")) {
+			if (UI::MenuItem("Add 100 lines of nonsense")) {
+				auto emoteKeys = Emotes::g_emotes.GetKeys();
+
+				for (int i = 0; i < 100; i++) {
+					string line = "[$<" + DummyData::PlayerName() + "$>] ";
+
+					string msg = DummyData::Lipsum();
+					auto parse = msg.Split(" ");
+					for (uint j = 0; j < parse.Length; j++) {
+						if (j > 0) {
+							line += " ";
+						}
+						line += parse[j];
+						if (Math::Rand(0, 2) == 0) {
+							line += DummyData::FormattedColor();
+						}
+						if (Math::Rand(0, 10) == 0) {
+							line += " " + emoteKeys[Math::Rand(0, emoteKeys.Length)];
+						}
+					}
+
+					OnChatMessage(line);
+				}
+			}
+			UI::EndMenu();
+		}
 	}
 }

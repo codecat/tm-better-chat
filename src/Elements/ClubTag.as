@@ -4,11 +4,11 @@ class ElementClubTag : Element
 
 	ElementClubTag(const string &in text)
 	{
-		m_text = text;
+		m_text = ColoredString(text);
 	}
 
 	void Render() override
 	{
-		UI::Tag(ColoredString(m_text));
+		UI::Tag(m_text);
 	}
 }

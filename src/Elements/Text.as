@@ -4,12 +4,12 @@ class ElementText : Element
 
 	ElementText(const string &in text)
 	{
-		m_text = text;
+		m_text = ColoredString(text);
 		m_spacingAfter = 2;
 	}
 
 	void Render() override
 	{
-		UI::TextWrappedWindow(ColoredString(m_text));
+		UI::TextWrappedWindow(m_text);
 	}
 }

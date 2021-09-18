@@ -5,7 +5,10 @@ bool Setting_ClearOnLeave = true;
 bool Setting_TraceToLog = false;
 
 [Setting]
-int Setting_MaximumLines = 50; //TODO: Tweak to find the best default setting
+int Setting_MaximumLines = 200; //TODO: Tweak to find the best default setting
+
+[Setting]
+bool Setting_LimitOnHiddenOverlay = false; // Turning this on gives slightly better performance, but a noticable glitch when toggling overlay visibility
 
 [Setting]
 bool Setting_ShowTimestamp = true;

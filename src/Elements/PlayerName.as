@@ -6,14 +6,14 @@ class ElementPlayerName : Element
 
 	ElementPlayerName(const string &in text, const string &in login = "", const string &in accountID = "")
 	{
-		m_text = text;
+		m_text = ColoredString(text);
 		m_login = login;
 		m_accountID = accountID;
 	}
 
 	void Render() override
 	{
-		UI::Tag(ColoredString(m_text));
+		UI::Tag(m_text);
 
 		if (UI::BeginPopupContextItem(tostring(m_line.m_id) + " " + m_text)) {
 			UI::Text(m_text);
@@ -28,10 +28,12 @@ class ElementPlayerName : Element
 				warn("TODO: Implement me"); //TODO
 			}
 
-			UI::Separator();
+			if (m_accountID != "") {
+				UI::Separator();
 
-			if (m_accountID != "" && UI::Selectable(Icons::ExternalLinkSquare + " Open on Trackmania.io", false)) {
-				OpenBrowserURL("https://trackmania.io/#/player/" + m_accountID);
+				if (UI::Selectable(Icons::ExternalLinkSquare + " Open on Trackmania.io", false)) {
+					OpenBrowserURL("https://trackmania.io/#/player/" + m_accountID);
+				}
 			}
 
 			UI::Separator();
