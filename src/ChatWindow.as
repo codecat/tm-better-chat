@@ -10,7 +10,7 @@ class ChatWindow : IChatMessageReceiver
 	string m_input;
 	uint64 m_inputShownTime;
 
-	uint m_startIndex = 0;
+	float m_chatLineFrameHeight = 30.0f;
 
 	void Initialize()
 	{
@@ -19,7 +19,6 @@ class ChatWindow : IChatMessageReceiver
 	void Clear()
 	{
 		m_lines.RemoveRange(0, m_lines.Length);
-		m_startIndex = 0;
 	}
 
 	void ShowInput()
@@ -47,6 +46,10 @@ class ChatWindow : IChatMessageReceiver
 	{
 		// Add the message to the list
 		m_lines.InsertLast(ChatLine(m_lineIdIterator++, Time::Stamp, line));
+
+		if (m_lines.Length > uint(Setting_MaximumLines)) {
+			m_lines.RemoveRange(0, m_lines.Length - Setting_MaximumLines);
+		}
 	}
 
 	bool OnKeyPress(bool down, VirtualKey key)
@@ -100,28 +103,32 @@ class ChatWindow : IChatMessageReceiver
 
 		UI::Begin("Better Chat", windowFlags);
 
-		// Starting index for lines when the overlay is not shown so that we don't render (too many) hidden lines
-		int startIndex = m_startIndex;
-		if (UI::IsOverlayShown()) {
-			startIndex = 0;
+		vec2 windowPos = UI::GetWindowPos();
+		vec2 windowSize = UI::GetWindowSize();
+
+		// Decide on start index
+		uint startIndex = 0;
+		if (!UI::IsOverlayShown()) {
+			int numLines = int(windowSize.y / m_chatLineFrameHeight) + 1;
+			if (uint(numLines) < m_lines.Length) {
+				startIndex = m_lines.Length - numLines;
+			}
 		}
 
 		// Render each line
 		for (uint i = startIndex; i < m_lines.Length; i++) {
 			m_lines[i].Render();
-			float scrollOffset = UI::GetCursorPos().y - UI::GetScrollY();
-			if (!UI::IsOverlayShown() && scrollOffset < -100) {
-				m_startIndex = i;
+
+			float frameHeight = UI::GetFrameHeightWithSpacing();
+			if (frameHeight != m_chatLineFrameHeight) {
+				m_chatLineFrameHeight = frameHeight;
 			}
 		}
 
 		// Automatically scroll down if overlay is not visible or if the user is at the bottom of the scrolling area
 		if (!UI::IsOverlayShown() || (UI::GetScrollY() >= UI::GetScrollMaxY())) {
 			UI::SetScrollHereY(1.0f);
-			m_startIndex = 0;
 		}
-		vec2 windowPos = UI::GetWindowPos();
-		vec2 windowSize = UI::GetWindowSize();
 		UI::End();
 
 		if (m_showInput) {
