@@ -1,11 +1,14 @@
 class ChatLine
 {
 	uint m_id;
+
+	int64 m_time;
 	array<Element@> m_elements;
 
-	ChatLine(uint id, const string &in line)
+	ChatLine(uint id, int64 time, const string &in line)
 	{
 		m_id = id;
+		m_time = time;
 		ParseLine(line);
 	}
 
@@ -95,6 +98,8 @@ class ChatLine
 
 	void Render()
 	{
+		UI::Tag(Time::FormatString("%H:%M:%S", m_time));
+		UI::SameLine();
 		for (uint i = 0; i < m_elements.Length; i++) {
 			auto element = m_elements[i];
 			element.Render();

@@ -43,7 +43,7 @@ class ChatWindow : IChatMessageReceiver
 	void OnChatMessage(const string &in line)
 	{
 		// Add the message to the list
-		m_lines.InsertLast(ChatLine(m_lineIdIterator++, line));
+		m_lines.InsertLast(ChatLine(m_lineIdIterator++, Time::Stamp, line));
 	}
 
 	bool OnKeyPress(bool down, VirtualKey key)
