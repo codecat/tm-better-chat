@@ -21,5 +21,16 @@ void Main()
 
 	Emotes::Load();
 
-	ChatMessageLoop(@g_window);
+	startnew(ChatMessageLoop, @g_window);
+
+	while (true) {
+		auto ctlRoot = GameInterface::GetRoot();
+		if (ctlRoot !is null) {
+			auto ctlChat = GameInterface::ControlFromID(ctlRoot, "FrameChat");
+			if (ctlChat !is null) {
+				ctlChat.IsHiddenExternal = true;
+			}
+		}
+		yield();
+	}
 }
