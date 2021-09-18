@@ -10,6 +10,11 @@ void Render()
 	g_window.Render();
 }
 
+void RenderMenu()
+{
+	g_window.RenderMenu();
+}
+
 bool OnKeyPress(bool down, VirtualKey key)
 {
 	return g_window.OnKeyPress(down, key);

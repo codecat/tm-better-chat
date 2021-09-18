@@ -138,4 +138,8 @@ class ChatWindow : IChatMessageReceiver
 			HideInput();
 		}
 	}
+
+	void RenderMenu()
+	{
+	}
 }
