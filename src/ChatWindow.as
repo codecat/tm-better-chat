@@ -53,7 +53,7 @@ class ChatWindow : IChatMessageReceiver
 
 		int windowFlags = UI::WindowFlags::NoTitleBar;
 		if (!UI::IsOverlayShown()) {
-			UI::PushStyleColor(UI::Col::WindowBg, vec4(0, 0, 0, 0.4));
+			UI::PushStyleColor(UI::Col::WindowBg, vec4(0, 0, 0, 0.75));
 			windowFlags |= UI::WindowFlags::NoDecoration;
 		}
 
