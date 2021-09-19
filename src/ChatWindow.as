@@ -11,6 +11,9 @@ class ChatWindow : IChatMessageReceiver
 	uint64 m_inputShownTime;
 
 	float m_chatLineFrameHeight = 30.0f;
+	string m_previousServer;
+
+	uint64 m_lastMessageTime;
 
 	void Initialize()
 	{
@@ -58,6 +61,8 @@ class ChatWindow : IChatMessageReceiver
 		if (m_lines.Length > uint(Setting_MaximumLines)) {
 			m_lines.RemoveRange(0, m_lines.Length - Setting_MaximumLines);
 		}
+
+		m_lastMessageTime = Time::Now;
 	}
 
 	void OnChatMessage(const string &in line)
@@ -85,8 +90,17 @@ class ChatWindow : IChatMessageReceiver
 		if (Setting_ClearOnLeave) {
 			auto network = GetApp().Network;
 			auto serverInfo = cast<CGameCtnNetServerInfo>(network.ServerInfo);
-			if ((serverInfo is null || serverInfo.ServerLogin == "") && m_lines.Length > 0) {
-				Clear();
+
+			string serverLogin;
+			if (serverInfo !is null) {
+				serverLogin = serverInfo.ServerLogin;
+			}
+
+			if (serverLogin != m_previousServer) {
+				m_previousServer = serverLogin;
+				if (serverLogin == "") {
+					Clear();
+				}
 			}
 		}
 	}
@@ -106,7 +120,22 @@ class ChatWindow : IChatMessageReceiver
 		int windowFlags = UI::WindowFlags::NoTitleBar;
 
 		if (!UI::IsOverlayInputEnabled()) {
-			UI::PushStyleColor(UI::Col::WindowBg, vec4(0, 0, 0, 0.75f));
+			float alpha = 0;
+			switch (Setting_BackgroundStyle) {
+				case BackgroundStyle::Hidden: alpha = 0; break;
+				case BackgroundStyle::Transparent: alpha = 0.75f; break;
+				case BackgroundStyle::TransparentLight: alpha = 0.5f; break;
+			}
+			if (Setting_BackgroundFlash) {
+				int timeSinceLastMessage = Time::Now - m_lastMessageTime;
+				const int FLASH_TIME = 1000;
+				if (timeSinceLastMessage < FLASH_TIME) {
+					alpha *= 1.0 - timeSinceLastMessage / float(FLASH_TIME);
+				} else {
+					alpha = 0;
+				}
+			}
+			UI::PushStyleColor(UI::Col::WindowBg, vec4(0, 0, 0, alpha));
 			windowFlags |= UI::WindowFlags::NoInputs;
 			m_showInput = false;
 		}
