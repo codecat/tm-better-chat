@@ -19,6 +19,10 @@
 		"GivePLZ": { "pos": [ 196, 30 ], "size": [ 28, 28 ] },
 		"CoolCat": { "pos": [ 224, 30 ], "size": [ 28, 28 ] },
 		"CurseLit": { "pos": [ 0, 56 ], "size": [ 28, 28 ] },
+		"KKona": { "pos": [ 233, 0 ], "size": [ 20, 30 ] },
+		"Kreygasm": { "pos": [ 96, 58 ], "size": [ 30, 30 ] },
+		"KappaPride": { "pos": [ 126, 58 ], "size": [ 28, 28 ] },
+		"PogChamp": { "pos": [ 154, 58 ], "size": [ 28, 28 ] },
 
 		"YEP": { "pos": [ 0, 225 ], "size": [ 32, 31 ] },
 		"monkaS": { "pos": [ 32, 228 ], "size": [ 28, 28 ] },
@@ -30,12 +34,40 @@
 		"Pepega": { "pos": [ 200, 228 ], "size": [ 28, 28 ] },
 		"KEKW": { "pos": [ 228, 231 ], "size": [ 25, 25 ] },
 		"5Head": { "pos": [ 0, 197 ], "size": [ 28, 28 ] },
+		"3Head": { "pos": [ 128, 172 ], "size": [ 28, 28 ] },
 		"PepeHands": { "pos": [ 28, 197 ], "size": [ 28, 28 ] },
 		"Sadge": { "pos": [ 56, 200 ], "size": [ 28, 28 ] },
 		"LULW": { "pos": [ 84, 200 ], "size": [ 28, 28 ] },
 		"peepoLove": { "pos": [ 112, 200 ], "size": [ 28, 28 ] },
 		"PepoG": { "pos": [ 140, 200 ], "size": [ 28, 28 ] },
 		"PauseChamp": { "pos": [ 168, 200 ], "size": [ 28, 28 ] },
-		"KEKWait": { "pos": [ 196, 200 ], "size": [ 28, 28 ] }
+		"KEKWait": { "pos": [ 196, 200 ], "size": [ 28, 28 ] },
+		"GLOD": { "pos": [ 28, 56 ], "size": [ 28, 28 ] },
+		"Hylis": { "pos": [ 56, 56 ], "size": [ 28, 28 ] },
+		"KEKL": { "pos": [ 224, 200 ], "size": [ 28, 28 ] },
+		"KEKEGA": { "pos": [ 237, 172 ], "size": [ 19, 28 ] },
+		"Kapp": { "pos": [ 84, 58 ], "size": [ 12, 30 ] },
+		"Madge": { "pos": [ 0, 169 ], "size": [ 36, 28 ] },
+		"NOP": { "pos": [ 36, 166 ], "size": [ 31, 31 ] },
+		"D:": { "pos": [ 67, 170 ], "size": [ 30, 30 ] },
+		"monkaSTEER": { "pos": [ 97, 172 ], "size": [ 31, 28 ] },
+		"POGGIES": { "pos": [ 156, 173 ], "size": [ 28, 27 ] },
+		"sadCat": { "pos": [ 184, 172 ], "size": [ 28, 28 ] },
+		"COPIUM": { "pos": [ 228, 145 ], "size": [ 28, 27 ] },
+		"MedalAuthor": { "pos": [ 200, 144 ], "size": [ 28, 28 ] },
+		"KKomrade": { "pos": [ 172, 144 ], "size": [ 28, 28 ] },
+		"pikachuS": { "pos": [ 140, 140 ], "size": [ 32, 32 ] },
+		"Bedge": { "pos": [ 112, 144 ], "size": [ 28, 28 ] },
+		"FeelsBadMan": { "pos": [ 226, 114 ], "size": [ 30, 30 ] },
+
+		"spmW": { "pos": [ 0, 141 ], "size": [ 28, 28 ] },
+		"spmBM": { "pos": [ 28, 138 ], "size": [ 28, 28 ] },
+		"spmHi": { "pos": [ 56, 138 ], "size": [ 28, 28 ] },
+
+		"misste3Op": { "pos": [ 0, 113 ], "size": [ 28, 28 ] },
+
+		"kem1W": { "pos": [ 28, 110 ], "size": [ 28, 28 ] },
+
+		"marius5SAFE": { "pos": [ 56, 110 ], "size": [ 28, 28 ] }
 	}
 }
