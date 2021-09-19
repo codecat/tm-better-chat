@@ -1,6 +1,7 @@
 enum Highlight
 {
 	None,
+	System,
 	Self,
 	Mention,
 	Favorite,
@@ -20,6 +21,17 @@ class ChatLine
 		m_id = id;
 		m_time = time;
 		ParseLine(line);
+	}
+
+	vec4 GetHighlightColor(const vec4 &in def = vec4(0, 0, 0, 1))
+	{
+		switch (m_highlight) {
+			case Highlight::System: return vec4(0.4f, 0, 0.5f, 1);
+			case Highlight::Self: return vec4(0.2f, 0.2f, 0.2f, 1);
+			case Highlight::Mention: return vec4(0.6f, 0.2f, 0, 1);
+			case Highlight::Favorite: return vec4(0, 0.5f, 1, 1);
+		}
+		return def;
 	}
 
 	void ParseLine(const string &in line)
@@ -67,6 +79,11 @@ class ChatLine
 			isLocalPlayer = (authorInfo.Login == network.PlayerInfo.Login);
 
 			//TODO: What else can we do with the player info object here?
+		}
+
+		// Highlight if this is a system message
+		if (m_highlight == Highlight::None && author == "") {
+			m_highlight = Highlight::System;
 		}
 
 		// Highlight if this is the local player
@@ -136,7 +153,7 @@ class ChatLine
 		vec2 rectPos = UI::GetCursorPos();
 
 		if (Setting_ShowTimestamp) {
-			UI::Tag(Time::FormatString("%H:%M:%S", m_time));
+			UI::Tag(Time::FormatString("%H:%M:%S", m_time), GetHighlightColor(UI::TAG_COLOR));
 			UI::SameLine();
 		}
 
@@ -171,17 +188,12 @@ class ChatLine
 			rectPos += windowPos;
 			rectPos.y -= UI::GetScrollY();
 
-			vec4 borderColor = vec4(0, 0, 0, 1);
-			switch (m_highlight) {
-				case Highlight::Self: borderColor = vec4(0.5f, 0.5f, 0.5f, 1); break;
-				case Highlight::Mention: borderColor = vec4(1, 0.5f, 0, 1); break;
-				case Highlight::Favorite: borderColor = vec4(0, 0.5f, 1, 1); break;
-			}
+			vec4 borderColor = GetHighlightColor();
 
 			dl.AddRectFilled(vec4(
 				windowPos.x + 4, rectPos.y,
 				2, rectSize.y
-			), borderColor);
+			), borderColor, 2);
 		}
 	}
 }

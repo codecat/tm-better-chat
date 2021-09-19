@@ -23,7 +23,7 @@ class ChatWindow : IChatMessageReceiver
 
 		if (Setting_ShowHelp) {
 			auto plugin = Meta::ExecutingPlugin();
-			AddLine("$e7f" + Icons::Bolt + " $ef7Better Chat " + plugin.Version + " $eee- Open the overlay for options");
+			AddLine("$96f" + Icons::Bolt + " $ef7Better Chat " + plugin.Version + " $eee- Open the overlay for options");
 		}
 	}
 
@@ -106,7 +106,7 @@ class ChatWindow : IChatMessageReceiver
 		int windowFlags = UI::WindowFlags::NoTitleBar;
 
 		if (!UI::IsOverlayInputEnabled()) {
-			UI::PushStyleColor(UI::Col::WindowBg, vec4(0, 0, 0, 0.75));
+			UI::PushStyleColor(UI::Col::WindowBg, vec4(0, 0, 0, 0.75f));
 			windowFlags |= UI::WindowFlags::NoInputs;
 			m_showInput = false;
 		}
@@ -204,9 +204,6 @@ class ChatWindow : IChatMessageReceiver
 							line += " ";
 						}
 						line += parse[j];
-						if (Math::Rand(0, 2) == 0) {
-							line += DummyData::FormattedColor();
-						}
 						if (Math::Rand(0, 10) == 0) {
 							line += " " + emoteKeys[Math::Rand(0, emoteKeys.Length)];
 						}
