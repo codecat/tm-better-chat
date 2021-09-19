@@ -106,16 +106,12 @@ class ChatWindow : IChatMessageReceiver
 
 		bool shouldHideInput = false;
 
+		UI::SetNextWindowPos(5, Draw::GetHeight() - 200 - 50, UI::Cond::FirstUseEver);
+		UI::SetNextWindowSize(700, 200, UI::Cond::FirstUseEver);
 		UI::Begin("Better Chat", windowFlags);
 
-		vec2 windowSize = UI::GetWindowSize();
-
-		// Lock window to the bottom left corner
-		if (Setting_LockWindow) {
-			UI::SetWindowPos(vec2(5, Draw::GetHeight() - windowSize.y - 50), UI::Cond::Always);
-		}
-
 		vec2 windowPos = UI::GetWindowPos();
+		vec2 windowSize = UI::GetWindowSize();
 
 		// Decide on start index
 		uint startIndex = 0;
@@ -150,7 +146,7 @@ class ChatWindow : IChatMessageReceiver
 			}
 			UI::SetNextWindowPos(int(inputPos.x), int(inputPos.y), UI::Cond::Always);
 			UI::SetNextWindowSize(int(windowSize.x), 0, UI::Cond::Always);
-			UI::Begin("Better Chat Input", UI::WindowFlags::NoTitleBar | UI::WindowFlags::NoDecoration);
+			UI::Begin("Better Chat Input", UI::WindowFlags::NoTitleBar | UI::WindowFlags::NoDecoration | UI::WindowFlags::NoSavedSettings);
 			UI::PushItemWidth(-1);
 			UI::SetKeyboardFocusHere();
 			UI::PushStyleColor(UI::Col::FrameBg, vec4(0, 0, 0, 0));
