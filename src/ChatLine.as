@@ -1,9 +1,19 @@
+enum Highlight
+{
+	None,
+	Self,
+	Mention,
+	Favorite,
+}
+
 class ChatLine
 {
 	uint m_id;
 
 	int64 m_time;
 	array<Element@> m_elements;
+
+	Highlight m_highlight = Highlight::None;
 
 	ChatLine(uint id, int64 time, const string &in line)
 	{
@@ -33,7 +43,7 @@ class ChatLine
 		// If we have an author display name, find the player associated
 		//NOTE: we can't keep this handle around because it will be invalidated on disconnect
 		CGamePlayerInfo@ authorInfo = null;
-		auto network = GetApp().Network;
+		auto network = cast<CTrackManiaNetwork>(GetApp().Network);
 		for (uint i = 0; i < network.PlayerInfos.Length; i++) {
 			auto playerInfo = cast<CGamePlayerInfo>(network.PlayerInfos[i]);
 			if (playerInfo.Name == author) {
@@ -44,6 +54,7 @@ class ChatLine
 
 		string authorLogin;
 		string authorId;
+		bool isLocalPlayer = false;
 
 		if (authorInfo !is null) {
 			// Add club tag
@@ -53,8 +64,15 @@ class ChatLine
 
 			authorLogin = authorInfo.Login;
 			authorId = authorInfo.WebServicesUserId;
+			isLocalPlayer = (authorInfo.Login == network.PlayerInfo.Login);
 
 			//TODO: What else can we do with the player info object here?
+		}
+
+		if (isLocalPlayer) {
+			m_highlight = Highlight::Self;
+		} else {
+			//TODO: More highlight types
 		}
 
 		if (author != "") {
@@ -98,6 +116,8 @@ class ChatLine
 
 	void Render()
 	{
+		vec2 rectPos = UI::GetCursorPos();
+
 		if (Setting_ShowTimestamp) {
 			UI::Tag(Time::FormatString("%H:%M:%S", m_time));
 			UI::SameLine();
@@ -111,6 +131,40 @@ class ChatLine
 				UI::SameLine();
 				UI::PopStyleVar();
 			}
+		}
+
+		UI::SameLine();
+		vec2 endPos = UI::GetCursorPos();
+		UI::NewLine();
+		vec2 newLinePos = UI::GetCursorPos();
+
+		vec2 rectSize = vec2(
+			endPos.x - rectPos.x,
+			newLinePos.y - rectPos.y - 6
+		);
+
+		if (endPos.y > rectPos.y) {
+			rectSize.x = UI::GetWindowSize().x;
+		}
+
+		if (m_highlight != Highlight::None) {
+			auto dl = UI::GetWindowDrawList();
+
+			vec2 windowPos = UI::GetWindowPos();
+			rectPos += windowPos;
+			rectPos.y -= UI::GetScrollY();
+
+			vec4 borderColor = vec4(0, 0, 0, 1);
+			switch (m_highlight) {
+				case Highlight::Self: borderColor = vec4(0.5f, 0.5f, 0.5f, 1); break;
+				case Highlight::Mention: borderColor = vec4(1, 0.5f, 0, 1); break;
+				case Highlight::Favorite: borderColor = vec4(0, 0.5f, 1, 1); break;
+			}
+
+			dl.AddRectFilled(vec4(
+				windowPos.x + 4, rectPos.y,
+				2, rectSize.y
+			), vec4(1, 0.5f, 0, 1));
 		}
 	}
 }

@@ -210,6 +210,12 @@ class ChatWindow : IChatMessageReceiver
 						if (Math::Rand(0, 10) == 0) {
 							line += " " + emoteKeys[Math::Rand(0, emoteKeys.Length)];
 						}
+						if (Math::Rand(0, 20) == 0) {
+							line += " Miss-tm";
+						}
+						if (Math::Rand(0, 20) == 0) {
+							line += " Poop";
+						}
 					}
 
 					AddLine(line);
