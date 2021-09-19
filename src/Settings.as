@@ -15,3 +15,9 @@ bool Setting_ShowTimestamp = true;
 
 [Setting]
 bool Setting_ShowHelp = true;
+
+[Setting description="Favorite users to highlight, separated by commas."]
+string Setting_Favorites;
+
+[Setting description="Extra names to get mentioned by, seperated by commas."]
+string Setting_ExtraMentions;

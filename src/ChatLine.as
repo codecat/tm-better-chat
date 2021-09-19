@@ -69,10 +69,27 @@ class ChatLine
 			//TODO: What else can we do with the player info object here?
 		}
 
-		if (isLocalPlayer) {
+		// Highlight if this is the local player
+		if (m_highlight == Highlight::None && isLocalPlayer) {
 			m_highlight = Highlight::Self;
-		} else {
-			//TODO: More highlight types
+		}
+
+		// Highlight if this is a favorite user
+		if (m_highlight == Highlight::None && CsvContainsValue(Setting_Favorites, author)) {
+			m_highlight = Highlight::Favorite;
+		}
+
+		// Highlight if the player's exact name is mentioned
+		if (m_highlight == Highlight::None) {
+			string localPlayerName = network.PlayerInfo.Name;
+			if (text.ToLower().Contains(localPlayerName.ToLower())) {
+				m_highlight = Highlight::Mention;
+			}
+		}
+
+		// Highlight if any extra names are mentioned
+		if (m_highlight == Highlight::None && CsvInText(Setting_ExtraMentions, text)) {
+			m_highlight = Highlight::Mention;
 		}
 
 		if (author != "") {
@@ -164,7 +181,7 @@ class ChatLine
 			dl.AddRectFilled(vec4(
 				windowPos.x + 4, rectPos.y,
 				2, rectSize.y
-			), vec4(1, 0.5f, 0, 1));
+			), borderColor);
 		}
 	}
 }

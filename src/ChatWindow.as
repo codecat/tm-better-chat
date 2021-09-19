@@ -211,10 +211,10 @@ class ChatWindow : IChatMessageReceiver
 							line += " " + emoteKeys[Math::Rand(0, emoteKeys.Length)];
 						}
 						if (Math::Rand(0, 20) == 0) {
-							line += " Miss-tm";
+							line += " miss";
 						}
 						if (Math::Rand(0, 20) == 0) {
-							line += " Poop";
+							line += " poop";
 						}
 					}
 
