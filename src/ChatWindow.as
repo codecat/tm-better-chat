@@ -135,7 +135,10 @@ class ChatWindow : IChatMessageReceiver
 
 		// Render each line
 		for (uint i = startIndex; i < m_lines.Length; i++) {
-			m_lines[i].Render();
+			auto line = m_lines[i];
+			UI::PushID(line.m_id);
+			line.Render();
+			UI::PopID();
 
 			float frameHeight = UI::GetFrameHeightWithSpacing();
 			if (frameHeight != m_chatLineFrameHeight) {
