@@ -22,9 +22,9 @@ bool OnKeyPress(bool down, VirtualKey key)
 
 void Main()
 {
-	g_window.Initialize();
-
 	Emotes::Load();
+
+	g_window.Initialize();
 
 	startnew(ChatMessageLoop, @g_window);
 

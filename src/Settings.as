@@ -12,3 +12,6 @@ bool Setting_LimitOnHiddenOverlay = false; // Turning this on gives slightly bet
 
 [Setting]
 bool Setting_ShowTimestamp = true;
+
+[Setting]
+bool Setting_ShowHelp = true;

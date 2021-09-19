@@ -14,11 +14,17 @@ class ChatWindow : IChatMessageReceiver
 
 	void Initialize()
 	{
+		Clear();
 	}
 
 	void Clear()
 	{
 		m_lines.RemoveRange(0, m_lines.Length);
+
+		if (Setting_ShowHelp) {
+			auto plugin = Meta::ExecutingPlugin();
+			AddLine("$e7f" + Icons::Bolt + " $ef7Better Chat " + plugin.Version + " $eee- Open the overlay for options");
+		}
 	}
 
 	void ShowInput()
@@ -44,7 +50,7 @@ class ChatWindow : IChatMessageReceiver
 		m_input = "";
 	}
 
-	void OnChatMessage(const string &in line)
+	void AddLine(const string &in line)
 	{
 		// Add the message to the list
 		m_lines.InsertLast(ChatLine(m_lineIdIterator++, Time::Stamp, line));
@@ -52,6 +58,11 @@ class ChatWindow : IChatMessageReceiver
 		if (m_lines.Length > uint(Setting_MaximumLines)) {
 			m_lines.RemoveRange(0, m_lines.Length - Setting_MaximumLines);
 		}
+	}
+
+	void OnChatMessage(const string &in line)
+	{
+		AddLine(line);
 	}
 
 	bool OnKeyPress(bool down, VirtualKey key)
@@ -198,7 +209,7 @@ class ChatWindow : IChatMessageReceiver
 						}
 					}
 
-					OnChatMessage(line);
+					AddLine(line);
 				}
 			}
 			UI::EndMenu();
