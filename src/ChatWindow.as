@@ -108,8 +108,14 @@ class ChatWindow : IChatMessageReceiver
 
 		UI::Begin("Better Chat", windowFlags);
 
-		vec2 windowPos = UI::GetWindowPos();
 		vec2 windowSize = UI::GetWindowSize();
+
+		// Lock window to the bottom left corner
+		if (Setting_LockWindow) {
+			UI::SetWindowPos(vec2(5, Draw::GetHeight() - windowSize.y - 50), UI::Cond::Always);
+		}
+
+		vec2 windowPos = UI::GetWindowPos();
 
 		// Decide on start index
 		uint startIndex = 0;
@@ -136,6 +142,7 @@ class ChatWindow : IChatMessageReceiver
 		}
 		UI::End();
 
+		// Render the input box
 		if (m_showInput) {
 			vec2 inputPos = windowPos + vec2(0, windowSize.y + 4);
 			if (inputPos.y + 10 > Draw::GetHeight()) {
