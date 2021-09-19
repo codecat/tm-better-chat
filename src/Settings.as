@@ -14,6 +14,9 @@ bool Setting_LimitOnHiddenOverlay = false; // Turning this on gives slightly bet
 bool Setting_ShowTimestamp = true;
 
 [Setting]
+bool Setting_TextShadow = true;
+
+[Setting]
 bool Setting_ShowHelp = true;
 
 [Setting description="Favorite users to highlight, separated by commas."]
