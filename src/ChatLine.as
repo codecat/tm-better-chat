@@ -49,7 +49,15 @@ class ChatLine
 			author = parse[1];
 			text = parse[2];
 		} else {
-			text = line;
+			// Check if this is an EvoSC message
+			parse = Regex::Match(line, "^\\$FFF\\$z\\$s(\\$[0-9a-f]{3}.+)\\[\\$<\\$<\\$fff\\$eee(.*)\\$>\\$>\\]\\$z\\$s (.*)");
+			if (parse.Length > 0) {
+				author = parse[1] + " " + parse[2];
+				text = parse[3];
+			} else {
+				// This is a system message (or something else)
+				text = line;
+			}
 		}
 
 		// If we have an author display name, find the player associated
