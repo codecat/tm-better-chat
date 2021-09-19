@@ -10,6 +10,6 @@ class ElementText : Element
 
 	void Render() override
 	{
-		UI::TextWrappedWindow(m_text);
+		UI::TextWrappedWindow(m_text, 8);
 	}
 }
