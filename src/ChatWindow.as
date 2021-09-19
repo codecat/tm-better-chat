@@ -5,7 +5,7 @@ class ChatWindow : IChatMessageReceiver
 	array<ChatLine@> m_lines;
 	uint m_lineIdIterator;
 
-	bool m_overlayWasShown;
+	bool m_overlayInputWasEnabled;
 	bool m_showInput;
 	string m_input;
 	uint64 m_inputShownTime;
@@ -27,16 +27,18 @@ class ChatWindow : IChatMessageReceiver
 			return;
 		}
 
-		m_overlayWasShown = UI::IsOverlayShown();
-		UI::ShowOverlay();
+		m_overlayInputWasEnabled = UI::IsOverlayInputEnabledExternally();
+		if (!m_overlayInputWasEnabled) {
+			UI::EnableOverlayInput();
+		}
 		m_showInput = true;
 		m_inputShownTime = Time::Now;
 	}
 
 	void HideInput()
 	{
-		if (!m_overlayWasShown) {
-			UI::HideOverlay();
+		if (!m_overlayInputWasEnabled) {
+			UI::DisableOverlayInput();
 		}
 		m_showInput = false;
 		m_input = "";
@@ -91,12 +93,15 @@ class ChatWindow : IChatMessageReceiver
 		}
 
 		int windowFlags = UI::WindowFlags::NoTitleBar;
-		if (!UI::IsOverlayShown()) {
-			UI::PushStyleColor(UI::Col::WindowBg, vec4(0, 0, 0, 0.75));
-			windowFlags |= UI::WindowFlags::NoDecoration;
-			windowFlags |= UI::WindowFlags::NoInputs;
 
+		if (!UI::IsOverlayInputEnabled()) {
+			UI::PushStyleColor(UI::Col::WindowBg, vec4(0, 0, 0, 0.75));
+			windowFlags |= UI::WindowFlags::NoInputs;
 			m_showInput = false;
+		}
+
+		if (!UI::IsOverlayShown()) {
+			windowFlags |= UI::WindowFlags::NoDecoration;
 		}
 
 		bool shouldHideInput = false;
@@ -108,7 +113,7 @@ class ChatWindow : IChatMessageReceiver
 
 		// Decide on start index
 		uint startIndex = 0;
-		if (Setting_LimitOnHiddenOverlay && !UI::IsOverlayShown()) {
+		if (Setting_LimitOnHiddenOverlay && !UI::IsOverlayInputEnabled()) {
 			int numLines = int(windowSize.y / m_chatLineFrameHeight) + 1;
 			if (uint(numLines) < m_lines.Length) {
 				startIndex = m_lines.Length - numLines;
@@ -125,8 +130,8 @@ class ChatWindow : IChatMessageReceiver
 			}
 		}
 
-		// Automatically scroll down if overlay is not visible or if the user is at the bottom of the scrolling area
-		if (!UI::IsOverlayShown() || (UI::GetScrollY() >= UI::GetScrollMaxY())) {
+		// Automatically scroll down if overlay input is not enabled or if the user is at the bottom of the scrolling area
+		if (!UI::IsOverlayInputEnabled() || (UI::GetScrollY() >= UI::GetScrollMaxY())) {
 			UI::SetScrollHereY(1.0f);
 		}
 		UI::End();
@@ -156,7 +161,7 @@ class ChatWindow : IChatMessageReceiver
 			UI::End();
 		}
 
-		if (!UI::IsOverlayShown()) {
+		if (!UI::IsOverlayInputEnabled()) {
 			UI::PopStyleColor();
 		}
 
