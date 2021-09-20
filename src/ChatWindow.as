@@ -196,7 +196,7 @@ class ChatWindow : IChatMessageReceiver
 
 			bool pressedEnter = false;
 			m_input = UI::InputText("", m_input, pressedEnter, UI::InputTextFlags::EnterReturnsTrue);
-			if (pressedEnter && (Time::Now - m_inputShownTime) > 100) {
+			if (pressedEnter && (m_input != "" || (Time::Now - m_inputShownTime) > 250)) {
 				auto playgroundInterface = GetApp().CurrentPlayground.Interface;
 				playgroundInterface.ChatEntry = m_input;
 				shouldHideInput = true;
