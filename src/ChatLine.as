@@ -16,6 +16,11 @@ class ChatLine
 
 	Highlight m_highlight = Highlight::None;
 
+	bool m_isSystem;
+	bool m_isSelf;
+	bool m_isMention;
+	bool m_isFavorite;
+
 	ChatLine(uint id, int64 time, const string &in line)
 	{
 		m_id = id;
@@ -32,6 +37,14 @@ class ChatLine
 			case Highlight::Favorite: return vec4(0, 0.5f, 1, 1);
 		}
 		return def;
+	}
+
+	void SetHighlight(Highlight highlight)
+	{
+		if (m_highlight != Highlight::None) {
+			return;
+		}
+		m_highlight = highlight;
 	}
 
 	void ParseLine(const string &in line)
@@ -89,32 +102,35 @@ class ChatLine
 			//TODO: What else can we do with the player info object here?
 		}
 
-		// Highlight if this is a system message
-		if (m_highlight == Highlight::None && author == "") {
-			m_highlight = Highlight::System;
+		// System message
+		if (author == "") {
+			m_isSystem = true;
+			SetHighlight(Highlight::System);
 		}
 
 		// Highlight if this is the local player
-		if (m_highlight == Highlight::None && isLocalPlayer) {
-			m_highlight = Highlight::Self;
-		}
-
-		// Highlight if this is a favorite user
-		if (m_highlight == Highlight::None && CsvContainsValue(Setting_Favorites, author)) {
-			m_highlight = Highlight::Favorite;
+		if (isLocalPlayer) {
+			m_isSelf = true;
+			SetHighlight(Highlight::Self);
 		}
 
 		// Highlight if the player's exact name is mentioned
-		if (m_highlight == Highlight::None) {
-			string localPlayerName = network.PlayerInfo.Name;
-			if (text.ToLower().Contains(localPlayerName.ToLower())) {
-				m_highlight = Highlight::Mention;
-			}
+		string localPlayerName = network.PlayerInfo.Name;
+		if (text.ToLower().Contains(localPlayerName.ToLower())) {
+			m_isMention = true;
+			SetHighlight(Highlight::Mention);
 		}
 
 		// Highlight if any extra names are mentioned
-		if (m_highlight == Highlight::None && CsvInText(Setting_ExtraMentions, text)) {
-			m_highlight = Highlight::Mention;
+		if (CsvInText(Setting_ExtraMentions, text)) {
+			m_isMention = true;
+			SetHighlight(Highlight::Mention);
+		}
+
+		// Highlight if this is a favorite user
+		if (CsvContainsValue(Setting_Favorites, author)) {
+			m_isFavorite = true;
+			SetHighlight(Highlight::Favorite);
 		}
 
 		if (author != "") {

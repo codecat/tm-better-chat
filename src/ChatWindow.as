@@ -5,6 +5,9 @@ class ChatWindow : IChatMessageReceiver
 	array<ChatLine@> m_lines;
 	uint m_lineIdIterator = 0;
 
+	bool m_displaySystem = true;
+	bool m_displayOnlyFavorites = false;
+
 	bool m_overlayInputWasEnabled = false;
 	bool m_showInput = false;
 	string m_input;
@@ -195,6 +198,18 @@ class ChatWindow : IChatMessageReceiver
 			}
 			UI::SetPreviousTooltip("Clear the chat");
 
+			// Button to toggle system message visibility
+			if (UI::ToggledButton(m_displaySystem, Icons::Bolt)) { // Icons::Terminal?
+				m_displaySystem = !m_displaySystem;
+			}
+			UI::SetPreviousTooltip("Toggle system messages");
+
+			// Button to toggle only favorites mode
+			if (UI::ToggledButton(m_displayOnlyFavorites, Icons::Star)) {
+				m_displayOnlyFavorites = !m_displayOnlyFavorites;
+			}
+			UI::SetPreviousTooltip("Toggle favorite-only mode");
+
 			// Begin second half of the window
 			UI::SetCursorPos(startingCursorPos + vec2(40, 0));
 			UI::BeginChild("ChatContainer");
@@ -212,6 +227,19 @@ class ChatWindow : IChatMessageReceiver
 		// Render each line
 		for (uint i = startIndex; i < m_lines.Length; i++) {
 			auto line = m_lines[i];
+
+			// Hide line if we want to filter out system messages
+			if (!m_displaySystem && line.m_isSystem) {
+				continue;
+			}
+
+			// Hide line if we're in favorites-only mode and this is not a favorite, system, or self message
+			if (m_displayOnlyFavorites) {
+				if (!line.m_isSystem && !line.m_isSelf && !line.m_isFavorite) {
+					continue;
+				}
+			}
+
 			UI::PushID(line.m_id);
 			line.Render();
 			UI::PopID();
