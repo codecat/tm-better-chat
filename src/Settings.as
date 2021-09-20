@@ -10,6 +10,12 @@ int Setting_MaximumLines = 200; //TODO: Tweak to find the best default setting
 [Setting]
 bool Setting_LimitOnHiddenOverlay = false; // Turning this on gives slightly better performance, but a noticable glitch when toggling overlay visibility
 
+[Setting]
+vec2 Setting_DefaultPosition = vec2(5, 50);
+
+[Setting]
+vec2 Setting_DefaultSize = vec2(700, 200);
+
 enum BackgroundStyle
 {
 	Hidden,

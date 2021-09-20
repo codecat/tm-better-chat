@@ -3,17 +3,20 @@ class ChatWindow : IChatMessageReceiver
 	bool m_visible = true;
 
 	array<ChatLine@> m_lines;
-	uint m_lineIdIterator;
+	uint m_lineIdIterator = 0;
 
-	bool m_overlayInputWasEnabled;
-	bool m_showInput;
+	bool m_overlayInputWasEnabled = false;
+	bool m_showInput = false;
 	string m_input;
-	uint64 m_inputShownTime;
+	uint64 m_inputShownTime = 0;
 
 	float m_chatLineFrameHeight = 30.0f;
 	string m_previousServer;
+	bool m_overlayWasShown = false;
 
-	uint64 m_lastMessageTime;
+	bool m_scrollToBottom = false;
+
+	uint64 m_lastMessageTime = 0;
 
 	void Initialize()
 	{
@@ -87,6 +90,12 @@ class ChatWindow : IChatMessageReceiver
 
 	void Update(float dt)
 	{
+		bool isOverlayShown = UI::IsOverlayShown();
+		if (m_overlayWasShown != isOverlayShown) {
+			m_scrollToBottom = true;
+			m_overlayWasShown = isOverlayShown;
+		}
+
 		if (Setting_ClearOnLeave) {
 			auto network = GetApp().Network;
 			auto serverInfo = cast<CGameCtnNetServerInfo>(network.ServerInfo);
@@ -146,12 +155,50 @@ class ChatWindow : IChatMessageReceiver
 
 		bool shouldHideInput = false;
 
-		UI::SetNextWindowPos(5, Draw::GetHeight() - 200 - 50, UI::Cond::FirstUseEver);
-		UI::SetNextWindowSize(700, 200, UI::Cond::FirstUseEver);
+		UI::SetNextWindowPos(
+			int(Setting_DefaultPosition.x),
+			Draw::GetHeight() - int(Setting_DefaultSize.y - Setting_DefaultPosition.y),
+			UI::Cond::FirstUseEver
+		);
+		UI::SetNextWindowSize(
+			int(Setting_DefaultSize.x),
+			int(Setting_DefaultSize.y),
+			UI::Cond::FirstUseEver
+		);
 		UI::Begin("Better Chat", windowFlags);
 
 		vec2 windowPos = UI::GetWindowPos();
 		vec2 windowSize = UI::GetWindowSize();
+
+		if (UI::IsOverlayShown()) {
+			vec2 startingCursorPos = UI::GetCursorPos();
+
+			// Button to reset position and size
+			if (UI::Button(Icons::Undo)) {
+				UI::SetWindowPos(vec2(
+					Setting_DefaultPosition.x,
+					Draw::GetHeight() - Setting_DefaultSize.y - Setting_DefaultPosition.y
+				));
+				UI::SetWindowSize(Setting_DefaultSize);
+			}
+			UI::SetPreviousTooltip("Reset position & size");
+
+			// Button to toggle timestamps
+			if (UI::Button(Icons::ClockO)) {
+				Setting_ShowTimestamp = !Setting_ShowTimestamp;
+			}
+			UI::SetPreviousTooltip("Toggle timestamps");
+
+			// Button to clear the chat
+			if (UI::RedButton(Icons::Trash)) {
+				Clear();
+			}
+			UI::SetPreviousTooltip("Clear the chat");
+
+			// Begin second half of the window
+			UI::SetCursorPos(startingCursorPos + vec2(40, 0));
+			UI::BeginChild("ChatContainer");
+		}
 
 		// Decide on start index
 		uint startIndex = 0;
@@ -176,8 +223,12 @@ class ChatWindow : IChatMessageReceiver
 		}
 
 		// Automatically scroll down if overlay input is not enabled or if the user is at the bottom of the scrolling area
-		if (!UI::IsOverlayInputEnabled() || (UI::GetScrollY() >= UI::GetScrollMaxY())) {
+		if (m_scrollToBottom || !UI::IsOverlayInputEnabled() || (UI::GetScrollY() >= UI::GetScrollMaxY())) {
 			UI::SetScrollHereY(1.0f);
+			m_scrollToBottom = false;
+		}
+		if (UI::IsOverlayShown()) {
+			UI::EndChild();
 		}
 		UI::End();
 

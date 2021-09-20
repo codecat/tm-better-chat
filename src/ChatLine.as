@@ -160,6 +160,8 @@ class ChatLine
 	{
 		vec2 rectPos = UI::GetCursorPos();
 
+		UI::SetCursorPos(rectPos + vec2(4, 0));
+
 		if (Setting_ShowTimestamp) {
 			UI::Tag(Time::FormatString("%H:%M:%S", m_time), GetHighlightColor(UI::TAG_COLOR));
 			UI::SameLine();
@@ -199,7 +201,7 @@ class ChatLine
 			vec4 borderColor = GetHighlightColor();
 
 			dl.AddRectFilled(vec4(
-				windowPos.x + 4, rectPos.y,
+				rectPos.x, rectPos.y,
 				2, rectSize.y
 			), borderColor, 2);
 		}

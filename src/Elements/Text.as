@@ -18,7 +18,7 @@ class ElementText : Element
 			//NOTE: We can't aim the shadow down because the scrolling area increases in height if we add 1 pixel
 			UI::SetCursorPos(pos + vec2(1, -1));
 			UI::PushStyleColor(UI::Col::Text, vec4(0, 0, 0, 1));
-			UI::TextWrappedWindow(m_textPlain, 8, 1);
+			UI::TextWrappedWindow(m_textPlain, 9, 1);
 			UI::PopStyleColor();
 
 			UI::SetCursorPos(pos);
