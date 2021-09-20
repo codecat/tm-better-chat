@@ -50,7 +50,7 @@ class ChatLine
 			text = parse[2];
 		} else {
 			// Check if this is an EvoSC message
-			parse = Regex::Match(line, "^\\$FFF\\$z\\$s(\\$[0-9a-f]{3}.+)\\[\\$<\\$<\\$fff\\$eee(.*)\\$>\\$>\\]\\$z\\$s (.*)");
+			parse = Regex::Match(line, "^\\$FFF\\$z\\$s(\\$[0-9a-fA-F]{3}.+)\\[\\$<\\$<\\$fff\\$eee(.*)\\$>\\$>\\]\\$z\\$s (.*)");
 			if (parse.Length > 0) {
 				author = parse[1] + "$z " + parse[2];
 				text = parse[3];
