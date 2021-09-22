@@ -36,6 +36,12 @@ class ChatWindow : IChatMessageReceiver
 		}
 	}
 
+	void SendChatMessage(const string &in text)
+	{
+		auto playgroundInterface = GetApp().CurrentPlayground.Interface;
+		playgroundInterface.ChatEntry = text;
+	}
+
 	void ShowInput()
 	{
 		if (!Permissions::InGameChat()) {
@@ -91,6 +97,24 @@ class ChatWindow : IChatMessageReceiver
 		return false;
 	}
 
+	void OnNewServerAsync()
+	{
+		while (GetApp().CurrentPlayground is null) {
+			yield();
+		}
+		trace("Telling server about Better Chat's format via /setformat");
+		SendChatMessage("/setformat json");
+	}
+
+	void OnServerChanged(const string &in login)
+	{
+		if (login == "") {
+			Clear();
+			return;
+		}
+		startnew(CoroutineFunc(OnNewServerAsync));
+	}
+
 	void Update(float dt)
 	{
 		bool isOverlayShown = UI::IsOverlayShown();
@@ -110,9 +134,7 @@ class ChatWindow : IChatMessageReceiver
 
 			if (serverLogin != m_previousServer) {
 				m_previousServer = serverLogin;
-				if (serverLogin == "") {
-					Clear();
-				}
+				OnServerChanged(serverLogin);
 			}
 		}
 	}
@@ -276,8 +298,7 @@ class ChatWindow : IChatMessageReceiver
 			bool pressedEnter = false;
 			m_input = UI::InputText("", m_input, pressedEnter, UI::InputTextFlags::EnterReturnsTrue);
 			if (pressedEnter && (m_input != "" || (Time::Now - m_inputShownTime) > 250)) {
-				auto playgroundInterface = GetApp().CurrentPlayground.Interface;
-				playgroundInterface.ChatEntry = m_input;
+				SendChatMessage(m_input);
 				shouldHideInput = true;
 			}
 
