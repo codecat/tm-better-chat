@@ -119,11 +119,11 @@ class ChatLine
 
 		// If this is a team chat message, add secret tag here
 		if (teamChat) {
-			AddColorableElement(ElementTag(Icons::UserSecret), coloredTags, linearHue);
+			AddElement(ElementTag(Icons::UserSecret));
 		}
 
 		// Add club tag
-		if (authorClubTag != "") {
+		if (Setting_ClubTags && authorClubTag != "") {
 			AddColorableElement(ElementClubTag(authorClubTag), coloredTags, linearHue);
 		}
 
@@ -160,7 +160,7 @@ class ChatLine
 
 		if (author != "") {
 			// Add author name
-			AddColorableElement(ElementPlayerName(author, authorLogin, authorId), coloredTags, linearHue);
+			AddColorableElement(ElementPlayerName(author, authorLogin, authorId, authorClubTag), coloredTags, linearHue);
 		}
 
 		ParseMessageText(text);

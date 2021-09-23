@@ -14,7 +14,7 @@ bool Setting_LimitOnHiddenOverlay = false; // Turning this on gives slightly bet
 vec2 Setting_DefaultPosition = vec2(5, 50);
 
 [Setting]
-vec2 Setting_DefaultSize = vec2(700, 200);
+vec2 Setting_DefaultSize = vec2(800, 200);
 
 enum BackgroundStyle
 {
@@ -34,6 +34,9 @@ bool Setting_ShowTimestamp = true;
 
 [Setting]
 bool Setting_TextShadow = true;
+
+[Setting]
+bool Setting_ClubTags = true;
 
 [Setting]
 bool Setting_ShowHelp = true;
