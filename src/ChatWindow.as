@@ -339,32 +339,30 @@ class ChatWindow : IChatMessageReceiver
 	void RenderMenu()
 	{
 		if (UI::BeginMenu("Better Chat Debug")) {
-			if (UI::MenuItem("Add 100 lines of nonsense")) {
+			if (UI::MenuItem("Add a line of nonsense")) {
 				auto emoteKeys = Emotes::g_emotes.GetKeys();
 
-				for (int i = 0; i < 100; i++) {
-					string line = "[$<" + DummyData::PlayerName() + "$>] ";
+				string line = "[$<" + DummyData::PlayerName() + "$>] ";
 
-					string msg = DummyData::Lipsum();
-					auto parse = msg.Split(" ");
-					for (uint j = 0; j < parse.Length; j++) {
-						if (j > 0) {
-							line += " ";
-						}
-						line += parse[j];
-						if (Math::Rand(0, 10) == 0) {
-							line += " " + emoteKeys[Math::Rand(0, emoteKeys.Length)];
-						}
-						if (Math::Rand(0, 20) == 0) {
-							line += " miss";
-						}
-						if (Math::Rand(0, 20) == 0) {
-							line += " poop";
-						}
+				string msg = DummyData::Lipsum();
+				auto parse = msg.Split(" ");
+				for (uint j = 0; j < parse.Length; j++) {
+					if (j > 0) {
+						line += " ";
 					}
-
-					AddLine(line);
+					line += parse[j];
+					if (Math::Rand(0, 10) == 0) {
+						line += " " + emoteKeys[Math::Rand(0, emoteKeys.Length)];
+					}
+					if (Math::Rand(0, 20) == 0) {
+						line += " miss";
+					}
+					if (Math::Rand(0, 20) == 0) {
+						line += " poop";
+					}
 				}
+
+				AddLine(line);
 			}
 			UI::EndMenu();
 		}
