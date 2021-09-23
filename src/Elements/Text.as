@@ -7,7 +7,7 @@ class ElementText : Element
 	{
 		m_text = ColoredString(text);
 		m_textPlain = StripFormatCodes(text);
-		m_spacingAfter = 2;
+		m_spacingAfter = 0;
 	}
 
 	void Render() override

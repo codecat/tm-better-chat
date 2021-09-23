@@ -7,7 +7,7 @@ class ElementEmote : Element
 	{
 		m_name = name;
 		@m_emote = emote;
-		m_spacingAfter = 2;
+		m_spacingAfter = 0;
 	}
 
 	void Render() override

@@ -191,8 +191,10 @@ class ChatLine
 
 			auto emote = Emotes::Find(word);
 			if (emote !is null) {
-				AddElement(ElementText(buffer));
-				buffer = "";
+				if (buffer != "") {
+					AddText(buffer + " ");
+					buffer = "";
+				}
 				AddElement(ElementEmote(word, emote));
 				continue;
 			}
@@ -203,7 +205,9 @@ class ChatLine
 			buffer += word;
 		}
 
-		AddElement(ElementText(buffer));
+		if (buffer != "") {
+			AddText(buffer);
+		}
 	}
 
 	//TODO: This can be refactored probably
@@ -220,6 +224,66 @@ class ChatLine
 	{
 		@element.m_line = this;
 		m_elements.InsertLast(element);
+	}
+
+	void AddText(const string &in text)
+	{
+		// $lhttps://openplanet.nl/ yes$l ytes
+		//   ^^^^^^^^^^^^^^^^^^^^^^^^^^
+		// $l[https://openplanet.nl/]yes
+		//                           ^^^
+		// $l[https://openplanet.nl/]yes$>yes
+		//                           ^^^
+		// $l[https://openplanet.nl/]yes$lyes
+		//                           ^^^
+		// $l[https://openplanet.nl/]yes$zyes
+		//                           ^^^
+		int index = text.IndexOf("$l");
+		if (index == -1) {
+			AddElement(ElementText(text));
+			return;
+		}
+
+		int pos = 0;
+		while (index != -1) {
+			// Add text before the link
+			if (index > pos) {
+				AddElement(ElementText(text.SubStr(pos, index - pos)));
+			}
+
+			//TODO: Consider adding links to the end, eg: "Like this[1]." <1>
+			//      This way we can keep any formatting
+
+			// Parse link start
+			string textWithLink = text.SubStr(index);
+			auto parse = Regex::Search(textWithLink, "^\\$l(\\[[^\\]]+\\])?(.*?)(\\$[lz>]|$)");
+			if (parse.Length == 0) {
+				// Invalid link?
+				warn("Invalid link in text: \"" + text + "\"");
+				break;
+			}
+
+			string url = parse[1];
+			string linkText = parse[2];
+			if (url == "") {
+				url = linkText;
+			} else {
+				url = url.SubStr(1, url.Length - 2);
+			}
+			AddElement(ElementLink(linkText, url));
+
+			pos = index + parse[0].Length;
+
+			int newIndex = text.SubStr(pos).IndexOf("$l");
+			if (newIndex == -1) {
+				break;
+			}
+			index = pos + newIndex;
+		}
+
+		if (pos < text.Length) {
+			AddElement(ElementText(text.SubStr(pos)));
+		}
 	}
 
 	void Render()
