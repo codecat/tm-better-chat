@@ -80,9 +80,18 @@ class ChatLine
 
 		auto network = cast<CTrackManiaNetwork>(GetApp().Network);
 
-		// Check if this message should be filtered
+		// Check if this user is blocked
 		if (CsvContainsValue(Setting_Blocked, author)) {
 			m_isFiltered = true;
+		}
+
+		// Check if the message matches the filter regex
+		try {
+			if (Setting_FilterRegex != "" && Regex::IsMatch(text, Setting_FilterRegex)) {
+				m_isFiltered = true;
+			}
+		} catch {
+			warn("There's a problem with the filter regex!");
 		}
 
 		// If we have an author display name, find the player associated

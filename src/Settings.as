@@ -27,6 +27,9 @@ string Setting_Favorites;
 [Setting category="Messages" name="Blocked users" description="Users to block from chat, separated by commas."]
 string Setting_Blocked;
 
+[Setting category="Messages" name="Filter regex" description="Regular expression to match for filtering out messages."]
+string Setting_FilterRegex;
+
 [Setting category="Messages" name="Sound on system message"]
 bool Setting_SoundSystem = false;
 
