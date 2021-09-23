@@ -233,17 +233,17 @@ class ChatWindow : IChatMessageReceiver
 			}
 			UI::SetPreviousTooltip("Reset position & size");
 
-			// Button to toggle timestamps
-			if (UI::Button(Icons::ClockO)) {
-				Setting_ShowTimestamp = !Setting_ShowTimestamp;
-			}
-			UI::SetPreviousTooltip("Toggle timestamps");
-
 			// Button to clear the chat
 			if (UI::RedButton(Icons::Trash)) {
 				Clear();
 			}
 			UI::SetPreviousTooltip("Clear the chat");
+
+			// Button to toggle timestamps
+			if (UI::ToggledButton(Setting_ShowTimestamp, Icons::ClockO)) {
+				Setting_ShowTimestamp = !Setting_ShowTimestamp;
+			}
+			UI::SetPreviousTooltip("Toggle timestamps");
 
 			// Button to toggle system message visibility
 			if (UI::ToggledButton(m_displaySystem, Icons::Bolt)) { // Icons::Terminal?
