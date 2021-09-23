@@ -23,7 +23,6 @@ class ChatWindow : IChatMessageReceiver
 
 	void Initialize()
 	{
-		Clear();
 	}
 
 	void Clear()
@@ -67,14 +66,34 @@ class ChatWindow : IChatMessageReceiver
 
 	void AddLine(const string &in line)
 	{
-		// Add the message to the list
-		m_lines.InsertLast(ChatLine(m_lineIdIterator++, Time::Stamp, line));
+		ChatLine@ newLine = ChatLine(m_lineIdIterator++, Time::Stamp, line);
 
+		m_lines.InsertLast(newLine);
 		if (m_lines.Length > uint(Setting_MaximumLines)) {
 			m_lines.RemoveRange(0, m_lines.Length - Setting_MaximumLines);
 		}
 
 		m_lastMessageTime = Time::Now;
+
+		// Maybe play a sound
+		if (Setting_SoundGain > 0) {
+			Audio::Sample@ sound = null;
+			if (Setting_SoundChat) {
+				@sound = g_sndChat;
+			}
+			if (newLine.m_isSystem && Setting_SoundSystem) {
+				@sound = g_sndChatSystem;
+			}
+			if (newLine.m_isMention && Setting_SoundMention) {
+				@sound = g_sndChatMention;
+			}
+			if (newLine.m_isFavorite && Setting_SoundFavorite) {
+				@sound = g_sndChatFavorite;
+			}
+			if (sound !is null) {
+				Audio::Play(sound, Setting_SoundGain);
+			}
+		}
 	}
 
 	void OnChatMessage(const string &in line)
@@ -89,7 +108,7 @@ class ChatWindow : IChatMessageReceiver
 				m_visible = !m_visible;
 			}
 
-			if (key == VirtualKey::Return) {
+			if (m_visible && key == VirtualKey::Return) {
 				ShowInput();
 			}
 		}
@@ -108,7 +127,7 @@ class ChatWindow : IChatMessageReceiver
 
 	void OnServerChanged(const string &in login)
 	{
-		if (login == "") {
+		if (login != "") {
 			Clear();
 			return;
 		}

@@ -43,3 +43,18 @@ string Setting_Favorites;
 
 [Setting description="Extra names to get mentioned by, seperated by commas."]
 string Setting_ExtraMentions;
+
+[Setting category="Sound" min=0 max=2]
+float Setting_SoundGain = 0.3f;
+
+[Setting category="Sound"]
+bool Setting_SoundSystem = false;
+
+[Setting category="Sound"]
+bool Setting_SoundChat = false;
+
+[Setting category="Sound"]
+bool Setting_SoundMention = false;
+
+[Setting category="Sound"]
+bool Setting_SoundFavorite = false;
