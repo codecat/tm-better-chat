@@ -65,5 +65,3 @@ bool Setting_ClubTags = true;
 
 [Setting category="Appearance" name="Display help line on startup"]
 bool Setting_ShowHelp = true;
-
-
