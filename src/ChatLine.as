@@ -49,6 +49,7 @@ class ChatLine
 
 	void ParseLine(const string &in line)
 	{
+		bool teamChat = false;
 		string author;
 		string text;
 
@@ -57,10 +58,13 @@ class ChatLine
 		}
 
 		// Extract author & message contents
-		auto parse = Regex::Match(line, "^\\[\\$<([^\\$]+)\\$>\\] (.*)"); //TODO: This regex only works for basic uplay player names!
+		auto parse = Regex::Match(line, "^([<\\[])\\$<([^\\$]+)\\$>[\\]>] (.*)"); //TODO: This regex only works for basic uplay player names!
 		if (parse.Length > 0) {
-			author = parse[1];
-			text = parse[2];
+			if (parse[1] == "<") {
+				teamChat = true;
+			}
+			author = parse[2];
+			text = parse[3];
 		} else {
 			// Check if this is an EvoSC message
 			parse = Regex::Match(line, "^\\$FFF\\$z\\$s(\\$[0-9a-fA-F]{3}.+)\\[\\$<\\$<\\$fff\\$eee(.*)\\$>\\$>\\]\\$z\\$s (.*)");
@@ -73,33 +77,54 @@ class ChatLine
 			}
 		}
 
+		auto network = cast<CTrackManiaNetwork>(GetApp().Network);
+
 		// If we have an author display name, find the player associated
 		//NOTE: we can't keep this handle around because it will be invalidated on disconnect
-		CGamePlayerInfo@ authorInfo = null;
-		auto network = cast<CTrackManiaNetwork>(GetApp().Network);
-		for (uint i = 0; i < network.PlayerInfos.Length; i++) {
-			auto playerInfo = cast<CGamePlayerInfo>(network.PlayerInfos[i]);
-			if (playerInfo.Name == author) {
-				@authorInfo = playerInfo;
-				break;
+		CSmPlayer@ authorInfo = null;
+		if (author != "") {
+			auto pg = GetApp().CurrentPlayground;
+			if (pg !is null) {
+				for (uint i = 0; i < pg.Players.Length; i++) {
+					auto player = cast<CSmPlayer>(pg.Players[i]);
+					if (player.User.Name == author) {
+						@authorInfo = player;
+					}
+				}
 			}
 		}
 
 		string authorLogin;
 		string authorId;
+		string authorClubTag;
 		bool isLocalPlayer = false;
+		int teamNumber = 0;
+		float linearHue = 0;
 
 		if (authorInfo !is null) {
-			// Add club tag
-			if (authorInfo.ClubTag != "") {
-				AddElement(ElementClubTag(authorInfo.ClubTag));
-			}
+			auto user = authorInfo.User;
 
-			authorLogin = authorInfo.Login;
-			authorId = authorInfo.WebServicesUserId;
-			isLocalPlayer = (authorInfo.Login == network.PlayerInfo.Login);
+			authorLogin = user.Login;
+			authorId = user.WebServicesUserId;
+			authorClubTag = user.ClubTag;
+			isLocalPlayer = (user.Login == network.PlayerInfo.Login);
 
-			//TODO: What else can we do with the player info object here?
+			teamNumber = authorInfo.EdClan;
+			linearHue = authorInfo.LinearHue;
+
+			//TODO: What else can we do with the player object here?
+		}
+
+		bool coloredTags = (teamNumber > 0);
+
+		// If this is a team chat message, add secret tag here
+		if (teamChat) {
+			AddColorableElement(ElementTag(Icons::UserSecret), coloredTags, linearHue);
+		}
+
+		// Add club tag
+		if (authorClubTag != "") {
+			AddColorableElement(ElementClubTag(authorClubTag), coloredTags, linearHue);
 		}
 
 		// System message
@@ -135,7 +160,7 @@ class ChatLine
 
 		if (author != "") {
 			// Add author name
-			AddElement(ElementPlayerName(author, authorLogin, authorId));
+			AddColorableElement(ElementPlayerName(author, authorLogin, authorId), coloredTags, linearHue);
 		}
 
 		ParseMessageText(text);
@@ -164,6 +189,16 @@ class ChatLine
 		}
 
 		AddElement(ElementText(buffer));
+	}
+
+	//TODO: This can be refactored probably
+	void AddColorableElement(ElementTag@ element, bool colored, float hue)
+	{
+		@element.m_line = this;
+		if (colored) {
+			element.SetHue(hue);
+		}
+		m_elements.InsertLast(element);
 	}
 
 	void AddElement(Element@ element)

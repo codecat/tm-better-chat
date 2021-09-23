@@ -1,14 +1,7 @@
-class ElementClubTag : Element
+class ElementClubTag : ElementTag
 {
-	string m_text;
-
 	ElementClubTag(const string &in text)
 	{
-		m_text = ColoredString(text);
-	}
-
-	void Render() override
-	{
-		UI::Tag(m_text);
+		super(text);
 	}
 }

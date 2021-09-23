@@ -1,6 +1,5 @@
-class ElementPlayerName : Element
+class ElementPlayerName : ElementTag
 {
-	string m_text;
 	string m_login;
 	string m_accountID;
 
@@ -8,14 +7,14 @@ class ElementPlayerName : Element
 
 	ElementPlayerName(const string &in text, const string &in login = "", const string &in accountID = "")
 	{
-		m_text = ColoredString(text);
+		super(text);
 		m_login = login;
 		m_accountID = accountID;
 	}
 
 	void Render() override
 	{
-		UI::Tag(m_text);
+		ElementTag::Render();
 
 		if (UI::BeginPopupContextItem(tostring(m_line.m_id) + " " + m_text)) {
 			if (UI::IsWindowAppearing()) {
