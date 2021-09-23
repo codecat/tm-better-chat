@@ -68,6 +68,12 @@ class ChatWindow : IChatMessageReceiver
 	{
 		ChatLine@ newLine = ChatLine(m_lineIdIterator++, Time::Stamp, line);
 
+		// Check if this line should be filtered out
+		if (newLine.m_isFiltered) {
+			return;
+		}
+
+		// Add the line to the list of messages
 		m_lines.InsertLast(newLine);
 		if (m_lines.Length > uint(Setting_MaximumLines)) {
 			m_lines.RemoveRange(0, m_lines.Length - Setting_MaximumLines);

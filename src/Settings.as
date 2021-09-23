@@ -24,6 +24,9 @@ string Setting_ExtraMentions;
 [Setting category="Messages" name="Favorite users" description="Favorite users to highlight, separated by commas."]
 string Setting_Favorites;
 
+[Setting category="Messages" name="Blocked users" description="Users to block from chat, separated by commas."]
+string Setting_Blocked;
+
 [Setting category="Messages" name="Sound on system message"]
 bool Setting_SoundSystem = false;
 

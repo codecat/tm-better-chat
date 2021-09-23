@@ -6,6 +6,7 @@ class ElementPlayerName : ElementTag
 	string m_clubTag;
 
 	bool m_favorited;
+	bool m_blocked;
 
 	ElementPlayerName(const string &in name, const string &in login, const string &in accountID, const string &in clubTag)
 	{
@@ -24,6 +25,7 @@ class ElementPlayerName : ElementTag
 		if (UI::BeginPopupContextItem(tostring(m_line.m_id) + " " + m_name)) {
 			if (UI::IsWindowAppearing()) {
 				m_favorited = CsvContainsValue(Setting_Favorites, m_name);
+				m_blocked = CsvContainsValue(Setting_Blocked, m_name);
 			}
 
 			UI::Text(m_text);
@@ -40,8 +42,14 @@ class ElementPlayerName : ElementTag
 				}
 			}
 
-			if (UI::Selectable(Icons::Ban + " Block", false)) {
-				warn("TODO: Implement me"); //TODO
+			if (m_blocked) {
+				if (UI::Selectable(Icons::Check + " Unblock", false)) {
+					Setting_Blocked = CsvRemoveValue(Setting_Blocked, m_name);
+				}
+			} else {
+				if (UI::Selectable(Icons::Ban + " Block", false)) {
+					Setting_Blocked = CsvAddValue(Setting_Blocked, m_name);
+				}
 			}
 
 			if (m_accountID != "") {

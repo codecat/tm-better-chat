@@ -16,10 +16,11 @@ class ChatLine
 
 	Highlight m_highlight = Highlight::None;
 
-	bool m_isSystem;
-	bool m_isSelf;
-	bool m_isMention;
-	bool m_isFavorite;
+	bool m_isSystem = false;
+	bool m_isSelf = false;
+	bool m_isMention = false;
+	bool m_isFavorite = false;
+	bool m_isFiltered = false;
 
 	ChatLine(uint id, int64 time, const string &in line)
 	{
@@ -78,6 +79,11 @@ class ChatLine
 		}
 
 		auto network = cast<CTrackManiaNetwork>(GetApp().Network);
+
+		// Check if this message should be filtered
+		if (CsvContainsValue(Setting_Blocked, author)) {
+			m_isFiltered = true;
+		}
 
 		// If we have an author display name, find the player associated
 		//NOTE: we can't keep this handle around because it will be invalidated on disconnect
