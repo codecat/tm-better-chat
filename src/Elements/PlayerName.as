@@ -32,6 +32,14 @@ class ElementPlayerName : ElementTag
 
 			UI::Separator();
 
+			if (UI::Selectable(Icons::Eye + " Spectate", false)) {
+				auto api = GetApp().Network.PlaygroundClientScriptAPI;
+				api.RequestSpectatorClient(true);
+				api.SetSpectateTarget(m_login);
+			}
+
+			UI::Separator();
+
 			if (m_favorited) {
 				if (UI::Selectable(Icons::StarO + " Unfavorite", false)) {
 					Setting_Favorites = CsvRemoveValue(Setting_Favorites, m_name);
