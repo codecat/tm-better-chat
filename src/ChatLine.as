@@ -193,7 +193,7 @@ class ChatLine
 			if (emote !is null) {
 				AddElement(ElementText(buffer));
 				buffer = "";
-				AddElement(ElementEmote(emote));
+				AddElement(ElementEmote(word, emote));
 				continue;
 			}
 
