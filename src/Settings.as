@@ -66,7 +66,7 @@ bool Setting_BackgroundFlash = true;
 [Setting category="Appearance" name="Show timestamp"]
 bool Setting_ShowTimestamp = true;
 
-[Setting category="Appearance" name="Text shadow" description="Makes text more readable. This can have a small impact on performance."]
+[Setting category="Appearance" name="Text shadow"]
 bool Setting_TextShadow = true;
 
 [Setting category="Appearance" name="Add club tags"]
