@@ -183,6 +183,8 @@ class ChatLine
 
 	void ParseMessageText(const string &in text)
 	{
+		AddElement(ElementFormatGroup(true));
+
 		string buffer;
 
 		auto parseText = text.Split(" ");
@@ -208,6 +210,8 @@ class ChatLine
 		if (buffer != "") {
 			AddText(buffer);
 		}
+
+		AddElement(ElementFormatGroup(false));
 	}
 
 	//TODO: This can be refactored probably

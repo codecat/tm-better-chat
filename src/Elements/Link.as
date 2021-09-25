@@ -1,35 +1,53 @@
-class ElementLink : ElementText
+class ElementLink : Element
 {
+	string m_text;
 	string m_url;
-
-	bool m_hovered = false;
 
 	ElementLink(const string &in text, const string &in url)
 	{
-		super(text);
-
+		m_text = text;
 		m_url = url;
+
 		if (!m_url.StartsWith("https://") && !m_url.StartsWith("http://")) {
 			m_url = "https://" + m_url;
 		}
+
+		m_spacingAfter = 0;
 	}
 
 	void Render() override
 	{
-		vec4 color = vec4(0.5f, 0.5f, 1, 1);
-		if (m_hovered) {
-			color = vec4(0.4f, 0.4f, 1, 1);
-		}
+		const int FRAME_PADDING = 4;
 
-		UI::PushStyleColor(UI::Col::Text, color);
-		ElementText::Render();
-		UI::PopStyleColor();
+		vec2 textSize = Draw::MeasureString(m_text);
 
-		if (UI::IsItemClicked()) {
+		if (UI::InvisibleButton(m_url, textSize + vec2(0, FRAME_PADDING * 2))) {
 			OpenBrowserURL(m_url);
 		}
 
-		m_hovered = UI::IsItemHovered();
+		vec4 rect = UI::GetItemRect();
+		auto dl = UI::GetWindowDrawList();
+
+		string text;
+		vec4 color;
+
+		if (UI::IsItemHovered()) {
+			text = "\\$<\\$aaf" + m_text + "\\$>";
+			color = vec4(0.66f, 0.66f, 1, 1);
+		} else {
+			text = "\\$<\\$66f" + m_text + "\\$>";
+			color = vec4(0.4f, 0.4f, 1, 1);
+		}
+
+		dl.AddText(vec2(rect.x, rect.y + FRAME_PADDING), vec4(1, 1, 1, 1), text);
+
+		float bottomY = rect.y + FRAME_PADDING + textSize.y;
+		dl.AddLine(
+			vec2(rect.x, bottomY),
+			vec2(rect.x + rect.z, bottomY),
+			color
+		);
+
 		UI::SetPreviousTooltip(m_url);
 	}
 }

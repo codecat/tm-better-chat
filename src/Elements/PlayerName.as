@@ -30,12 +30,14 @@ class ElementPlayerName : ElementTag
 
 			UI::Text(m_text);
 
-			UI::Separator();
+			if (m_login != "") {
+				UI::Separator();
 
-			if (UI::Selectable(Icons::Eye + " Spectate", false)) {
-				auto api = GetApp().Network.PlaygroundClientScriptAPI;
-				api.RequestSpectatorClient(true);
-				api.SetSpectateTarget(m_login);
+				if (UI::Selectable(Icons::Eye + " Spectate", false)) {
+					auto api = GetApp().Network.PlaygroundClientScriptAPI;
+					api.RequestSpectatorClient(true);
+					api.SetSpectateTarget(m_login);
+				}
 			}
 
 			UI::Separator();
