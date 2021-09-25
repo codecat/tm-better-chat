@@ -296,6 +296,8 @@ class ChatLine
 
 		UI::SetCursorPos(rectPos + vec2(4, 0));
 
+		UI::AlignTextToFramePadding();
+
 		if (Setting_ShowTimestamp) {
 			UI::Tag(Time::FormatString("%H:%M:%S", m_time), GetHighlightColor(UI::TAG_COLOR));
 			UI::SameLine();
