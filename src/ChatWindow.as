@@ -197,6 +197,8 @@ class ChatWindow : IChatMessageReceiver
 			UI::PushStyleColor(UI::Col::WindowBg, vec4(0, 0, 0, alpha));
 			windowFlags |= UI::WindowFlags::NoInputs;
 			m_showInput = false;
+		} else {
+			UI::PushStyleColor(UI::Col::WindowBg, vec4(0, 0, 0, 0.75f));
 		}
 
 		if (!UI::IsOverlayShown()) {
@@ -332,9 +334,7 @@ class ChatWindow : IChatMessageReceiver
 			UI::End();
 		}
 
-		if (!UI::IsOverlayInputEnabled()) {
-			UI::PopStyleColor();
-		}
+		UI::PopStyleColor();
 
 		if (shouldHideInput) {
 			HideInput();
