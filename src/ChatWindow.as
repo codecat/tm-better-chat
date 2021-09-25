@@ -11,7 +11,6 @@ class ChatWindow : IChatMessageReceiver
 	bool m_overlayInputWasEnabled = false;
 	bool m_showInput = false;
 	string m_input;
-	uint64 m_inputShownTime = 0;
 
 	float m_chatLineFrameHeight = 30.0f;
 	string m_previousServer;
@@ -52,7 +51,6 @@ class ChatWindow : IChatMessageReceiver
 			UI::EnableOverlayInput();
 		}
 		m_showInput = true;
-		m_inputShownTime = Time::Now;
 	}
 
 	void HideInput()
@@ -114,8 +112,13 @@ class ChatWindow : IChatMessageReceiver
 				m_visible = !m_visible;
 			}
 
-			if (m_visible && key == VirtualKey::Return) {
-				ShowInput();
+			if (m_visible) {
+				if (key == VirtualKey::Return || key == VirtualKey::T) {
+					ShowInput();
+				} else if (key == VirtualKey::Y) {
+					ShowInput();
+					m_input = "/t ";
+				}
 			}
 		}
 
@@ -324,7 +327,7 @@ class ChatWindow : IChatMessageReceiver
 
 			bool pressedEnter = false;
 			m_input = UI::InputText("", m_input, pressedEnter, UI::InputTextFlags::EnterReturnsTrue);
-			if (pressedEnter && (m_input != "" || (Time::Now - m_inputShownTime) > 250)) {
+			if (pressedEnter) {
 				SendChatMessage(m_input);
 				shouldHideInput = true;
 			}
