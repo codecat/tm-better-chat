@@ -23,6 +23,8 @@
 		"Kreygasm": { "pos": [ 96, 58 ], "size": [ 30, 30 ] },
 		"KappaPride": { "pos": [ 126, 58 ], "size": [ 28, 28 ] },
 		"PogChamp": { "pos": [ 154, 58 ], "size": [ 28, 28 ] },
+		"HypeMiss": { "pos": [ 182, 58 ], "size": [ 28, 28 ] },
+		"PrideUwu": { "pos": [ 210, 58 ], "size": [ 28, 28 ] },
 
 		"YEP": { "pos": [ 0, 225 ], "size": [ 32, 31 ] },
 		"monkaS": { "pos": [ 32, 228 ], "size": [ 28, 28 ] },
