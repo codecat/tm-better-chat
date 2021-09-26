@@ -191,13 +191,19 @@ class ChatLine
 		for (uint i = 0; i < parseText.Length; i++) {
 			string word = parseText[i];
 
-			auto emote = Emotes::Find(word);
+			// Strip colons from word if they exist
+			string emoteKey = word;
+			if (emoteKey.Length > 2 && emoteKey.StartsWith(":") && emoteKey.EndsWith(":")) {
+				emoteKey = emoteKey.SubStr(1, emoteKey.Length - 2);
+			}
+
+			auto emote = Emotes::Find(emoteKey);
 			if (emote !is null) {
 				if (buffer != "") {
 					AddText(buffer + " ");
 					buffer = "";
 				}
-				AddElement(ElementEmote(word, emote));
+				AddElement(ElementEmote(emoteKey, emote));
 				continue;
 			}
 
