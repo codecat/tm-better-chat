@@ -244,8 +244,11 @@ class ChatLine
 		//                           ^^^
 		int index = text.IndexOf("$l");
 		if (index == -1) {
-			AddElement(ElementText(text));
-			return;
+			index = text.IndexOf("$L");
+			if (index == -1) {
+				AddElement(ElementText(text));
+				return;
+			}
 		}
 
 		int pos = 0;
@@ -260,7 +263,7 @@ class ChatLine
 
 			// Parse link start
 			string textWithLink = text.SubStr(index);
-			auto parse = Regex::Search(textWithLink, "^\\$l(\\[[^\\]]+\\])?(.*?)(\\$[lz>]|$)");
+			auto parse = Regex::Search(textWithLink, "^\\$[lL](\\[[^\\]]+\\])?(.*?)(\\$[lLzZ>]|$)");
 			if (parse.Length == 0) {
 				// Invalid link?
 				warn("Invalid link in text: \"" + text + "\"");
