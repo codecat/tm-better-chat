@@ -11,7 +11,7 @@ class ChatWindow : IChatMessageReceiver
 	bool m_overlayInputWasEnabled = false;
 	bool m_showInput = false;
 	string m_input;
-	bool m_setInputCursorToEnd = false;
+	int m_setInputCursor = -1;
 
 	float m_chatLineFrameHeight = 30.0f;
 	string m_previousServer;
@@ -20,6 +20,8 @@ class ChatWindow : IChatMessageReceiver
 	bool m_scrollToBottom = false;
 
 	uint64 m_lastMessageTime = 0;
+
+	AutoCompletion m_auto;
 
 	void Initialize()
 	{
@@ -37,8 +39,13 @@ class ChatWindow : IChatMessageReceiver
 
 	void SendChatMessage(const string &in text)
 	{
-		auto playgroundInterface = GetApp().CurrentPlayground.Interface;
-		playgroundInterface.ChatEntry = text;
+		auto pg = GetApp().CurrentPlayground;
+		if (pg is null) {
+			//TODO: Queue the message for later
+			warn("Can't send message right now because there's no playground!");
+			return;
+		}
+		pg.Interface.ChatEntry = text;
 	}
 
 	void ShowInput()
@@ -52,7 +59,7 @@ class ChatWindow : IChatMessageReceiver
 			UI::EnableOverlayInput();
 		}
 		m_showInput = true;
-		m_setInputCursorToEnd = true;
+		m_setInputCursor = m_input.Length;
 	}
 
 	void HideInput()
@@ -147,21 +154,31 @@ class ChatWindow : IChatMessageReceiver
 
 	void InputCallback(UI::InputTextCallbackData@ data)
 	{
-		if (m_setInputCursorToEnd) {
-			data.CursorPos = data.TextLength;
-			m_setInputCursorToEnd = false;
-		}
+		if (data.EventFlag == UI::InputTextFlags::CallbackAlways) {
+			m_auto.Update(data);
 
-		if (data.EventFlag == UI::InputTextFlags::CallbackCharFilter) {
-			if (data.EventChar == 58 /* ':' */) {
-				//TODO: Begin autocompletion of emotes
-			} else if (data.EventChar == 64 /* '@' */) {
-				//TODO: Begin autocompletion of mentions
+			if (m_setInputCursor != -1) {
+				data.CursorPos = m_setInputCursor;
+				m_setInputCursor = -1;
 			}
+
+		} else if (data.EventFlag == UI::InputTextFlags::CallbackCharFilter) {
+			if (data.EventChar == 58 /* ':' */) {
+				m_auto.Begin(AutoCompletionType::Emote);
+			} else if (data.EventChar == 64 /* '@' */) {
+				m_auto.Begin(AutoCompletionType::Mention);
+			}
+			m_auto.CharFilter(data);
+
 		} else if (data.EventFlag == UI::InputTextFlags::CallbackCompletion) {
-			//TODO: Emote and @ mention auto completion
+			m_auto.Accept();
+
 		} else if (data.EventFlag == UI::InputTextFlags::CallbackHistory) {
-			//TODO: History and autocompletion navigation
+			if (m_auto.IsVisible()) {
+				m_auto.Navigate(data);
+			} else {
+				//TODO: History (pressed up or down arrow)
+			}
 		}
 	}
 
@@ -357,8 +374,12 @@ class ChatWindow : IChatMessageReceiver
 				UI::InputTextCallback(InputCallback)
 			);
 			if (pressedEnter) {
-				SendChatMessage(m_input);
-				shouldHideInput = true;
+				if (m_auto.IsVisible()) {
+					m_auto.Accept();
+				} else {
+					SendChatMessage(m_input);
+					shouldHideInput = true;
+				}
 			}
 
 			UI::PopStyleColor();
@@ -367,6 +388,10 @@ class ChatWindow : IChatMessageReceiver
 		}
 
 		UI::PopStyleColor();
+
+		if (m_showInput && !shouldHideInput) {
+			m_auto.Render(windowPos, windowSize);
+		}
 
 		if (shouldHideInput) {
 			HideInput();
