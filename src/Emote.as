@@ -17,21 +17,34 @@ class Emote
 		m_size.y = jsSize[1];
 	}
 
-	void Render(float maxheight = 24)
+	void Render(UI::DrawList@ dl, const vec4 &in rect)
 	{
-		auto dl = UI::GetWindowDrawList();
-
-		vec2 size = m_size;
-		size *= maxheight / m_size.y;
-
-		UI::Dummy(size);
-		vec4 rect = UI::GetItemRect();
-
 		vec4 uv;
 		uv.x = m_pos.x;
 		uv.y = m_pos.y;
 		uv.z = m_size.x;
 		uv.w = m_size.y;
-		dl.AddImage(m_texture, vec2(Math::Round(rect.x), Math::Round(rect.y)), size, 0xFFFFFFFF, uv);
+		dl.AddImage(m_texture, vec2(Math::Round(rect.x), Math::Round(rect.y)), vec2(rect.z, rect.w), 0xFFFFFFFF, uv);
+	}
+
+	vec2 Render(UI::DrawList@ dl, const vec2 &in pos, float maxheight = 24)
+	{
+		vec2 size = m_size;
+		if (size.y > maxheight) {
+			size *= maxheight / m_size.y;
+		}
+		Render(dl, vec4(pos.x, pos.y, size.x, size.y));
+		return size;
+	}
+
+	void Render(float maxheight = 24)
+	{
+		vec2 size = m_size;
+		if (size.y > maxheight) {
+			size *= maxheight / m_size.y;
+		}
+
+		UI::Dummy(size);
+		Render(UI::GetWindowDrawList(), UI::GetItemRect());
 	}
 }
