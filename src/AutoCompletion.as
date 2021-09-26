@@ -155,6 +155,7 @@ class AutoCompletion
 			// Cancel if we typed something non-alphanumeric
 			if (
 				data.EventChar != 58 /* ':' */ &&
+				data.EventChar != 64 /* '@' */ &&
 				(data.EventChar < 48 /* '0' */ || data.EventChar > 57 /* '9' */) &&
 				(data.EventChar < 65 /* 'A' */ || data.EventChar > 90 /* 'Z' */) &&
 				(data.EventChar < 97 /* 'a' */ || data.EventChar > 122 /* 'z' */)

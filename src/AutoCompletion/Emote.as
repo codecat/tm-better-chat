@@ -24,6 +24,6 @@ class AutoCompletionItemEmote : IAutoCompletionItem
 	void Render(UI::DrawList@ dl, const vec2 &in pos)
 	{
 		vec2 size = m_emote.Render(dl, pos, 32);
-		dl.AddText(pos + vec2(size.x + 4, 0), vec4(1, 1, 1, 1), m_name);
+		dl.AddText(pos + vec2(size.x + 4, 6), vec4(1, 1, 1, 1), m_name);
 	}
 }

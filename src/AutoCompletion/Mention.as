@@ -16,11 +16,11 @@ class AutoCompletionItemMention : IAutoCompletionItem
 
 	string AcceptText()
 	{
-		return m_name;
+		return "@" + m_name;
 	}
 
 	void Render(UI::DrawList@ dl, const vec2 &in pos)
 	{
-		dl.AddText(pos, vec4(1, 1, 1, 1), m_name);
+		dl.AddText(pos + vec2(0, 6), vec4(1, 1, 1, 1), m_name);
 	}
 }
