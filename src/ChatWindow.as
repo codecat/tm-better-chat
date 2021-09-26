@@ -11,6 +11,7 @@ class ChatWindow : IChatMessageReceiver
 	bool m_overlayInputWasEnabled = false;
 	bool m_showInput = false;
 	string m_input;
+	bool m_setInputCursorToEnd = false;
 
 	float m_chatLineFrameHeight = 30.0f;
 	string m_previousServer;
@@ -51,6 +52,7 @@ class ChatWindow : IChatMessageReceiver
 			UI::EnableOverlayInput();
 		}
 		m_showInput = true;
+		m_setInputCursorToEnd = true;
 	}
 
 	void HideInput()
@@ -141,6 +143,20 @@ class ChatWindow : IChatMessageReceiver
 			return;
 		}
 		startnew(CoroutineFunc(OnNewServerAsync));
+	}
+
+	void InputCallback(UI::InputTextCallbackData@ data)
+	{
+		if (m_setInputCursorToEnd) {
+			data.CursorPos = data.TextLength;
+			m_setInputCursorToEnd = false;
+		}
+
+		if (data.EventFlag == UI::InputTextFlags::CallbackCompletion) {
+			//TODO: Emote and @ mention auto completion
+		} else if (data.EventFlag == UI::InputTextFlags::CallbackHistory) {
+			//TODO: History and autocompletion navigation
+		}
 	}
 
 	void Update(float dt)
@@ -326,7 +342,13 @@ class ChatWindow : IChatMessageReceiver
 			UI::PushStyleColor(UI::Col::FrameBg, vec4(0, 0, 0, 0));
 
 			bool pressedEnter = false;
-			m_input = UI::InputText("", m_input, pressedEnter, UI::InputTextFlags::EnterReturnsTrue);
+			m_input = UI::InputText("", m_input, pressedEnter,
+				UI::InputTextFlags::EnterReturnsTrue |
+				UI::InputTextFlags::CallbackAlways |
+				UI::InputTextFlags::CallbackCompletion |
+				UI::InputTextFlags::CallbackHistory,
+				UI::InputTextCallback(InputCallback)
+			);
 			if (pressedEnter) {
 				SendChatMessage(m_input);
 				shouldHideInput = true;
