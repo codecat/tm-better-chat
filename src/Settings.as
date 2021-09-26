@@ -17,7 +17,7 @@ vec2 Setting_DefaultPosition = vec2(5, 50);
 vec2 Setting_DefaultSize = vec2(800, 200);
 
 [Setting category="General" name="Trace full debug lines to the logfile"]
-bool Setting_TraceToLog = false;
+bool Setting_TraceToLog = true;
 
 
 
