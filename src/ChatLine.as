@@ -242,13 +242,10 @@ class ChatLine
 		//                           ^^^
 		// $l[https://openplanet.nl/]yes$zyes
 		//                           ^^^
-		int index = text.IndexOf("$l");
+		int index = text.IndexOfI("$l");
 		if (index == -1) {
-			index = text.IndexOf("$L");
-			if (index == -1) {
-				AddElement(ElementText(text));
-				return;
-			}
+			AddElement(ElementText(text));
+			return;
 		}
 
 		int pos = 0;
@@ -281,7 +278,7 @@ class ChatLine
 
 			pos = index + parse[0].Length;
 
-			int newIndex = text.SubStr(pos).IndexOf("$l");
+			int newIndex = text.SubStr(pos).IndexOfI("$l");
 			if (newIndex == -1) {
 				break;
 			}
