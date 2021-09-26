@@ -152,7 +152,13 @@ class ChatWindow : IChatMessageReceiver
 			m_setInputCursorToEnd = false;
 		}
 
-		if (data.EventFlag == UI::InputTextFlags::CallbackCompletion) {
+		if (data.EventFlag == UI::InputTextFlags::CallbackCharFilter) {
+			if (data.EventChar == 58 /* ':' */) {
+				//TODO: Begin autocompletion of emotes
+			} else if (data.EventChar == 64 /* '@' */) {
+				//TODO: Begin autocompletion of mentions
+			}
+		} else if (data.EventFlag == UI::InputTextFlags::CallbackCompletion) {
 			//TODO: Emote and @ mention auto completion
 		} else if (data.EventFlag == UI::InputTextFlags::CallbackHistory) {
 			//TODO: History and autocompletion navigation
@@ -345,6 +351,7 @@ class ChatWindow : IChatMessageReceiver
 			m_input = UI::InputText("", m_input, pressedEnter,
 				UI::InputTextFlags::EnterReturnsTrue |
 				UI::InputTextFlags::CallbackAlways |
+				UI::InputTextFlags::CallbackCharFilter |
 				UI::InputTextFlags::CallbackCompletion |
 				UI::InputTextFlags::CallbackHistory,
 				UI::InputTextCallback(InputCallback)
