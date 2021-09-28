@@ -62,6 +62,34 @@ class ElementPlayerName : ElementTag
 				}
 			}
 
+			if (UI::BeginMenu(Icons::ClockO + " Timeout")) {
+				if (UI::MenuItem("1 minute")) {
+					Timeout::Add(m_name, 60 * 1000);
+				}
+				if (UI::MenuItem("5 minutes")) {
+					Timeout::Add(m_name, 5 * 60 * 1000);
+				}
+				if (UI::MenuItem("10 minutes")) {
+					Timeout::Add(m_name, 10 * 60 * 1000);
+				}
+				if (UI::MenuItem("15 minutes")) {
+					Timeout::Add(m_name, 15 * 60 * 1000);
+				}
+				if (UI::MenuItem("30 minutes")) {
+					Timeout::Add(m_name, 30 * 60 * 1000);
+				}
+				if (UI::MenuItem("1 hour")) {
+					Timeout::Add(m_name, 60 * 60 * 1000);
+				}
+				if (UI::MenuItem("2 hours")) {
+					Timeout::Add(m_name, 2 * 60 * 60 * 1000);
+				}
+				if (UI::MenuItem("4 hours")) {
+					Timeout::Add(m_name, 4 * 60 * 60 * 1000);
+				}
+				UI::EndMenu();
+			}
+
 			if (m_accountID != "") {
 				UI::Separator();
 
