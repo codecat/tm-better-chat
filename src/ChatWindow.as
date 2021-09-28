@@ -263,16 +263,15 @@ class ChatWindow : IChatMessageReceiver
 				case BackgroundStyle::Hidden: alpha = 0; break;
 				case BackgroundStyle::Transparent: alpha = 0.75f; break;
 				case BackgroundStyle::TransparentLight: alpha = 0.5f; break;
-			}
-
-			if (Setting_BackgroundFlash) {
-				int timeSinceLastMessage = Time::Now - m_lastMessageTime;
-				const int FLASH_TIME = 1000;
-				if (timeSinceLastMessage < FLASH_TIME) {
-					alpha *= 1.0 - timeSinceLastMessage / float(FLASH_TIME);
-				} else {
-					alpha = 0;
-				}
+				case BackgroundStyle::Flashing: {
+					int timeSinceLastMessage = Time::Now - m_lastMessageTime;
+					const int FLASH_TIME = 1000;
+					if (timeSinceLastMessage < FLASH_TIME) {
+						alpha = 0.5f * (1.0f - timeSinceLastMessage / float(FLASH_TIME));
+					} else {
+						alpha = 0;
+					}
+				} break;
 			}
 
 			return vec4(0, 0, 0, alpha);

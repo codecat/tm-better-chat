@@ -55,13 +55,11 @@ enum BackgroundStyle
 	Hidden,
 	Transparent,
 	TransparentLight,
+	Flashing,
 }
 
 [Setting category="Appearance" name="Background style" description="Background style when the general overlay is hidden."]
 BackgroundStyle Setting_BackgroundStyle = BackgroundStyle::TransparentLight;
-
-[Setting category="Appearance" name="Flash background" description="Flash window transparency on new messages."]
-bool Setting_BackgroundFlash = true;
 
 [Setting category="Appearance" name="Show timestamp"]
 bool Setting_ShowTimestamp = true;
