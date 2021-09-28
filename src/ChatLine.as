@@ -107,7 +107,7 @@ class ChatLine
 		// Check if the message matches the filter regex
 		if (!m_isFiltered) {
 			try {
-				if (Setting_FilterRegex != "" && Regex::IsMatch(text, Setting_FilterRegex, Regex::Flags::ECMAScript | Regex::Flags::CaseInsensitive)) {
+				if (Setting_FilterRegex != "" && Regex::Contains(text, Setting_FilterRegex, Regex::Flags::ECMAScript | Regex::Flags::CaseInsensitive)) {
 					m_isFiltered = true;
 				}
 			} catch {
