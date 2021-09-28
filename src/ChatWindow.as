@@ -49,7 +49,7 @@ class ChatWindow : IChatMessageReceiver
 		pg.Interface.ChatEntry = text;
 	}
 
-	void ShowInput()
+	void ShowInput(const string &in text = "")
 	{
 		if (!Permissions::InGameChat()) {
 			return;
@@ -60,6 +60,7 @@ class ChatWindow : IChatMessageReceiver
 			UI::EnableOverlayInput();
 		}
 		m_showInput = true;
+		m_input = text;
 		m_setInputCursor = m_input.Length;
 	}
 
@@ -144,8 +145,7 @@ class ChatWindow : IChatMessageReceiver
 				if (key == VirtualKey::Return || key == VirtualKey::T) {
 					ShowInput();
 				} else if (key == VirtualKey::Y) {
-					ShowInput();
-					m_input = "/t ";
+					ShowInput("/t ");
 				}
 			}
 		}
