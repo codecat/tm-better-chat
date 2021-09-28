@@ -1,6 +1,7 @@
 class ChatWindow : IChatMessageReceiver
 {
 	bool m_visible = true;
+	bool m_big = false;
 
 	array<ChatLine@> m_lines;
 	uint m_lineIdIterator = 0;
@@ -119,6 +120,8 @@ class ChatWindow : IChatMessageReceiver
 		if (down) {
 			if (key == VirtualKey::F4) {
 				m_visible = !m_visible;
+			} else if (key == VirtualKey::C) {
+				m_big = !m_big;
 			}
 
 			if (m_visible) {
@@ -206,27 +209,46 @@ class ChatWindow : IChatMessageReceiver
 		}
 	}
 
-	void Render()
+	string GetWindowTitle()
 	{
-		if (!m_visible) {
-			return;
+		string ret = "Better Chat";
+		if (m_big) {
+			ret += "##Big";
 		}
+		return ret;
+	}
 
-		auto network = GetApp().Network;
-		auto serverInfo = cast<CGameCtnNetServerInfo>(network.ServerInfo);
-		if (serverInfo is null || serverInfo.ServerLogin == "") {
-			return;
+	int GetWindowFlags()
+	{
+		int ret = UI::WindowFlags::NoTitleBar;
+
+		if (m_big) {
+			ret |= UI::WindowFlags::NoResize;
+			ret |= UI::WindowFlags::NoSavedSettings;
 		}
-
-		int windowFlags = UI::WindowFlags::NoTitleBar;
 
 		if (!UI::IsOverlayInputEnabled()) {
+			ret |= UI::WindowFlags::NoInputs;
+		}
+
+		if (!UI::IsOverlayShown()) {
+			ret |= UI::WindowFlags::NoDecoration;
+		}
+
+		return ret;
+	}
+
+	vec4 GetWindowBackground()
+	{
+		if (!UI::IsOverlayInputEnabled() && !m_big) {
 			float alpha = 0;
+
 			switch (Setting_BackgroundStyle) {
 				case BackgroundStyle::Hidden: alpha = 0; break;
 				case BackgroundStyle::Transparent: alpha = 0.75f; break;
 				case BackgroundStyle::TransparentLight: alpha = 0.5f; break;
 			}
+
 			if (Setting_BackgroundFlash) {
 				int timeSinceLastMessage = Time::Now - m_lastMessageTime;
 				const int FLASH_TIME = 1000;
@@ -236,75 +258,16 @@ class ChatWindow : IChatMessageReceiver
 					alpha = 0;
 				}
 			}
-			UI::PushStyleColor(UI::Col::WindowBg, vec4(0, 0, 0, alpha));
-			windowFlags |= UI::WindowFlags::NoInputs;
-			m_showInput = false;
-		} else {
-			UI::PushStyleColor(UI::Col::WindowBg, vec4(0, 0, 0, 0.75f));
+
+			return vec4(0, 0, 0, alpha);
 		}
 
-		if (!UI::IsOverlayShown()) {
-			windowFlags |= UI::WindowFlags::NoDecoration;
-		}
+		return vec4(0, 0, 0, 0.75f);
+	}
 
-		bool shouldHideInput = false;
-
-		UI::SetNextWindowPos(
-			int(Setting_DefaultPosition.x),
-			Draw::GetHeight() - int(Setting_DefaultSize.y - Setting_DefaultPosition.y),
-			UI::Cond::FirstUseEver
-		);
-		UI::SetNextWindowSize(
-			int(Setting_DefaultSize.x),
-			int(Setting_DefaultSize.y),
-			UI::Cond::FirstUseEver
-		);
-		UI::Begin("Better Chat", windowFlags);
-
-		vec2 windowPos = UI::GetWindowPos();
+	void RenderLines()
+	{
 		vec2 windowSize = UI::GetWindowSize();
-
-		if (UI::IsOverlayShown()) {
-			vec2 startingCursorPos = UI::GetCursorPos();
-
-			// Button to reset position and size
-			if (UI::Button(Icons::Undo)) {
-				UI::SetWindowPos(vec2(
-					Setting_DefaultPosition.x,
-					Draw::GetHeight() - Setting_DefaultSize.y - Setting_DefaultPosition.y
-				));
-				UI::SetWindowSize(Setting_DefaultSize);
-			}
-			UI::SetPreviousTooltip("Reset position & size");
-
-			// Button to clear the chat
-			if (UI::RedButton(Icons::Trash)) {
-				Clear();
-			}
-			UI::SetPreviousTooltip("Clear the chat");
-
-			// Button to toggle timestamps
-			if (UI::ToggledButton(Setting_ShowTimestamp, Icons::ClockO)) {
-				Setting_ShowTimestamp = !Setting_ShowTimestamp;
-			}
-			UI::SetPreviousTooltip("Toggle timestamps");
-
-			// Button to toggle system message visibility
-			if (UI::ToggledButton(m_displaySystem, Icons::Bolt)) { // Icons::Terminal?
-				m_displaySystem = !m_displaySystem;
-			}
-			UI::SetPreviousTooltip("Toggle system messages");
-
-			// Button to toggle only favorites mode
-			if (UI::ToggledButton(m_displayOnlyFavorites, Icons::Star)) {
-				m_displayOnlyFavorites = !m_displayOnlyFavorites;
-			}
-			UI::SetPreviousTooltip("Toggle favorite-only mode");
-
-			// Begin second half of the window
-			UI::SetCursorPos(startingCursorPos + vec2(40, 0));
-			UI::BeginChild("ChatContainer");
-		}
 
 		// Decide on start index
 		uint startIndex = 0;
@@ -340,16 +303,143 @@ class ChatWindow : IChatMessageReceiver
 				m_chatLineFrameHeight = frameHeight;
 			}
 		}
+	}
+
+	void RenderSidebar()
+	{
+		if (m_big) {
+			// Button to get out of big mode
+			if (UI::Button(Icons::Backward)) {
+				m_big = false;
+			}
+			UI::SetPreviousTooltip("Get out of big chat");
+		} else {
+			// Button to reset position and size
+			if (UI::Button(Icons::Undo)) {
+				UI::SetWindowPos(vec2(
+					Setting_DefaultPosition.x,
+					Draw::GetHeight() - Setting_DefaultSize.y - Setting_DefaultPosition.y
+				));
+				UI::SetWindowSize(Setting_DefaultSize);
+			}
+			UI::SetPreviousTooltip("Reset position & size");
+		}
+
+		// Button to clear the chat
+		if (UI::RedButton(Icons::Trash)) {
+			Clear();
+		}
+		UI::SetPreviousTooltip("Clear the chat");
+
+		// Button to toggle timestamps
+		if (UI::ToggledButton(Setting_ShowTimestamp, Icons::ClockO)) {
+			Setting_ShowTimestamp = !Setting_ShowTimestamp;
+		}
+		UI::SetPreviousTooltip("Toggle timestamps");
+
+		// Button to toggle system message visibility
+		if (UI::ToggledButton(m_displaySystem, Icons::Bolt)) { // Icons::Terminal?
+			m_displaySystem = !m_displaySystem;
+		}
+		UI::SetPreviousTooltip("Toggle system messages");
+
+		// Button to toggle only favorites mode
+		if (UI::ToggledButton(m_displayOnlyFavorites, Icons::Star)) {
+			m_displayOnlyFavorites = !m_displayOnlyFavorites;
+		}
+		UI::SetPreviousTooltip("Toggle favorite-only mode");
+	}
+
+	void SetNextWindowLocation()
+	{
+		if (m_big) {
+			float screenWidth = Draw::GetWidth();
+			float screenHeight = Draw::GetHeight();
+
+			float chatWidth = screenWidth / 2.0f;
+			float chatHeight = screenHeight / 2.0f;
+
+			UI::SetNextWindowPos(
+				int(screenWidth / 2.0f - chatWidth / 2.0f),
+				int(screenHeight / 2.0f - chatHeight / 2.0f),
+				UI::Cond::Always
+			);
+			UI::SetNextWindowSize(
+				int(chatWidth),
+				int(chatHeight),
+				UI::Cond::Always
+			);
+
+		} else {
+			UI::SetNextWindowPos(
+				int(Setting_DefaultPosition.x),
+				Draw::GetHeight() - int(Setting_DefaultSize.y - Setting_DefaultPosition.y),
+				UI::Cond::FirstUseEver
+			);
+			UI::SetNextWindowSize(
+				int(Setting_DefaultSize.x),
+				int(Setting_DefaultSize.y),
+				UI::Cond::FirstUseEver
+			);
+		}
+	}
+
+	void Render()
+	{
+		if (!m_visible) {
+			return;
+		}
+
+		auto network = GetApp().Network;
+		auto serverInfo = cast<CGameCtnNetServerInfo>(network.ServerInfo);
+		if (serverInfo is null || serverInfo.ServerLogin == "") {
+			return;
+		}
+
+		string windowTitle = GetWindowTitle();
+		int windowFlags = GetWindowFlags();
+
+		UI::PushStyleColor(UI::Col::WindowBg, GetWindowBackground());
+
+		SetNextWindowLocation();
+
+		UI::Begin(windowTitle, windowFlags);
+
+		vec2 windowPos = UI::GetWindowPos();
+		vec2 windowSize = UI::GetWindowSize();
+
+		if (UI::IsOverlayShown()) {
+			vec2 startingCursorPos = UI::GetCursorPos();
+
+			RenderSidebar();
+
+			// Begin second half of the window
+			UI::SetCursorPos(startingCursorPos + vec2(40, 0));
+			UI::BeginChild("ChatContainer");
+		}
+
+		RenderLines();
 
 		// Automatically scroll down if overlay input is not enabled or if the user is at the bottom of the scrolling area
 		if (m_scrollToBottom || !UI::IsOverlayInputEnabled() || (UI::GetScrollY() >= UI::GetScrollMaxY())) {
 			UI::SetScrollHereY(1.0f);
 			m_scrollToBottom = false;
 		}
+
 		if (UI::IsOverlayShown()) {
 			UI::EndChild();
 		}
 		UI::End();
+
+		// Hide the input box if the overlay is disabled
+		if (!UI::IsOverlayInputEnabled()) {
+			m_showInput = false;
+		}
+
+		// Whether we have to hide the input at the end of the frame
+		// This is required at end of frame because... I forgot why
+		//TODO: Check if this is still needed and if so, why
+		bool shouldHideInput = false;
 
 		// Render the input box
 		if (m_showInput) {
@@ -365,6 +455,7 @@ class ChatWindow : IChatMessageReceiver
 			UI::PushStyleColor(UI::Col::FrameBg, vec4(0, 0, 0, 0));
 
 			bool pressedEnter = false;
+
 			m_input = UI::InputText("", m_input, pressedEnter,
 				UI::InputTextFlags::EnterReturnsTrue |
 				UI::InputTextFlags::CallbackAlways |
@@ -373,6 +464,7 @@ class ChatWindow : IChatMessageReceiver
 				UI::InputTextFlags::CallbackHistory,
 				UI::InputTextCallback(InputCallback)
 			);
+
 			if (pressedEnter) {
 				if (m_auto.IsVisible()) {
 					m_auto.Accept();
