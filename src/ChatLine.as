@@ -155,13 +155,16 @@ class ChatLine
 
 		bool coloredTags = (teamNumber > 0);
 
+		// Add timestamp element
+		AddColorableElement(ElementTimestamp(Time::Stamp), coloredTags, linearHue);
+
 		// If this is a team chat message, add secret tag here
 		if (teamChat) {
 			AddElement(ElementTag(Icons::UserSecret));
 		}
 
 		// Add club tag
-		if (Setting_ClubTags && authorClubTag != "") {
+		if (authorClubTag != "") {
 			AddColorableElement(ElementClubTag(authorClubTag), coloredTags, linearHue);
 		}
 
@@ -327,18 +330,16 @@ class ChatLine
 
 		UI::AlignTextToFramePadding();
 
-		if (Setting_ShowTimestamp) {
-			UI::Tag(Time::FormatString("%H:%M:%S", m_time), GetHighlightColor(UI::TAG_COLOR));
-			UI::SameLine();
-		}
-
 		for (uint i = 0; i < m_elements.Length; i++) {
 			auto element = m_elements[i];
+			if (!element.IsVisible()) {
+				continue;
+			}
+
 			element.Render();
+
 			if (i < m_elements.Length - 1) {
-				UI::PushStyleVar(UI::StyleVar::ItemSpacing, vec2(element.m_spacingAfter, 4));
-				UI::SameLine();
-				UI::PopStyleVar();
+				element.Advance();
 			}
 		}
 

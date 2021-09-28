@@ -61,14 +61,14 @@ enum BackgroundStyle
 [Setting category="Appearance" name="Background style" description="Background style when the general overlay is hidden."]
 BackgroundStyle Setting_BackgroundStyle = BackgroundStyle::TransparentLight;
 
-[Setting category="Appearance" name="Show timestamp"]
+[Setting category="Appearance" name="Show timestamps"]
 bool Setting_ShowTimestamp = true;
 
-[Setting category="Appearance" name="Text shadow"]
-bool Setting_TextShadow = true;
+[Setting category="Appearance" name="Show club tags"]
+bool Setting_ShowClubTags = true;
 
-[Setting category="Appearance" name="Add club tags"]
-bool Setting_ClubTags = true;
+[Setting category="Appearance" name="Show text shadow"]
+bool Setting_ShowTextShadow = true;
 
 [Setting category="Appearance" name="Display help line on startup"]
 bool Setting_ShowHelp = true;

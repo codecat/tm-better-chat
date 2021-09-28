@@ -4,4 +4,9 @@ class ElementClubTag : ElementTag
 	{
 		super(text);
 	}
+
+	bool IsVisible() override
+	{
+		return Setting_ShowClubTags;
+	}
 }

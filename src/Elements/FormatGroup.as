@@ -12,11 +12,18 @@ class ElementFormatGroup : Element
 	{
 		if (m_start) {
 			UI::BeginFormattingGroup();
-			if (Setting_TextShadow) {
+			if (Setting_ShowTextShadow) {
 				UI::Text("\\$s");
 			}
 		} else {
 			UI::EndFormattingGroup();
+		}
+	}
+
+	void Advance() override
+	{
+		if (Setting_ShowTextShadow) {
+			Element::Advance();
 		}
 	}
 }
