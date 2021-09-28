@@ -420,6 +420,7 @@ class ChatWindow : IChatMessageReceiver
 
 		UI::Begin(windowTitle, windowFlags);
 
+		bool windowFocused = UI::IsWindowFocused(UI::FocusedFlags::AnyWindow);
 		vec2 windowPos = UI::GetWindowPos();
 		vec2 windowSize = UI::GetWindowSize();
 
@@ -455,6 +456,7 @@ class ChatWindow : IChatMessageReceiver
 		// This is required at end of frame because... I forgot why
 		//TODO: Check if this is still needed and if so, why
 		bool shouldHideInput = false;
+		bool inputWindowFocused = false;
 
 		// Render the input box
 		if (m_showInput) {
@@ -462,15 +464,21 @@ class ChatWindow : IChatMessageReceiver
 			if (inputPos.y + 10 > Draw::GetHeight()) {
 				inputPos.y = Draw::GetHeight() - 30;
 			}
+
 			UI::SetNextWindowPos(int(inputPos.x), int(inputPos.y), UI::Cond::Always);
 			UI::SetNextWindowSize(int(windowSize.x), 0, UI::Cond::Always);
+
 			UI::Begin("Better Chat Input", UI::WindowFlags::NoTitleBar | UI::WindowFlags::NoDecoration | UI::WindowFlags::NoSavedSettings);
+			inputWindowFocused = UI::IsWindowFocused();
+
 			UI::PushItemWidth(-1);
-			UI::SetKeyboardFocusHere();
 			UI::PushStyleColor(UI::Col::FrameBg, vec4(0, 0, 0, 0));
 
 			bool pressedEnter = false;
 
+			if (UI::IsWindowAppearing()) {
+				UI::SetKeyboardFocusHere();
+			}
 			m_input = UI::InputText("", m_input, pressedEnter,
 				UI::InputTextFlags::EnterReturnsTrue |
 				UI::InputTextFlags::CallbackAlways |
@@ -495,6 +503,10 @@ class ChatWindow : IChatMessageReceiver
 		}
 
 		UI::PopStyleColor();
+
+		if (!windowFocused && !inputWindowFocused && UI::IsOverlayInputEnabledExternally()) {
+			HideInput();
+		}
 
 		if (m_showInput && !shouldHideInput) {
 			m_auto.Render(windowPos, windowSize);
