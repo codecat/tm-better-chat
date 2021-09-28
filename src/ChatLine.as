@@ -155,19 +155,6 @@ class ChatLine
 
 		bool coloredTags = (teamNumber > 0);
 
-		// Add timestamp element
-		AddColorableElement(ElementTimestamp(Time::Stamp), coloredTags, linearHue);
-
-		// If this is a team chat message, add secret tag here
-		if (teamChat) {
-			AddElement(ElementTag(Icons::UserSecret));
-		}
-
-		// Add club tag
-		if (authorClubTag != "") {
-			AddColorableElement(ElementClubTag(authorClubTag), coloredTags, linearHue);
-		}
-
 		// System message
 		if (author == "") {
 			m_isSystem = true;
@@ -197,6 +184,19 @@ class ChatLine
 		if (CsvContainsValue(Setting_Favorites, author)) {
 			m_isFavorite = true;
 			SetHighlight(Highlight::Favorite);
+		}
+
+		// Add timestamp element
+		AddColorableElement(ElementTimestamp(Time::Stamp), coloredTags, linearHue);
+
+		// If this is a team chat message, add secret tag here
+		if (teamChat) {
+			AddElement(ElementTag(Icons::UserSecret));
+		}
+
+		// Add club tag
+		if (authorClubTag != "") {
+			AddColorableElement(ElementClubTag(authorClubTag), coloredTags, linearHue);
 		}
 
 		if (author != "") {
@@ -254,12 +254,14 @@ class ChatLine
 			element.SetHue(hue);
 		}
 		m_elements.InsertLast(element);
+		element.OnAdded();
 	}
 
 	void AddElement(Element@ element)
 	{
 		@element.m_line = this;
 		m_elements.InsertLast(element);
+		element.OnAdded();
 	}
 
 	void AddText(const string &in text)

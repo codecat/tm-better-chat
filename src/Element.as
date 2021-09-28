@@ -8,6 +8,10 @@ class Element
 		return true;
 	}
 
+	void OnAdded()
+	{
+	}
+
 	void Render()
 	{
 	}
