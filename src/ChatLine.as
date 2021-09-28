@@ -54,7 +54,8 @@ class ChatLine
 		string author;
 		string text;
 
-		if (Setting_TraceToLog) {
+		// Trace the message to the log if needed by settings (and not in streamer mode)
+		if (Setting_TraceToLog) {// && !Setting_StreamerMode) {
 			trace(line);
 		}
 
@@ -78,20 +79,40 @@ class ChatLine
 			}
 		}
 
-		auto network = cast<CTrackManiaNetwork>(GetApp().Network);
-
-		// Check if this user is blocked
-		if (CsvContainsValue(Setting_Blocked, author)) {
+		// Check if this user is timed out
+		if (!m_isFiltered && Timeout::IsTimedOut(author)) {
 			m_isFiltered = true;
 		}
 
-		// Check if the message matches the filter regex
-		try {
-			if (Setting_FilterRegex != "" && Regex::IsMatch(text, Setting_FilterRegex)) {
+		// Check if this user is blocked
+		if (!m_isFiltered && CsvContainsValue(Setting_Blocked, author)) {
+			m_isFiltered = true;
+		}
+
+		// Check if the message should be blocked by streamer mode
+		if (!m_isFiltered && Setting_StreamerMode && (author != "" || Setting_StreamerCensorSystem)) {
+			string censored = StreamerMode::Censor(text);
+			if (censored == "") {
 				m_isFiltered = true;
 			}
-		} catch {
-			warn("There's a problem with the filter regex!");
+
+			if (censored != text) {
+				text = censored;
+				if (Setting_StreamerAutoTimeout) {
+					Timeout::Add(author, 5 * 60 * 1000);
+				}
+			}
+		}
+
+		// Check if the message matches the filter regex
+		if (!m_isFiltered) {
+			try {
+				if (Setting_FilterRegex != "" && Regex::IsMatch(text, Setting_FilterRegex, Regex::Flags::ECMAScript | Regex::Flags::CaseInsensitive)) {
+					m_isFiltered = true;
+				}
+			} catch {
+				warn("There's a problem with the filter regex!");
+			}
 		}
 
 		// If we have an author display name, find the player associated
@@ -108,6 +129,8 @@ class ChatLine
 				}
 			}
 		}
+
+		auto network = cast<CTrackManiaNetwork>(GetApp().Network);
 
 		string authorLogin;
 		string authorId;

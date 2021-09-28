@@ -34,7 +34,7 @@ class ChatWindow : IChatMessageReceiver
 
 		if (Setting_ShowHelp) {
 			auto plugin = Meta::ExecutingPlugin();
-			AddLine("$96f" + Icons::Bolt + " $ef7Better Chat " + plugin.Version + " $eee- Open the overlay for options");
+			AddSystemLine("$<$ef7Better Chat " + plugin.Version + "$> - Open the overlay for options");
 		}
 	}
 
@@ -72,8 +72,25 @@ class ChatWindow : IChatMessageReceiver
 		m_input = "";
 	}
 
+	void LimitLineCount()
+	{
+		if (m_lines.Length > uint(Setting_MaximumLines)) {
+			m_lines.RemoveRange(0, m_lines.Length - Setting_MaximumLines);
+		}
+	}
+
+	void AddSystemLine(const string &in line)
+	{
+		string text = "$96f" + Icons::Bolt + " $eee" + line;
+		m_lines.InsertLast(ChatLine(m_lineIdIterator++, Time::Stamp, text));
+	}
+
 	void AddLine(const string &in line)
 	{
+		if (line == "") {
+			return;
+		}
+
 		ChatLine@ newLine = ChatLine(m_lineIdIterator++, Time::Stamp, line);
 
 		// Check if this line should be filtered out
@@ -83,10 +100,9 @@ class ChatWindow : IChatMessageReceiver
 
 		// Add the line to the list of messages
 		m_lines.InsertLast(newLine);
-		if (m_lines.Length > uint(Setting_MaximumLines)) {
-			m_lines.RemoveRange(0, m_lines.Length - Setting_MaximumLines);
-		}
+		LimitLineCount();
 
+		// Remember when the last message was received
 		m_lastMessageTime = Time::Now;
 
 		// Maybe play a sound

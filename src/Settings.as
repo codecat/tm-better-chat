@@ -16,7 +16,7 @@ vec2 Setting_DefaultPosition = vec2(5, 50);
 [Setting category="General" name="Default size" description="You can move and resize the chat like a normal window as well!"]
 vec2 Setting_DefaultSize = vec2(800, 200);
 
-[Setting category="General" name="Trace full debug lines to the logfile"]
+[Setting category="General" name="Trace full debug lines to the logfile (has no effect when streamer mode is enabled)"]
 bool Setting_TraceToLog = true;
 
 
@@ -30,7 +30,7 @@ string Setting_Favorites;
 [Setting category="Messages" name="Blocked users" description="Users to block from chat, separated by commas."]
 string Setting_Blocked;
 
-[Setting category="Messages" name="Filter regex" description="Regular expression to match for filtering out messages."]
+[Setting category="Messages" name="Filter regex" description="Regular expression to match for filtering out messages. The regex is case insensitive."]
 string Setting_FilterRegex;
 
 [Setting category="Messages" name="Sound on system message"]
@@ -74,3 +74,20 @@ bool Setting_ClubTags = true;
 
 [Setting category="Appearance" name="Display help line on startup"]
 bool Setting_ShowHelp = true;
+
+
+
+[Setting category="Streamer" name="Enable streamer mode" description="Enables a global block-list of streamer-unfriendly texts."]
+bool Setting_StreamerMode = true;
+
+[Setting category="Streamer" name="Censor messages" description="Censors messages in chat instead of dropping them."]
+bool Setting_StreamerCensor = true;
+
+[Setting category="Streamer" name="Censor replacement" description="What you see instead of the banned text."]
+string Setting_StreamerCensorReplace = "$f33<censored>";
+
+[Setting category="Streamer" name="Automatic 5 minute timeout" description="Automatically time-out censored users for 5 minutes."]
+bool Setting_StreamerAutoTimeout = false;
+
+[Setting category="Streamer" name="Also censor system messages" description="Not recommended."]
+bool Setting_StreamerCensorSystem = false;
