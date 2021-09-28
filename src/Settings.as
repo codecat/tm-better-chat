@@ -45,7 +45,7 @@ bool Setting_SoundMention = false;
 [Setting category="Messages" name="Sound on favorite message"]
 bool Setting_SoundFavorite = false;
 
-[Setting category="Messages" name="Sound volume" min=0 max=2]
+[Setting category="Messages" name="Sound volume" min=0 max=1]
 float Setting_SoundGain = 0.3f;
 
 
