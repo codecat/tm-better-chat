@@ -10,6 +10,9 @@ bool Setting_EnableLinks = true;
 [Setting category="General" name="Limit backlog to visible range when not focused" description="Turning this on can slightly increase performance, but will introduce a small glitch when opening chat."]
 bool Setting_LimitOnHiddenOverlay = false;
 
+[Setting category="General" name="Lock size & position"]
+bool Setting_LockWindowLocation = false;
+
 [Setting category="General" name="Default position"]
 vec2 Setting_DefaultPosition = vec2(5, 50);
 
@@ -59,7 +62,7 @@ enum BackgroundStyle
 }
 
 [Setting category="Appearance" name="Background style" description="Background style when the general overlay is hidden."]
-BackgroundStyle Setting_BackgroundStyle = BackgroundStyle::TransparentLight;
+BackgroundStyle Setting_BackgroundStyle = BackgroundStyle::Flashing;
 
 [Setting category="Appearance" name="Show timestamps"]
 bool Setting_ShowTimestamp = true;

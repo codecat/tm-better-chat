@@ -238,7 +238,13 @@ class ChatWindow : IChatMessageReceiver
 	{
 		int ret = UI::WindowFlags::NoTitleBar;
 
+		if (Setting_LockWindowLocation) {
+			ret |= UI::WindowFlags::NoMove;
+			ret |= UI::WindowFlags::NoResize;
+		}
+
 		if (m_big) {
+			ret |= UI::WindowFlags::NoMove;
 			ret |= UI::WindowFlags::NoResize;
 			ret |= UI::WindowFlags::NoSavedSettings;
 		}
@@ -329,6 +335,12 @@ class ChatWindow : IChatMessageReceiver
 			}
 			UI::SetPreviousTooltip("Get out of big chat");
 		} else {
+			// Button to lock moving and resizing
+			if (UI::ToggledButton(Setting_LockWindowLocation, Icons::Lock)) {
+				Setting_LockWindowLocation = !Setting_LockWindowLocation;
+			}
+			UI::SetPreviousTooltip("Toggle window lock");
+
 			// Button to reset position and size
 			if (UI::Button(Icons::Undo)) {
 				UI::SetWindowPos(vec2(
