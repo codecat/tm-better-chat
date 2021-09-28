@@ -5,7 +5,7 @@ class ElementTag : Element
 
 	ElementTag(const string &in text)
 	{
-		m_text = ColoredString(text);
+		m_text = ColoredString(text).Replace("\n", " ");
 		m_color = UI::TAG_COLOR;
 	}
 
