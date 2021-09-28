@@ -30,52 +30,54 @@ class ElementPlayerName : ElementTag
 
 			UI::Text(m_text);
 
-			if (m_login != "") {
+			if (!m_line.m_isSelf) {
+				if (m_login != "") {
+					UI::Separator();
+
+					if (UI::Selectable(Icons::Eye + " Spectate", false)) {
+						auto api = GetApp().Network.PlaygroundClientScriptAPI;
+						api.RequestSpectatorClient(true);
+						api.SetSpectateTarget(m_login);
+					}
+				}
+
 				UI::Separator();
 
-				if (UI::Selectable(Icons::Eye + " Spectate", false)) {
-					auto api = GetApp().Network.PlaygroundClientScriptAPI;
-					api.RequestSpectatorClient(true);
-					api.SetSpectateTarget(m_login);
+				if (m_favorited) {
+					if (UI::Selectable(Icons::StarO + " Unfavorite", false)) {
+						Setting_Favorites = CsvRemoveValue(Setting_Favorites, m_name);
+					}
+				} else {
+					if (UI::Selectable(Icons::Star + " Favorite", false)) {
+						Setting_Favorites = CsvAddValue(Setting_Favorites, m_name);
+					}
 				}
-			}
 
-			UI::Separator();
+				if (m_blocked) {
+					if (UI::Selectable(Icons::Check + " Unblock", false)) {
+						Setting_Blocked = CsvRemoveValue(Setting_Blocked, m_name);
+					}
+				} else {
+					if (UI::Selectable(Icons::Ban + " Block", false)) {
+						Setting_Blocked = CsvAddValue(Setting_Blocked, m_name);
+					}
+				}
 
-			if (m_favorited) {
-				if (UI::Selectable(Icons::StarO + " Unfavorite", false)) {
-					Setting_Favorites = CsvRemoveValue(Setting_Favorites, m_name);
+				if (UI::BeginMenu(Icons::ClockO + " Timeout")) {
+					if (UI::MenuItem("1 minute")) {
+						Timeout::Add(m_name, 60 * 1000);
+					}
+					if (UI::MenuItem("10 minutes")) {
+						Timeout::Add(m_name, 10 * 60 * 1000);
+					}
+					if (UI::MenuItem("30 minutes")) {
+						Timeout::Add(m_name, 30 * 60 * 1000);
+					}
+					if (UI::MenuItem("1 hour")) {
+						Timeout::Add(m_name, 60 * 60 * 1000);
+					}
+					UI::EndMenu();
 				}
-			} else {
-				if (UI::Selectable(Icons::Star + " Favorite", false)) {
-					Setting_Favorites = CsvAddValue(Setting_Favorites, m_name);
-				}
-			}
-
-			if (m_blocked) {
-				if (UI::Selectable(Icons::Check + " Unblock", false)) {
-					Setting_Blocked = CsvRemoveValue(Setting_Blocked, m_name);
-				}
-			} else {
-				if (UI::Selectable(Icons::Ban + " Block", false)) {
-					Setting_Blocked = CsvAddValue(Setting_Blocked, m_name);
-				}
-			}
-
-			if (UI::BeginMenu(Icons::ClockO + " Timeout")) {
-				if (UI::MenuItem("1 minute")) {
-					Timeout::Add(m_name, 60 * 1000);
-				}
-				if (UI::MenuItem("10 minutes")) {
-					Timeout::Add(m_name, 10 * 60 * 1000);
-				}
-				if (UI::MenuItem("30 minutes")) {
-					Timeout::Add(m_name, 30 * 60 * 1000);
-				}
-				if (UI::MenuItem("1 hour")) {
-					Timeout::Add(m_name, 60 * 60 * 1000);
-				}
-				UI::EndMenu();
 			}
 
 			if (m_accountID != "") {
