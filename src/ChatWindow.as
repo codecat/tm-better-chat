@@ -388,7 +388,7 @@ class ChatWindow : IChatMessageReceiver
 		} else {
 			UI::SetNextWindowPos(
 				int(Setting_DefaultPosition.x),
-				Draw::GetHeight() - int(Setting_DefaultSize.y - Setting_DefaultPosition.y),
+				int(Draw::GetHeight() - Setting_DefaultSize.y - Setting_DefaultPosition.y),
 				UI::Cond::FirstUseEver
 			);
 			UI::SetNextWindowSize(
