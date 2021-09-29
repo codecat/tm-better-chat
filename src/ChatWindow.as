@@ -9,8 +9,8 @@ class ChatWindow : IChatMessageReceiver
 	bool m_displaySystem = true;
 	bool m_displayOnlyFavorites = false;
 
-	bool m_overlayInputWasEnabled = false;
 	bool m_showInput = false;
+	bool m_focusOnInput = false;
 	string m_input;
 	int m_setInputCursor = -1;
 
@@ -55,20 +55,14 @@ class ChatWindow : IChatMessageReceiver
 			return;
 		}
 
-		m_overlayInputWasEnabled = UI::IsOverlayInputEnabledExternally();
-		if (!m_overlayInputWasEnabled) {
-			UI::EnableOverlayInput();
-		}
 		m_showInput = true;
+		m_focusOnInput = true;
 		m_input = text;
 		m_setInputCursor = m_input.Length;
 	}
 
 	void HideInput()
 	{
-		if (!m_overlayInputWasEnabled) {
-			UI::DisableOverlayInput();
-		}
 		m_showInput = false;
 		m_input = "";
 	}
@@ -234,11 +228,16 @@ class ChatWindow : IChatMessageReceiver
 		return ret;
 	}
 
+	bool CanFocus()
+	{
+		return m_showInput || UI::IsOverlayShown();
+	}
+
 	int GetWindowFlags()
 	{
 		int ret = UI::WindowFlags::NoTitleBar;
 
-		if (Setting_LockWindowLocation) {
+		if (Setting_LockWindowLocation || !UI::IsOverlayShown()) {
 			ret |= UI::WindowFlags::NoMove;
 			ret |= UI::WindowFlags::NoResize;
 		}
@@ -249,7 +248,7 @@ class ChatWindow : IChatMessageReceiver
 			ret |= UI::WindowFlags::NoSavedSettings;
 		}
 
-		if (!UI::IsOverlayInputEnabled()) {
+		if (!CanFocus()) {
 			ret |= UI::WindowFlags::NoInputs;
 		}
 
@@ -262,28 +261,28 @@ class ChatWindow : IChatMessageReceiver
 
 	vec4 GetWindowBackground()
 	{
-		if (!UI::IsOverlayInputEnabled() && !m_big) {
-			float alpha = 0;
-
-			switch (Setting_BackgroundStyle) {
-				case BackgroundStyle::Hidden: alpha = 0; break;
-				case BackgroundStyle::Transparent: alpha = 0.75f; break;
-				case BackgroundStyle::TransparentLight: alpha = 0.5f; break;
-				case BackgroundStyle::Flashing: {
-					int timeSinceLastMessage = Time::Now - m_lastMessageTime;
-					const int FLASH_TIME = 1000;
-					if (timeSinceLastMessage < FLASH_TIME) {
-						alpha = 0.5f * (1.0f - timeSinceLastMessage / float(FLASH_TIME));
-					} else {
-						alpha = 0;
-					}
-				} break;
-			}
-
-			return vec4(0, 0, 0, alpha);
+		if (m_big || CanFocus()) {
+			return vec4(0, 0, 0, 0.75f);
 		}
 
-		return vec4(0, 0, 0, 0.75f);
+		float alpha = 0;
+
+		switch (Setting_BackgroundStyle) {
+			case BackgroundStyle::Hidden: alpha = 0; break;
+			case BackgroundStyle::Transparent: alpha = 0.75f; break;
+			case BackgroundStyle::TransparentLight: alpha = 0.5f; break;
+			case BackgroundStyle::Flashing: {
+				int timeSinceLastMessage = Time::Now - m_lastMessageTime;
+				const int FLASH_TIME = 1000;
+				if (timeSinceLastMessage < FLASH_TIME) {
+					alpha = 0.5f * (1.0f - timeSinceLastMessage / float(FLASH_TIME));
+				} else {
+					alpha = 0;
+				}
+			} break;
+		}
+
+		return vec4(0, 0, 0, alpha);
 	}
 
 	void RenderLines()
@@ -292,7 +291,7 @@ class ChatWindow : IChatMessageReceiver
 
 		// Decide on start index
 		uint startIndex = 0;
-		if (Setting_LimitOnHiddenOverlay && !UI::IsOverlayInputEnabled()) {
+		if (Setting_LimitOnHiddenOverlay && !CanFocus()) {
 			int numLines = int(windowSize.y / m_chatLineFrameHeight) + 1;
 			if (uint(numLines) < m_lines.Length) {
 				startIndex = m_lines.Length - numLines;
@@ -448,8 +447,8 @@ class ChatWindow : IChatMessageReceiver
 
 		RenderLines();
 
-		// Automatically scroll down if overlay input is not enabled or if the user is at the bottom of the scrolling area
-		if (m_scrollToBottom || !UI::IsOverlayInputEnabled() || (UI::GetScrollY() >= UI::GetScrollMaxY())) {
+		// Automatically scroll down if the user can focus, or if the user is at the bottom of the scrolling area
+		if (m_scrollToBottom || !CanFocus() || (UI::GetScrollY() >= UI::GetScrollMaxY())) {
 			UI::SetScrollHereY(1.0f);
 			m_scrollToBottom = false;
 		}
@@ -459,9 +458,10 @@ class ChatWindow : IChatMessageReceiver
 		}
 		UI::End();
 
-		// Hide the input box if the overlay is disabled
-		if (!UI::IsOverlayInputEnabled()) {
+		// Hide the input box if the user can't focus
+		if (!CanFocus()) {
 			m_showInput = false;
+			m_focusOnInput = false;
 		}
 
 		// Whether we have to hide the input at the end of the frame
@@ -488,8 +488,9 @@ class ChatWindow : IChatMessageReceiver
 
 			bool pressedEnter = false;
 
-			if (UI::IsWindowAppearing()) {
+			if (UI::IsWindowAppearing() || m_focusOnInput) {
 				UI::SetKeyboardFocusHere();
+				m_focusOnInput = false;
 			}
 			m_input = UI::InputText("", m_input, pressedEnter,
 				UI::InputTextFlags::EnterReturnsTrue |
@@ -516,7 +517,7 @@ class ChatWindow : IChatMessageReceiver
 
 		UI::PopStyleColor();
 
-		if (!windowFocused && !inputWindowFocused && UI::IsOverlayInputEnabledExternally()) {
+		if (!windowFocused && !inputWindowFocused) {
 			HideInput();
 		}
 
