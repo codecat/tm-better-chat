@@ -237,6 +237,17 @@ class ChatWindow : IChatMessageReceiver
 		return m_showInput || UI::IsOverlayShown();
 	}
 
+	int GetChildWindowFlags()
+	{
+		int ret = 0;
+
+		if (!Setting_ShowScrollbar) {
+			ret |= UI::WindowFlags::NoScrollbar;
+		}
+
+		return ret;
+	}
+
 	int GetWindowFlags()
 	{
 		int ret = UI::WindowFlags::NoTitleBar;
@@ -260,7 +271,7 @@ class ChatWindow : IChatMessageReceiver
 			ret |= UI::WindowFlags::NoDecoration;
 		}
 
-		return ret;
+		return ret | GetChildWindowFlags();
 	}
 
 	vec4 GetWindowBackground()
@@ -428,6 +439,7 @@ class ChatWindow : IChatMessageReceiver
 
 		string windowTitle = GetWindowTitle();
 		int windowFlags = GetWindowFlags();
+		int childWindowFlags = GetChildWindowFlags();
 
 		UI::PushStyleColor(UI::Col::WindowBg, GetWindowBackground());
 
@@ -446,7 +458,7 @@ class ChatWindow : IChatMessageReceiver
 
 			// Begin second half of the window
 			UI::SetCursorPos(startingCursorPos + vec2(40, 0));
-			UI::BeginChild("ChatContainer");
+			UI::BeginChild("ChatContainer", vec2(), false, childWindowFlags);
 		}
 
 		RenderLines();

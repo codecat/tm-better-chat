@@ -76,6 +76,9 @@ bool Setting_ShowTextShadow = true;
 [Setting category="Appearance" name="Display help line on startup"]
 bool Setting_ShowHelp = true;
 
+[Setting category="Appearance" name="Show scrollbar"]
+bool Setting_ShowScrollbar = true;
+
 
 
 [Setting category="Streamer" name="Enable streamer mode" description="Enables a global block-list of streamer-unfriendly texts."]
