@@ -6,7 +6,9 @@ When a player with Better Chat connects to a server, the following command is au
 
 	/chatformat json
 
-You may choose to ignore this command, or handle it. When you handle it, every (chat) message you output to the chat, should be in a Json format prefixed with `CHAT_JSON:`. Below are some example lines.
+You may choose to ignore this command, or handle it. Additionally, you should handle `/chatformat default` to reset it back to the default formatting.
+
+When you handle the command and the format is set to json, every (chat) message you output to the chat, should be in a Json format prefixed with `CHAT_JSON:`. Below are some example lines.
 
 	CHAT_JSON:{"login":"c5jutptORLinoaIUmVWscA","text":"I'm chatting w/o a nickname!"}
 	CHAT_JSON:{"login":"c5jutptORLinoaIUmVWscA","nickname":"Nimz|Miss","text":"I'm chatting with a nickname!"}
