@@ -131,15 +131,19 @@ class ChatWindow : IChatMessageReceiver
 		if (down) {
 			if (key == VirtualKey::F4) {
 				m_visible = !m_visible;
+				return true;
 			} else if (key == VirtualKey::C) {
 				m_big = !m_big;
+				return true;
 			}
 
 			if (m_visible) {
 				if (key == VirtualKey::Return || key == VirtualKey::T) {
 					ShowInput();
+					return true;
 				} else if (key == VirtualKey::Y) {
 					ShowInput("/t ");
+					return true;
 				}
 			}
 		}
