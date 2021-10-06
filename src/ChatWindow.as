@@ -156,8 +156,8 @@ class ChatWindow : IChatMessageReceiver
 		while (GetApp().CurrentPlayground is null) {
 			yield();
 		}
-		trace("Telling server about Better Chat's format via /setformat");
-		SendChatMessage("/setformat json");
+		trace("Telling server about Better Chat's format");
+		SendChatMessage("/chatformat json");
 	}
 
 	void OnServerChanged(const string &in login)
