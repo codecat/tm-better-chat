@@ -7,10 +7,13 @@ enum AutoCompletionType
 
 interface IAutoCompletionItem
 {
-	bool Matches(const string &in text);
-	string AcceptText();
-	void Render(UI::DrawList@ dl, const vec2 &in pos);
+	bool Matches(const string &in text) const;
+	int Distance(const string &in text) const;
+	string AcceptText() const;
+	void Render(UI::DrawList@ dl, const vec2 &in pos) const;
 }
+
+string g_filterListCompare;
 
 class AutoCompletion
 {
@@ -193,6 +196,11 @@ class AutoCompletion
 				m_itemsFiltered.InsertLast(item);
 			}
 		}
+
+		g_filterListCompare = text;
+		m_itemsFiltered.Sort(function(a, b) {
+			return a.Distance(g_filterListCompare) < b.Distance(g_filterListCompare);
+		});
 
 		m_selectedIndex = 0;
 	}
