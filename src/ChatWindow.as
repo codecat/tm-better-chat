@@ -147,10 +147,10 @@ class ChatWindow : IChatMessageReceiver
 		if (down) {
 			if (key == VirtualKey::F4) {
 				m_visible = !m_visible;
-				return true;
+				return false;
 			} else if (key == VirtualKey::C) {
 				m_big = !m_big;
-				return true;
+				return false;
 			}
 
 			if (m_visible) {
