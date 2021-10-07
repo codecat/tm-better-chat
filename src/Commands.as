@@ -30,5 +30,7 @@ namespace Commands
 		Register("gold", TimeCommand(TimeCommandType::Gold));
 		Register("silver", TimeCommand(TimeCommandType::Silver));
 		Register("bronze", TimeCommand(TimeCommandType::Bronze));
+		Register("trackmaniaio", TmioCommand());
+		Register("tmio", TmioCommand());
 	}
 }

@@ -29,6 +29,9 @@ class TimeCommand : ICommand
 	void Run(const string &in text)
 	{
 		auto map = GetApp().RootMap;
+		if (map is null) {
+			return;
+		}
 
 		switch (m_type) {
 			case TimeCommandType::Author: g_window.SendChatMessage("$<$071" + Icons::Trophy + "$> Author medal: $bbb" + Time::Format(map.TMObjective_AuthorTime)); break;
