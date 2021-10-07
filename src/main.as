@@ -33,6 +33,7 @@ void Main()
 	@g_sndChatSystem = Resources::GetAudioSample("audio/ChatSystem.wav");
 
 	Emotes::Load();
+	Commands::Load();
 
 	g_window.Initialize();
 

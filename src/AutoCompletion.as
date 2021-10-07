@@ -3,6 +3,7 @@ enum AutoCompletionType
 	None,
 	Emote,
 	Mention,
+	Command,
 }
 
 interface IAutoCompletionItem
@@ -45,7 +46,7 @@ class AutoCompletion
 			return;
 		}
 
-		const float WINDOW_WIDTH = 200;
+		const float WINDOW_WIDTH = 400;
 		const float WINDOW_SPACING = 4;
 		const float WINDOW_PADDING = 4;
 		const float WINDOW_ROUNDING = 4;
@@ -54,7 +55,7 @@ class AutoCompletion
 		const float ITEM_ROUNDING = 4;
 
 		vec2 windowPos = chatPos + vec2(
-			chatSize.x / 2.0f - WINDOW_WIDTH / 2.0f,
+			WINDOW_SPACING, //chatSize.x / 2.0f - WINDOW_WIDTH / 2.0f,
 			WINDOW_SPACING
 		);
 		vec2 windowSize = vec2(
@@ -120,6 +121,15 @@ class AutoCompletion
 					m_items.InsertLast(AutoCompletionItemMention(playerInfo.Name));
 				}
 			} break;
+
+			case AutoCompletionType::Command: {
+				auto keys = Commands::g_commands.GetKeys();
+				for (uint i = 0; i < keys.Length; i++) {
+					string name = keys[i];
+					auto cmd = Commands::Find(name);
+					m_items.InsertLast(AutoCompletionItemCommand(name, cmd));
+				}
+			} break;
 		}
 	}
 
@@ -159,6 +169,7 @@ class AutoCompletion
 			if (
 				data.EventChar != 58 /* ':' */ &&
 				data.EventChar != 64 /* '@' */ &&
+				data.EventChar != 47 /* '/' */ &&
 				(data.EventChar < 48 /* '0' */ || data.EventChar > 57 /* '9' */) &&
 				(data.EventChar < 65 /* 'A' */ || data.EventChar > 90 /* 'Z' */) &&
 				(data.EventChar < 97 /* 'a' */ || data.EventChar > 122 /* 'z' */)
@@ -197,12 +208,16 @@ class AutoCompletion
 			}
 		}
 
+		m_selectedIndex = 0;
+
+		if (m_itemsFiltered.Length == 0) {
+			return;
+		}
+
 		g_filterListCompare = text;
 		m_itemsFiltered.Sort(function(a, b) {
 			return a.Distance(g_filterListCompare) < b.Distance(g_filterListCompare);
 		});
-
-		m_selectedIndex = 0;
 	}
 
 	void Cancel()

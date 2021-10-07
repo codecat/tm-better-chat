@@ -38,6 +38,22 @@ class ChatWindow : IChatMessageReceiver
 		}
 	}
 
+	void OnUserInput(const string &in text)
+	{
+		if (text.StartsWith("/")) {
+			auto parse = Regex::Search(text, "^\\/([\\/A-Za-z0-9_]+)");
+			if (parse.Length > 0) {
+				auto cmd = Commands::Find(parse[1]);
+				if (cmd !is null) {
+					cmd.Run(text);
+					return;
+				}
+			}
+		}
+
+		SendChatMessage(text);
+	}
+
 	void SendChatMessage(const string &in text)
 	{
 		auto pg = GetApp().CurrentPlayground;
@@ -184,6 +200,8 @@ class ChatWindow : IChatMessageReceiver
 				m_auto.Begin(AutoCompletionType::Emote);
 			} else if (data.EventChar == 64 /* '@' */) {
 				m_auto.Begin(AutoCompletionType::Mention);
+			} else if (data.EventChar == 47 /* '/' */ && m_input == "") {
+				m_auto.Begin(AutoCompletionType::Command);
 			}
 			m_auto.CharFilter(data);
 
@@ -520,8 +538,9 @@ class ChatWindow : IChatMessageReceiver
 			if (pressedEnter) {
 				if (m_auto.IsVisible()) {
 					m_auto.Accept();
+					m_focusOnInput = true;
 				} else {
-					SendChatMessage(m_input);
+					OnUserInput(m_input);
 					shouldHideInput = true;
 				}
 			}
