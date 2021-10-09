@@ -70,6 +70,9 @@ bool Setting_ShowTimestamp = true;
 [Setting category="Appearance" name="Show club tags"]
 bool Setting_ShowClubTags = true;
 
+[Setting category="Appearance" name="Show nickname if available"]
+bool Setting_ShowNickname = true;
+
 [Setting category="Appearance" name="Show text shadow"]
 bool Setting_ShowTextShadow = true;
 

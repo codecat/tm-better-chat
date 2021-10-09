@@ -51,7 +51,14 @@ class ChatLine
 	void ParseLine(const string &in line)
 	{
 		bool teamChat = false;
-		string author;
+
+		string authorName;
+		string authorLogin;
+		string authorNickname;
+
+		//NOTE: we can't keep this handle around because it will be invalidated on disconnect
+		CSmPlayer@ authorInfo;
+
 		string text;
 
 		// Trace the message to the log if needed by settings (and not in streamer mode)
@@ -59,38 +66,67 @@ class ChatLine
 			trace(line);
 		}
 
-		// Extract author & message contents
-		auto parse = Regex::Match(line, "^([<\\[])\\$<([^\\$]+)\\$>[\\]>] (.*)"); //TODO: This regex only works for basic uplay player names!
-		if (parse.Length > 0) {
-			if (parse[1] == "<") {
-				teamChat = true;
+		// If the line starts with "CHAT_JSON:", we have a json object providing us juicy details
+		if (line.StartsWith("CHAT_JSON:")) {
+			auto js = Json::Parse(line.SubStr(10));
+
+			if (js.HasKey("login")) {
+				authorLogin = js["login"];
 			}
-			author = parse[2];
-			text = parse[3];
+
+			if (js.HasKey("nickname")) {
+				authorNickname = js["nickname"];
+			}
+
+			if (js.HasKey("text")) {
+				text = js["text"];
+			}
+
+			@authorInfo = FindPlayerByLogin(authorLogin);
+			if (authorInfo !is null) {
+				authorName = authorInfo.User.Name;
+			}
+
 		} else {
-			// Check if this is an EvoSC message
-			parse = Regex::Match(line, "^\\$FFF\\$z\\$s(\\$[0-9a-fA-F]{3}.+)\\[\\$<\\$<\\$fff\\$eee(.*)\\$>\\$>\\]\\$z\\$s (.*)");
+			// We don't have a json object, so we have to extract author & message contents manually
+			auto parse = Regex::Match(line, "^([<\\[])\\$<([^\\$]+)\\$>[\\]>] (.*)"); //TODO: This regex only works for basic uplay player names!
 			if (parse.Length > 0) {
-				author = parse[1] + "$z " + parse[2];
+				if (parse[1] == "<") {
+					teamChat = true;
+				}
+				authorName = parse[2];
 				text = parse[3];
 			} else {
-				// This is a system message (or something else)
-				text = line;
+				// Check if this is an EvoSC message
+				parse = Regex::Match(line, "^\\$FFF\\$z\\$s(\\$[0-9a-fA-F]{3}.+)\\[\\$<\\$<\\$fff\\$eee(.*)\\$>\\$>\\]\\$z\\$s (.*)");
+				if (parse.Length > 0) {
+					authorName = parse[1] + "$z " + parse[2];
+					text = parse[3];
+				} else {
+					// This is a system message (or something else)
+					text = line;
+				}
+			}
+
+			// If we have an author display name, find the player associated
+			@authorInfo = FindPlayerByName(authorName);
+			if (authorInfo !is null) {
+				authorLogin = authorInfo.User.Login;
 			}
 		}
 
 		// Check if this user is timed out
-		if (!m_isFiltered && Timeout::IsTimedOut(author)) {
+		if (!m_isFiltered && Timeout::IsTimedOut(authorName)) {
 			m_isFiltered = true;
 		}
 
 		// Check if this user is blocked
-		if (!m_isFiltered && CsvContainsValue(Setting_Blocked, author)) {
+		if (!m_isFiltered && CsvContainsValue(Setting_Blocked, authorName)) {
 			m_isFiltered = true;
 		}
 
 		// Check if the message should be blocked by streamer mode
-		if (!m_isFiltered && Setting_StreamerMode && (author != "" || Setting_StreamerCensorSystem)) {
+		if (!m_isFiltered && Setting_StreamerMode && (authorName != "" || Setting_StreamerCensorSystem)) {
 			string censored = StreamerMode::Censor(text);
 			if (censored == "") {
 				m_isFiltered = true;
@@ -99,7 +135,7 @@ class ChatLine
 			if (censored != text) {
 				text = censored;
 				if (Setting_StreamerAutoTimeout) {
-					Timeout::Add(author, 5 * 60 * 1000);
+					Timeout::Add(authorName, 5 * 60 * 1000);
 				}
 			}
 		}
@@ -115,24 +151,9 @@ class ChatLine
 			}
 		}
 
-		// If we have an author display name, find the player associated
-		//NOTE: we can't keep this handle around because it will be invalidated on disconnect
-		CSmPlayer@ authorInfo = null;
-		if (author != "") {
-			auto pg = GetApp().CurrentPlayground;
-			if (pg !is null) {
-				for (uint i = 0; i < pg.Players.Length; i++) {
-					auto player = cast<CSmPlayer>(pg.Players[i]);
-					if (player.User.Name == author) {
-						@authorInfo = player;
-					}
-				}
-			}
-		}
-
+		// Get some more information about this player
 		auto network = cast<CTrackManiaNetwork>(GetApp().Network);
 
-		string authorLogin;
 		string authorId;
 		string authorClubTag;
 		bool isLocalPlayer = false;
@@ -142,7 +163,6 @@ class ChatLine
 		if (authorInfo !is null) {
 			auto user = authorInfo.User;
 
-			authorLogin = user.Login;
 			authorId = user.WebServicesUserId;
 			authorClubTag = user.ClubTag;
 			isLocalPlayer = (user.Login == network.PlayerInfo.Login);
@@ -156,7 +176,7 @@ class ChatLine
 		bool coloredTags = (teamNumber > 0);
 
 		// System message
-		if (author == "") {
+		if (authorName == "") {
 			m_isSystem = true;
 			SetHighlight(Highlight::System);
 		}
@@ -181,7 +201,7 @@ class ChatLine
 		}
 
 		// Highlight if this is a favorite user
-		if (CsvContainsValue(Setting_Favorites, author)) {
+		if (CsvContainsValue(Setting_Favorites, authorName)) {
 			m_isFavorite = true;
 			SetHighlight(Highlight::Favorite);
 		}
@@ -199,9 +219,9 @@ class ChatLine
 			AddColorableElement(ElementClubTag(authorClubTag), coloredTags, linearHue);
 		}
 
-		if (author != "") {
+		if (authorName != "") {
 			// Add author name
-			AddColorableElement(ElementPlayerName(author, authorLogin, authorId, authorClubTag), coloredTags, linearHue);
+			AddColorableElement(ElementPlayerName(authorName, authorNickname, authorLogin, authorId, authorClubTag), coloredTags, linearHue);
 		}
 
 		ParseMessageText(text);

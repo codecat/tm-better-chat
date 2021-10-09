@@ -1,6 +1,7 @@
 class ElementPlayerName : ElementTag
 {
 	string m_name;
+	string m_nickname;
 	string m_login;
 	string m_accountID;
 	string m_clubTag;
@@ -8,11 +9,12 @@ class ElementPlayerName : ElementTag
 	bool m_favorited;
 	bool m_blocked;
 
-	ElementPlayerName(const string &in name, const string &in login, const string &in accountID, const string &in clubTag)
+	ElementPlayerName(const string &in name, const string &in nickname, const string &in login, const string &in accountID, const string &in clubTag)
 	{
-		super(name);
+		super();
 
 		m_name = name;
+		m_nickname = nickname;
 		m_login = login;
 		m_accountID = accountID;
 		m_clubTag = clubTag;
@@ -20,7 +22,12 @@ class ElementPlayerName : ElementTag
 
 	void Render() override
 	{
-		ElementTag::Render();
+		if (Setting_ShowNickname && m_nickname != "") {
+			UI::Tag(m_nickname, m_color);
+			UI::SetPreviousTooltip(m_name);
+		} else {
+			UI::Tag(m_name, m_color);
+		}
 
 		if (UI::BeginPopupContextItem(tostring(m_line.m_id) + " " + m_name)) {
 			if (UI::IsWindowAppearing()) {
@@ -28,7 +35,10 @@ class ElementPlayerName : ElementTag
 				m_blocked = CsvContainsValue(Setting_Blocked, m_name);
 			}
 
-			UI::Text(m_text);
+			if (m_nickname != "") {
+				UI::Text(m_nickname);
+			}
+			UI::Text(m_name);
 
 			if (!m_line.m_isSelf) {
 				if (m_login != "") {
