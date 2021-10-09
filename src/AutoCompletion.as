@@ -129,6 +129,9 @@ class AutoCompletion
 					auto cmd = Commands::Find(name);
 					m_items.InsertLast(AutoCompletionItemCommand(name, cmd));
 				}
+
+				// We don't want to wait until multiple characters have been typed, we want to show it immediately
+				m_visible = true;
 			} break;
 		}
 	}
