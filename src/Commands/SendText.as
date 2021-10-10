@@ -1,9 +1,9 @@
-class TextCommand : ICommand
+class SendTextCommand : ICommand
 {
 	string m_text;
 	string m_description;
 
-	TextCommand(const string &in text, const string &in description)
+	SendTextCommand(const string &in text, const string &in description)
 	{
 		m_text = text;
 		m_description = description;
