@@ -32,10 +32,10 @@ class ElementLink : Element
 		vec4 color;
 
 		if (UI::IsItemHovered()) {
-			text = "\\$<\\$aaf" + m_text + "\\$>";
+			text = "\\$<\\$ccf" + m_text + "\\$>";
 			color = vec4(0.66f, 0.66f, 1, 1);
 		} else {
-			text = "\\$<\\$66f" + m_text + "\\$>";
+			text = "\\$<\\$aaf" + m_text + "\\$>";
 			color = vec4(0.4f, 0.4f, 1, 1);
 		}
 
