@@ -41,7 +41,7 @@ class ChatWindow : IChatMessageReceiver
 	void OnUserInput(const string &in text)
 	{
 		if (text.StartsWith("/")) {
-			auto parse = Regex::Search(text, "^\\/([\\/A-Za-z0-9_]+)");
+			auto parse = Regex::Search(text, "^\\/([\\/A-Za-z0-9_\\-]+)");
 			if (parse.Length > 0) {
 				auto cmd = Commands::Find(parse[1]);
 				if (cmd !is null) {

@@ -123,9 +123,8 @@ class AutoCompletion
 			} break;
 
 			case AutoCompletionType::Command: {
-				auto keys = Commands::g_commands.GetKeys();
-				for (uint i = 0; i < keys.Length; i++) {
-					string name = keys[i];
+				for (uint i = 0; i < Commands::g_sortedCommands.Length; i++) {
+					string name = Commands::g_sortedCommands[i];
 					auto cmd = Commands::Find(name);
 					m_items.InsertLast(AutoCompletionItemCommand(name, cmd));
 				}
@@ -173,6 +172,7 @@ class AutoCompletion
 				data.EventChar != 58 /* ':' */ &&
 				data.EventChar != 64 /* '@' */ &&
 				data.EventChar != 47 /* '/' */ &&
+				data.EventChar != 45 /* '-' */ &&
 				(data.EventChar < 48 /* '0' */ || data.EventChar > 57 /* '9' */) &&
 				(data.EventChar < 65 /* 'A' */ || data.EventChar > 90 /* 'Z' */) &&
 				(data.EventChar < 97 /* 'a' */ || data.EventChar > 122 /* 'z' */)

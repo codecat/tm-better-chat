@@ -17,6 +17,21 @@ class TimeCommand : ICommand
 		m_send = send;
 	}
 
+	string Icon()
+	{
+		if (m_send) {
+			return "\\$acf" + Icons::Trophy;
+		}
+
+		switch (m_type) {
+			case TimeCommandType::Author: return "\\$071" + Icons::Trophy;
+			case TimeCommandType::Gold:   return "\\$db4" + Icons::Trophy;
+			case TimeCommandType::Silver: return "\\$899" + Icons::Trophy;
+			case TimeCommandType::Bronze: return "\\$964" + Icons::Trophy;
+		}
+		return Icons::Trophy;
+	}
+
 	string Description()
 	{
 		if (m_send) {

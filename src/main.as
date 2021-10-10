@@ -13,6 +13,7 @@ void Update(float dt)
 void Render()
 {
 	g_window.Render();
+	Renderables::Render();
 }
 
 void RenderMenu()

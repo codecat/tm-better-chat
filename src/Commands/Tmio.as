@@ -7,6 +7,15 @@ class TmioCommand : ICommand
 		m_send = send;
 	}
 
+	string Icon()
+	{
+		if (m_send) {
+			return "\\$acf" + Icons::Heartbeat;
+		} else {
+			return "\\$f39" + Icons::Heartbeat;
+		}
+	}
+
 	string Description()
 	{
 		if (m_send) {

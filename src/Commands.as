@@ -1,5 +1,6 @@
 interface ICommand
 {
+	string Icon();
 	string Description();
 	void Run(const string &in text);
 }
@@ -7,6 +8,7 @@ interface ICommand
 namespace Commands
 {
 	dictionary g_commands;
+	array<string> g_sortedCommands;
 
 	ICommand@ Find(const string &in name)
 	{
@@ -20,6 +22,7 @@ namespace Commands
 	void Register(const string &in name, ICommand@ cmd)
 	{
 		g_commands.Set(name, @cmd);
+		g_sortedCommands.InsertLast(name);
 	}
 
 	void Load()
@@ -38,18 +41,21 @@ namespace Commands
 		Register("version", PassthroughCommand("Prints the dedicated server version."));
 		Register("serverlogin", PassthroughCommand("Prints the server login."));
 
+		// Help dialog
+		Register("bc-help", HelpCommand());
+
 		// Tell medal times
-		Register("tellauthor", TimeCommand(TimeCommandType::Author, true));
-		Register("tellgold", TimeCommand(TimeCommandType::Gold, true));
-		Register("tellsilver", TimeCommand(TimeCommandType::Silver, true));
-		Register("tellbronze", TimeCommand(TimeCommandType::Bronze, true));
+		Register("tell-author", TimeCommand(TimeCommandType::Author, true));
+		Register("tell-gold", TimeCommand(TimeCommandType::Gold, true));
+		Register("tell-silver", TimeCommand(TimeCommandType::Silver, true));
+		Register("tell-bronze", TimeCommand(TimeCommandType::Bronze, true));
 
 		// Tell Trackmania.io
-		Register("telltrackmaniaio", TmioCommand(true));
-		Register("telltmio", TmioCommand(true));
+		Register("tell-trackmaniaio", TmioCommand(true));
+		Register("tell-tmio", TmioCommand(true));
 
 		// Promotion
-		Register("tellopenplanet", SendTextCommand("$<$f39" + Icons::Heartbeat + "$> Openplanet is an extension platform for Trackmania with many plugins: $lhttps://openplanet.nl/", "Tells chat about Openplanet."));
-		Register("tellbetterchat", SendTextCommand("$<$96f" + Icons::Bolt + " $ef7Better Chat$> is a complete replacement for the in-game chat: $lhttps://openplanet.nl/files/134", "Tells chat about Better Chat."));
+		Register("tell-openplanet", SendTextCommand("$<$f39" + Icons::Heartbeat + "$> Openplanet is an extension platform for Trackmania with many plugins: $lhttps://openplanet.nl/", "Tells chat about Openplanet.", Icons::Heartbeat));
+		Register("tell-betterchat", SendTextCommand("$<$96f" + Icons::Bolt + " $ef7Better Chat$> is a complete replacement for the in-game chat: $lhttps://openplanet.nl/files/134", "Tells chat about Better Chat.", Icons::Bolt));
 	}
 }
