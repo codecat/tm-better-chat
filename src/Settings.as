@@ -22,6 +22,9 @@ vec2 Setting_DefaultSize = vec2(800, 200);
 [Setting category="General" name="Trace full debug lines to the logfile (has no effect when streamer mode is enabled)"]
 bool Setting_TraceToLog = true;
 
+[Setting category="General" name="Also show Nadeo's chat (used for debugging)"]
+bool Setting_ShowNadeoChat = false;
+
 
 
 [Setting category="Messages" name="Extra mentions" description="Extra names to get mentioned by, seperated by commas."]

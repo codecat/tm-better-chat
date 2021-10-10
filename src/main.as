@@ -44,7 +44,7 @@ void Main()
 		if (ctlRoot !is null) {
 			auto ctlChat = GameInterface::ControlFromID(ctlRoot, "FrameChat");
 			if (ctlChat !is null) {
-				ctlChat.IsHiddenExternal = true;
+				ctlChat.IsHiddenExternal = !Setting_ShowNadeoChat;
 			}
 		}
 		yield();
