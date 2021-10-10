@@ -1,10 +1,5 @@
 ChatWindow g_window;
 
-Audio::Sample@ g_sndChat;
-Audio::Sample@ g_sndChatMention;
-Audio::Sample@ g_sndChatFavorite;
-Audio::Sample@ g_sndChatSystem;
-
 void Update(float dt)
 {
 	g_window.Update(dt);
@@ -26,13 +21,14 @@ bool OnKeyPress(bool down, VirtualKey key)
 	return g_window.OnKeyPress(down, key);
 }
 
+void OnSettingsChanged()
+{
+	Sounds::CheckIfSoundSetChanged();
+}
+
 void Main()
 {
-	@g_sndChat = Resources::GetAudioSample("audio/Chat.wav");
-	@g_sndChatMention = Resources::GetAudioSample("audio/ChatMention.wav");
-	@g_sndChatFavorite = Resources::GetAudioSample("audio/ChatFavorite.wav");
-	@g_sndChatSystem = Resources::GetAudioSample("audio/ChatSystem.wav");
-
+	Sounds::Load();
 	Emotes::Load();
 	Commands::Load();
 

@@ -118,19 +118,19 @@ class ChatWindow : IChatMessageReceiver
 		m_lastMessageTime = Time::Now;
 
 		// Maybe play a sound
-		if (Setting_SoundGain > 0) {
+		if (Setting_SoundGain > 0 && Setting_SoundSet != Sounds::SoundSet::None) {
 			Audio::Sample@ sound = null;
 			if (Setting_SoundChat) {
-				@sound = g_sndChat;
+				@sound = Sounds::g_sndChat;
 			}
 			if (newLine.m_isSystem && Setting_SoundSystem) {
-				@sound = g_sndChatSystem;
+				@sound = Sounds::g_sndChatSystem;
 			}
 			if (newLine.m_isMention && Setting_SoundMention) {
-				@sound = g_sndChatMention;
+				@sound = Sounds::g_sndChatMention;
 			}
 			if (newLine.m_isFavorite && Setting_SoundFavorite) {
-				@sound = g_sndChatFavorite;
+				@sound = Sounds::g_sndChatFavorite;
 			}
 			if (sound !is null) {
 				Audio::Play(sound, Setting_SoundGain);

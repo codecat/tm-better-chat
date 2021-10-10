@@ -42,20 +42,23 @@ string Setting_Blocked;
 [Setting category="Messages" name="Filter regex" description="Regular expression to match for filtering out messages. The regex is case insensitive."]
 string Setting_FilterRegex;
 
+[Setting category="Messages" name="Sound set"]
+Sounds::SoundSet Setting_SoundSet = Sounds::SoundSet::None;
+
 [Setting category="Messages" name="Sound on system message"]
-bool Setting_SoundSystem = false;
+bool Setting_SoundSystem = true;
 
 [Setting category="Messages" name="Sound on chat message"]
-bool Setting_SoundChat = false;
+bool Setting_SoundChat = true;
 
 [Setting category="Messages" name="Sound on mention"]
-bool Setting_SoundMention = false;
+bool Setting_SoundMention = true;
 
 [Setting category="Messages" name="Sound on favorite message"]
-bool Setting_SoundFavorite = false;
+bool Setting_SoundFavorite = true;
 
 [Setting category="Messages" name="Sound volume" min=0 max=1]
-float Setting_SoundGain = 0.3f;
+float Setting_SoundGain = 0.15f;
 
 
 
