@@ -33,7 +33,7 @@ class AutoCompletionItemCommand : IAutoCompletionItem
 
 	void Render(UI::DrawList@ dl, const vec2 &in pos) const override
 	{
-		dl.AddText(pos, vec4(1, 1, 1, 1), m_name);
+		dl.AddText(pos - vec2(0, 2), vec4(1, 1, 1, 1), m_name);
 		dl.AddText(pos + vec2(0, 14), vec4(0.7f, 0.7f, 0.7f, 1), m_description);
 	}
 }
