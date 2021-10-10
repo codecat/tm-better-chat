@@ -1,6 +1,7 @@
 namespace Emotes
 {
 	dictionary g_emotes;
+	array<Emote@> g_sortedEmotes;
 
 	Emote@ Find(const string &in name)
 	{
@@ -33,11 +34,17 @@ namespace Emotes
 			return;
 		}
 
+		EmoteSource@ source = EmoteSource();
+		source.m_name = js["name"];
+
 		auto keys = jsEmotes.GetKeys();
 		for (uint i = 0; i < keys.Length; i++) {
 			string key = keys[i];
 			auto jsEmote = jsEmotes[key];
-			g_emotes.Set(key, @Emote(jsEmote, texture));
+
+			Emote@ newEmote = Emote(jsEmote, key, texture, source);
+			g_emotes.Set(key, @newEmote);
+			g_sortedEmotes.InsertLast(newEmote);
 		}
 	}
 

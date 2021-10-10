@@ -106,11 +106,9 @@ class AutoCompletion
 
 		switch (m_type) {
 			case AutoCompletionType::Emote: {
-				auto keys = Emotes::g_emotes.GetKeys();
-				for (uint i = 0; i < keys.Length; i++) {
-					string name = keys[i];
-					auto emote = Emotes::Find(name);
-					m_items.InsertLast(AutoCompletionItemEmote(name, emote));
+				for (uint i = 0; i < Emotes::g_sortedEmotes.Length; i++) {
+					auto emote = Emotes::g_sortedEmotes[i];
+					m_items.InsertLast(AutoCompletionItemEmote(emote));
 				}
 			} break;
 

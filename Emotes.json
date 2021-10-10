@@ -1,4 +1,5 @@
 {
+	"name": "Better Chat Global emotes",
 	"texture": "Emotes.png",
 	"emotes": {
 		"Kappa": { "pos": [ 0, 0 ], "size": [ 25, 28 ] },

@@ -249,7 +249,7 @@ class ChatLine
 					AddText(buffer + " ");
 					buffer = "";
 				}
-				AddElement(ElementEmote(emoteKey, emote));
+				AddElement(ElementEmote(emote));
 				continue;
 			}
 

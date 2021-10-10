@@ -1,11 +1,14 @@
 class Emote
 {
+	string m_name;
 	Resources::Texture@ m_texture;
 	vec2 m_pos;
 	vec2 m_size;
+	EmoteSource@ m_source;
 
-	Emote(const Json::Value &in js, Resources::Texture@ texture)
+	Emote(const Json::Value &in js, const string &in name, Resources::Texture@ texture, EmoteSource@ source)
 	{
+		m_name = name;
 		@m_texture = texture;
 
 		auto jsPos = js["pos"];
@@ -15,6 +18,8 @@ class Emote
 		auto jsSize = js["size"];
 		m_size.x = jsSize[0];
 		m_size.y = jsSize[1];
+
+		@m_source = source;
 	}
 
 	void Render(UI::DrawList@ dl, const vec4 &in rect)
@@ -46,5 +51,18 @@ class Emote
 
 		UI::Dummy(size);
 		Render(UI::GetWindowDrawList(), UI::GetItemRect());
+	}
+
+	void RenderFixed(float height = 24)
+	{
+		vec2 size = m_size;
+		if (size.y > height) {
+			size *= height / m_size.y;
+		}
+
+		UI::Dummy(vec2(size.x, height));
+		vec4 rect = UI::GetItemRect();
+		rect.w = size.y;
+		Render(UI::GetWindowDrawList(), rect);
 	}
 }

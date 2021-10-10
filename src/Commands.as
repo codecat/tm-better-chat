@@ -44,6 +44,9 @@ namespace Commands
 		// Help dialog
 		Register("bc-help", HelpCommand());
 
+		// Emotes dialog
+		Register("bc-emotes", EmotesCommand());
+
 		// Tell medal times
 		Register("tell-author", TimeCommand(TimeCommandType::Author, true));
 		Register("tell-gold", TimeCommand(TimeCommandType::Gold, true));
