@@ -49,7 +49,7 @@ namespace Commands
 		Register("telltmio", TmioCommand(true));
 
 		// Promotion
-		Register("tellopenplanet", SendTextCommand("$<$f39" + Icons::Heartbeat + "$> Openplanet is an extension platform for Trackmania with many plugins: $lhttps://openplanet.nl", "Tells chat about Openplanet."));
+		Register("tellopenplanet", SendTextCommand("$<$f39" + Icons::Heartbeat + "$> Openplanet is an extension platform for Trackmania with many plugins: $lhttps://openplanet.nl/", "Tells chat about Openplanet."));
 		Register("tellbetterchat", SendTextCommand("$<$96f" + Icons::Bolt + " $ef7Better Chat$> is a complete replacement for the in-game chat: $lhttps://openplanet.nl/files/134", "Tells chat about Better Chat."));
 	}
 }
