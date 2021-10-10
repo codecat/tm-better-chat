@@ -1,3 +1,4 @@
+#if TMNEXT
 class TmioCommand : ICommand
 {
 	bool m_send;
@@ -41,3 +42,4 @@ class TmioCommand : ICommand
 		}
 	}
 }
+#endif

@@ -54,7 +54,11 @@ class TimeCommand : ICommand
 
 	void Run(const string &in text)
 	{
+#if TURBO || UNITED
+		auto map = GetApp().Challenge;
+#else
 		auto map = GetApp().RootMap;
+#endif
 		if (map is null) {
 			return;
 		}

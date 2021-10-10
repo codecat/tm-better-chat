@@ -183,6 +183,7 @@ class ChatLine
 			}
 #endif
 
+#if !TURBO
 			auto tmPlayer = cast<CTrackManiaPlayer>(authorInfo);
 			if (tmPlayer !is null) {
 				// 0 in time attack
@@ -195,6 +196,7 @@ class ChatLine
 					linearHue = 0.0f;
 				}
 			}
+#endif
 
 			//TODO: What else can we do with the player object here?
 		}

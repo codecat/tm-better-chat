@@ -41,7 +41,7 @@ void Main()
 		if (ctlRoot !is null) {
 			auto ctlChat = cast<CControlContainer>(GameInterface::ControlFromID(ctlRoot, "FrameChat"));
 			if (ctlChat !is null) {
-#if MP41
+#if MP41 || TURBO
 				// On MP4, we can't simply hide FrameChat by setting IsHiddenExternal
 				// Instead, we use a trick with IsClippingContainer and BoxMin
 				ctlChat.IsClippingContainer = !Setting_ShowNadeoChat;
