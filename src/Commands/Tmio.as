@@ -12,6 +12,6 @@ class TmioCommand : ICommand
 			return;
 		}
 
-		g_window.SendChatMessage("$l[https://trackmania.io/#/leaderboard/" + map.IdName + "]" + StripFormatCodes(map.MapName) + " on Trackmania.io");
+		g_window.SendChatMessage("$l[https://trackmania.io/#/leaderboard/" + map.IdName + "]\"" + StripFormatCodes(map.MapName) + "\" on Trackmania.io");
 	}
 }
