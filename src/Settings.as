@@ -4,7 +4,10 @@ bool Setting_ClearOnLeave = true;
 [Setting category="General" name="Maximum lines in backlog"]
 int Setting_MaximumLines = 100;
 
-[Setting category="Messages" name="Enable links"]
+[Setting category="General" name="Maximum lines in input history"]
+int Setting_MaximumHistory = 25;
+
+[Setting category="General" name="Enable links"]
 bool Setting_EnableLinks = true;
 
 [Setting category="General" name="Limit backlog to visible range when not focused" description="Turning this on can slightly increase performance, but will introduce a small glitch when opening chat."]

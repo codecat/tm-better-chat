@@ -24,6 +24,9 @@ class ChatWindow : IChatMessageReceiver
 
 	AutoCompletion m_auto;
 
+	array<string> m_history;
+	int m_historyIndex = -1;
+
 	void Initialize()
 	{
 	}
@@ -31,6 +34,7 @@ class ChatWindow : IChatMessageReceiver
 	void Clear()
 	{
 		m_lines.RemoveRange(0, m_lines.Length);
+		m_history.RemoveRange(0, m_history.Length);
 
 		if (Setting_ShowHelp) {
 			auto plugin = Meta::ExecutingPlugin();
@@ -40,6 +44,8 @@ class ChatWindow : IChatMessageReceiver
 
 	void OnUserInput(const string &in text)
 	{
+		AddInputHistory(text);
+
 		if (text.StartsWith("/")) {
 			auto parse = Regex::Search(text, "^\\/([\\/A-Za-z0-9_\\-]+)");
 			if (parse.Length > 0) {
@@ -83,13 +89,6 @@ class ChatWindow : IChatMessageReceiver
 		m_input = "";
 	}
 
-	void LimitLineCount()
-	{
-		if (m_lines.Length > uint(Setting_MaximumLines)) {
-			m_lines.RemoveRange(0, m_lines.Length - Setting_MaximumLines);
-		}
-	}
-
 	void AddSystemLine(const string &in line)
 	{
 		string text = "$96f" + Icons::Bolt + " $eee" + line;
@@ -111,7 +110,9 @@ class ChatWindow : IChatMessageReceiver
 
 		// Add the line to the list of messages
 		m_lines.InsertLast(newLine);
-		LimitLineCount();
+		if (m_lines.Length > uint(Setting_MaximumLines)) {
+			m_lines.RemoveRange(0, m_lines.Length - Setting_MaximumLines);
+		}
 
 		// Remember when the last message was received
 		m_lastMessageTime = Time::Now;
@@ -135,6 +136,16 @@ class ChatWindow : IChatMessageReceiver
 				Audio::Play(sound, Setting_SoundGain);
 			}
 		}
+	}
+
+	void AddInputHistory(const string &in text)
+	{
+		m_history.InsertLast(text);
+		if (m_history.Length > uint(Setting_MaximumHistory)) {
+			m_history.RemoveRange(0, m_history.Length - Setting_MaximumHistory);
+		}
+
+		m_historyIndex = -1;
 	}
 
 	void OnChatMessage(const string &in line)
@@ -204,6 +215,7 @@ class ChatWindow : IChatMessageReceiver
 				m_auto.Begin(AutoCompletionType::Command);
 			}
 			m_auto.CharFilter(data);
+			m_historyIndex = -1;
 
 		} else if (data.EventFlag == UI::InputTextFlags::CallbackCompletion) {
 			m_auto.Accept();
@@ -212,7 +224,30 @@ class ChatWindow : IChatMessageReceiver
 			if (m_auto.IsVisible()) {
 				m_auto.Navigate(data);
 			} else {
-				//TODO: History (pressed up or down arrow)
+				// 0: "first"
+				// 1: "second"
+				if (data.EventKey == UI::Key::UpArrow) {
+					if (m_historyIndex == -1) {
+						m_historyIndex = int(m_history.Length) - 1;
+					} else {
+						m_historyIndex--;
+					}
+					if (m_historyIndex == -1) {
+						data.Text = "";
+					}
+				} else if (data.EventKey == UI::Key::DownArrow) {
+					if (m_historyIndex >= 0) {
+						m_historyIndex++;
+					}
+					if (m_historyIndex == int(m_history.Length)) {
+						data.Text = "";
+						m_historyIndex = -1;
+					}
+				}
+
+				if (m_historyIndex >= 0 && m_historyIndex < int(m_history.Length)) {
+					data.Text = m_history[m_historyIndex];
+				}
 			}
 		}
 	}
