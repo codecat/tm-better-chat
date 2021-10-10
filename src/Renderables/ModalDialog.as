@@ -4,6 +4,8 @@ class ModalDialog : IRenderable
 	bool m_firstRender = false;
 	bool m_visible = true;
 
+	vec2 m_size = vec2(100, 100);
+
 	ModalDialog(const string &in id)
 	{
 		m_id = id;
@@ -14,6 +16,8 @@ class ModalDialog : IRenderable
 		if (!m_firstRender) {
 			UI::OpenPopup(m_id);
 		}
+
+		UI::SetNextWindowSize(int(m_size.x), int(m_size.y));
 
 		if (UI::BeginPopupModal(m_id, m_visible, UI::WindowFlags::NoSavedSettings)) {
 			RenderDialog();
