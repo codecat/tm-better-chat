@@ -4,7 +4,7 @@ author = "Miss"
 category = "Better Suite"
 
 siteid = 134
-version = "0.1.2"
+version = "0.2.0"
 
 [script]
 imports = [ "Icons.as", "Formatting.as", "Permissions.as", "Time.as" ]
