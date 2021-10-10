@@ -231,6 +231,10 @@ class AutoCompletion
 
 	void Accept()
 	{
+		if (!m_visible) {
+			return;
+		}
+
 		if (m_selectedIndex < 0 || m_selectedIndex >= int(m_itemsFiltered.Length)) {
 			// Shouldn't happen, but let's warn about it
 			warn("Autocompletion selected index out of range: " + m_itemsFiltered.Length + " items, index " + m_selectedIndex);
