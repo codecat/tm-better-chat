@@ -1,7 +1,11 @@
 class ElementPlayerName : ElementTag
 {
 	string m_name;
+	string m_nameColored;
+
 	string m_nickname;
+	string m_nicknameColored;
+
 	string m_login;
 	string m_accountID;
 	string m_clubTag;
@@ -14,7 +18,11 @@ class ElementPlayerName : ElementTag
 		super();
 
 		m_name = name;
+		m_nameColored = ColoredString(name);
+
 		m_nickname = nickname;
+		m_nicknameColored = ColoredString(nickname);
+
 		m_login = login;
 		m_accountID = accountID;
 		m_clubTag = clubTag;
@@ -23,10 +31,10 @@ class ElementPlayerName : ElementTag
 	void Render() override
 	{
 		if (Setting_ShowNickname && m_nickname != "") {
-			UI::Tag(m_nickname, m_color);
-			UI::SetPreviousTooltip(m_name);
+			UI::Tag(m_nicknameColored, m_color);
+			UI::SetPreviousTooltip(m_nameColored);
 		} else {
-			UI::Tag(m_name, m_color);
+			UI::Tag(m_nameColored, m_color);
 		}
 
 		if (UI::BeginPopupContextItem(tostring(m_line.m_id) + " " + m_name)) {
@@ -36,9 +44,12 @@ class ElementPlayerName : ElementTag
 			}
 
 			if (m_nickname != "") {
-				UI::Text(m_nickname);
+				UI::Text(m_nicknameColored);
 			}
-			UI::Text(m_name);
+			UI::Text(m_nameColored);
+#if !TMNEXT
+			UI::TextDisabled(m_login);
+#endif
 
 			if (!m_line.m_isSelf) {
 				if (m_login != "") {
@@ -90,6 +101,7 @@ class ElementPlayerName : ElementTag
 				}
 			}
 
+#if TMNEXT
 			if (m_accountID != "") {
 				UI::Separator();
 
@@ -97,11 +109,15 @@ class ElementPlayerName : ElementTag
 					OpenBrowserURL("https://trackmania.io/#/player/" + m_accountID);
 				}
 			}
+#endif
 
 			UI::Separator();
 
 			if (UI::Selectable(Icons::Clipboard + " Copy name", false)) {
 				IO::SetClipboard(m_name);
+			}
+			if (m_nickname != "" && UI::Selectable(Icons::Clipboard + " Copy nickname", false)) {
+				IO::SetClipboard(m_nickname);
 			}
 			if (m_clubTag != "" && UI::Selectable(Icons::Clipboard + " Copy clubtag", false)) {
 				IO::SetClipboard(m_clubTag);

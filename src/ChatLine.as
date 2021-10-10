@@ -57,7 +57,7 @@ class ChatLine
 		string authorNickname;
 
 		//NOTE: we can't keep this handle around because it will be invalidated on disconnect
-		CSmPlayer@ authorInfo;
+		CGamePlayer@ authorInfo;
 
 		string text;
 
@@ -89,7 +89,12 @@ class ChatLine
 
 		} else {
 			// We don't have a json object, so we have to extract author & message contents manually
-			auto parse = Regex::Match(line, "^([<\\[])\\$<([^\\$]+)\\$>[\\]>] (.*)"); //TODO: This regex only works for basic uplay player names!
+#if TMNEXT
+			//TODO: This regex only works for basic uplay player names!
+			auto parse = Regex::Match(line, "^([<\\[])\\$<([^\\$]+)\\$>[\\]>] (.*)");
+#else
+			auto parse = Regex::Match(line, "^([<\\[])\\$<(.+?)\\$>[\\]>] (.*)");
+#endif
 			if (parse.Length > 0) {
 				if (parse[1] == "<") {
 					teamChat = true;
@@ -163,12 +168,33 @@ class ChatLine
 		if (authorInfo !is null) {
 			auto user = authorInfo.User;
 
+#if TMNEXT
 			authorId = user.WebServicesUserId;
 			authorClubTag = user.ClubTag;
+#endif
+
 			isLocalPlayer = (user.Login == network.PlayerInfo.Login);
 
-			teamNumber = authorInfo.EdClan;
-			linearHue = authorInfo.LinearHue;
+#if !UNITED
+			auto smPlayer = cast<CSmPlayer>(authorInfo);
+			if (smPlayer !is null) {
+				teamNumber = smPlayer.EdClan;
+				linearHue = smPlayer.LinearHue;
+			}
+#endif
+
+			auto tmPlayer = cast<CTrackManiaPlayer>(authorInfo);
+			if (tmPlayer !is null) {
+				// 0 in time attack
+				// 1 in team blue
+				// 2 in team red
+				teamNumber = tmPlayer.ScriptAPI.CurrentClan;
+				if (teamNumber == 1) {
+					linearHue = 0.5f;
+				} else if (teamNumber == 2) {
+					linearHue = 0.0f;
+				}
+			}
 
 			//TODO: What else can we do with the player object here?
 		}

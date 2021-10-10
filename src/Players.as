@@ -1,4 +1,4 @@
-CSmPlayer@ FindPlayerByName(const string &in name)
+CGamePlayer@ FindPlayerByName(const string &in name)
 {
 	if (name == "") {
 		return null;
@@ -10,7 +10,7 @@ CSmPlayer@ FindPlayerByName(const string &in name)
 	}
 
 	for (uint i = 0; i < pg.Players.Length; i++) {
-		auto player = cast<CSmPlayer>(pg.Players[i]);
+		auto player = cast<CGamePlayer>(pg.Players[i]);
 		if (player.User.Name == name) {
 			return player;
 		}
@@ -19,7 +19,7 @@ CSmPlayer@ FindPlayerByName(const string &in name)
 	return null;
 }
 
-CSmPlayer@ FindPlayerByLogin(const string &in login)
+CGamePlayer@ FindPlayerByLogin(const string &in login)
 {
 	if (login == "") {
 		return null;
@@ -31,7 +31,7 @@ CSmPlayer@ FindPlayerByLogin(const string &in login)
 	}
 
 	for (uint i = 0; i < pg.Players.Length; i++) {
-		auto player = cast<CSmPlayer>(pg.Players[i]);
+		auto player = cast<CGamePlayer>(pg.Players[i]);
 		if (player.User.Login == login) {
 			return player;
 		}
@@ -39,4 +39,3 @@ CSmPlayer@ FindPlayerByLogin(const string &in login)
 
 	return null;
 }
-

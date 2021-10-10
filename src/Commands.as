@@ -33,9 +33,11 @@ namespace Commands
 		Register("silver", TimeCommand(TimeCommandType::Silver, false));
 		Register("bronze", TimeCommand(TimeCommandType::Bronze, false));
 
+#if TMNEXT
 		// Trackmania.io
 		Register("trackmaniaio", TmioCommand(false));
 		Register("tmio", TmioCommand(false));
+#endif
 
 		// Built-in commands available on all servers
 		Register("version", PassthroughCommand("Prints the dedicated server version."));
@@ -53,9 +55,11 @@ namespace Commands
 		Register("tell-silver", TimeCommand(TimeCommandType::Silver, true));
 		Register("tell-bronze", TimeCommand(TimeCommandType::Bronze, true));
 
+#if TMNEXT
 		// Tell Trackmania.io
 		Register("tell-trackmaniaio", TmioCommand(true));
 		Register("tell-tmio", TmioCommand(true));
+#endif
 
 		// Promotion
 		Register("tell-openplanet", SendTextCommand("$<$f39" + Icons::Heartbeat + "$> Openplanet is an extension platform for Trackmania with many plugins: $lhttps://openplanet.nl/", "Tells chat about Openplanet.", Icons::Heartbeat));

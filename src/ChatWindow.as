@@ -73,9 +73,11 @@ class ChatWindow : IChatMessageReceiver
 
 	void ShowInput(const string &in text = "")
 	{
+#if TMNEXT
 		if (!Permissions::InGameChat()) {
 			return;
 		}
+#endif
 
 		m_showInput = true;
 		m_focusOnInput = true;
