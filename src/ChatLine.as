@@ -376,7 +376,7 @@ class ChatLine
 	{
 		vec2 rectPos = UI::GetCursorPos();
 
-		UI::SetCursorPos(rectPos + vec2(4, 0));
+		UI::SetCursorPos(rectPos + vec2(8, 0));
 
 		UI::AlignTextToFramePadding();
 
