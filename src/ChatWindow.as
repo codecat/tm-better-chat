@@ -411,6 +411,7 @@ class ChatWindow : IChatMessageReceiver
 			UI::SetPreviousTooltip("Toggle window lock");
 
 			// Button to reset position and size
+			UI::BeginDisabled(Setting_LockWindowLocation);
 			if (UI::Button(Icons::Undo)) {
 				UI::SetWindowPos(vec2(
 					Setting_DefaultPosition.x,
@@ -418,6 +419,7 @@ class ChatWindow : IChatMessageReceiver
 				));
 				UI::SetWindowSize(Setting_DefaultSize);
 			}
+			UI::EndDisabled();
 			UI::SetPreviousTooltip("Reset position & size");
 		}
 
