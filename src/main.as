@@ -32,6 +32,12 @@ void Main()
 	startnew(ChatMessageLoop, @g_window);
 
 	while (true) {
+#if DEVELOPER
+		bool showNadeoChat = Setting_ShowNadeoChat;
+#else
+		bool showNadeoChat = false;
+#endif
+
 		auto ctlRoot = GameInterface::GetRoot();
 		if (ctlRoot !is null) {
 			auto ctlChat = cast<CControlContainer>(GameInterface::ControlFromID(ctlRoot, "FrameChat"));
@@ -39,15 +45,15 @@ void Main()
 #if MP41 || TURBO
 				// On MP4, we can't simply hide FrameChat by setting IsHiddenExternal
 				// Instead, we use a trick with IsClippingContainer and BoxMin
-				ctlChat.IsClippingContainer = !Setting_ShowNadeoChat;
+				ctlChat.IsClippingContainer = !showNadeoChat;
 				ctlChat.BoxMin = vec2();
 
 				auto ctlChatInput = GameInterface::ControlFromID(ctlChat, "OverlayChatInput");
 				if (ctlChatInput !is null) {
-					ctlChatInput.IsHiddenExternal = !Setting_ShowNadeoChat;
+					ctlChatInput.IsHiddenExternal = !showNadeoChat;
 				}
 #else
-				ctlChat.IsHiddenExternal = !Setting_ShowNadeoChat;
+				ctlChat.IsHiddenExternal = !showNadeoChat;
 #endif
 			}
 		}
