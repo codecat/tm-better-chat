@@ -42,6 +42,12 @@ string Setting_Blocked;
 [Setting category="Messages" name="Filter regex" description="Regular expression to match for filtering out messages. The regex is case insensitive."]
 string Setting_FilterRegex;
 
+[Setting category="Messages" name="Show system messages" description="Whether to show system messages."]
+bool Setting_ShowSystemMessages = true;
+
+[Setting category="Messages" name="Favorite-only mode" description="Show only messages from favorited users."]
+bool Setting_FavoriteOnlyMode = false;
+
 [Setting category="Messages" name="Sound set"]
 Sounds::SoundSet Setting_SoundSet = Sounds::SoundSet::None;
 

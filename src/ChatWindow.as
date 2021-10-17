@@ -6,9 +6,6 @@ class ChatWindow : IChatMessageReceiver
 	array<ChatLine@> m_lines;
 	uint m_lineIdIterator = 0;
 
-	bool m_displaySystem = true;
-	bool m_displayOnlyFavorites = false;
-
 	bool m_showInput = false;
 	bool m_focusOnInput = false;
 	string m_input;
@@ -373,12 +370,12 @@ class ChatWindow : IChatMessageReceiver
 			auto line = m_lines[i];
 
 			// Hide line if we want to filter out system messages
-			if (!m_displaySystem && line.m_isSystem) {
+			if (!Setting_ShowSystemMessages && line.m_isSystem) {
 				continue;
 			}
 
 			// Hide line if we're in favorites-only mode and this is not a favorite, system, or self message
-			if (m_displayOnlyFavorites) {
+			if (Setting_FavoriteOnlyMode) {
 				if (!line.m_isSystem && !line.m_isSelf && !line.m_isFavorite) {
 					continue;
 				}
@@ -436,14 +433,14 @@ class ChatWindow : IChatMessageReceiver
 		UI::SetPreviousTooltip("Toggle timestamps");
 
 		// Button to toggle system message visibility
-		if (UI::ToggledButton(m_displaySystem, Icons::Bolt)) { // Icons::Terminal?
-			m_displaySystem = !m_displaySystem;
+		if (UI::ToggledButton(Setting_ShowSystemMessages, Icons::Bolt)) { // Icons::Terminal?
+			Setting_ShowSystemMessages = !Setting_ShowSystemMessages;
 		}
 		UI::SetPreviousTooltip("Toggle system messages");
 
 		// Button to toggle only favorites mode
-		if (UI::ToggledButton(m_displayOnlyFavorites, Icons::Star)) {
-			m_displayOnlyFavorites = !m_displayOnlyFavorites;
+		if (UI::ToggledButton(Setting_FavoriteOnlyMode, Icons::Star)) {
+			Setting_FavoriteOnlyMode = !Setting_FavoriteOnlyMode;
 		}
 		UI::SetPreviousTooltip("Toggle favorite-only mode");
 	}
