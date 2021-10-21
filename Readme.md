@@ -3,6 +3,18 @@ Complete replacement of the Trackmania in-game chat for [Openplanet](https://ope
 
 ![](.github/screenshot.png)
 
+# Features
+Better Chat is better in a lot of ways, with features such as:
+
+* Built-in emotes
+* Easier to read names and club tags
+* Right-clicking player names for options (spectate, Trackmania.io profile, block, etc.)
+* Highlighting on @ mentions
+* Custom chat commands
+* Autocompletion for mentions, emotes, and commands
+* Blocking & filtering
+* Streamer mode to censor some bad stuff
+
 # Server controller formatting
 When a player with Better Chat connects to a server, the following command is automatically typed into chat:
 
