@@ -1,6 +1,8 @@
 # Better Chat
 Complete replacement of the Trackmania in-game chat for [Openplanet](https://openplanet.nl/).
 
+![](.github/screenshot.png)
+
 # Server controller formatting
 When a player with Better Chat connects to a server, the following command is automatically typed into chat:
 
