@@ -102,7 +102,7 @@ bool Setting_ShowScrollbar = true;
 
 
 [Setting category="Streamer" name="Enable streamer mode" description="Enables a global block-list of streamer-unfriendly texts."]
-bool Setting_StreamerMode = true;
+bool Setting_StreamerMode = false;
 
 [Setting category="Streamer" name="Censor messages" description="Censors messages in chat instead of dropping them."]
 bool Setting_StreamerCensor = true;

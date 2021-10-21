@@ -62,7 +62,7 @@ class ChatLine
 		string text;
 
 		// Trace the message to the log if needed by settings (and not in streamer mode)
-		if (Setting_TraceToLog) {// && !Setting_StreamerMode) {
+		if (Setting_TraceToLog && !Setting_StreamerMode) {
 			trace(line);
 		}
 
@@ -336,9 +336,6 @@ class ChatLine
 			if (index > pos) {
 				AddElement(ElementText(text.SubStr(pos, index - pos)));
 			}
-
-			//TODO: Consider adding links to the end, eg: "Like this[1]." <1>
-			//      This way we can keep any formatting
 
 			// Parse link start
 			string textWithLink = text.SubStr(index);
