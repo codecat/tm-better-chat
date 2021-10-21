@@ -59,6 +59,12 @@ class ChatWindow : IChatMessageReceiver
 
 	void SendChatMessage(const string &in text)
 	{
+#if TMNEXT
+		if (!Permissions::InGameChat()) {
+			return;
+		}
+#endif
+
 		auto pg = GetApp().CurrentPlayground;
 		if (pg is null) {
 			//TODO: Queue the message for later
