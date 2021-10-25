@@ -18,6 +18,7 @@ class ChatWindow : IChatMessageReceiver
 	bool m_scrollToBottom = false;
 
 	uint64 m_lastMessageTime = 0;
+	int m_jsonMessageCount = 0;
 
 	AutoCompletion m_auto;
 
@@ -107,6 +108,20 @@ class ChatWindow : IChatMessageReceiver
 		}
 
 		ChatLine@ newLine = ChatLine(m_lineIdIterator++, Time::Stamp, line);
+
+		// When a servercontroller restarts, it will have forgotten about the chatformat.
+		// We can (try to) detect these cases, by using a count of received json messages.
+		if (newLine.m_isJson) {
+			if (++m_jsonMessageCount > 3) {
+				m_jsonMessageCount = 3;
+			}
+		} else {
+			if (m_jsonMessageCount > 0 && --m_jsonMessageCount == 0) {
+				// We seem to have lost chat format, send the command again
+				warn("JSON chat format was lost, requesting it again from server.");
+				SendChatMessage("/chatformat json");
+			}
+		}
 
 		// Check if this line should be filtered out
 		if (newLine.m_isFiltered) {

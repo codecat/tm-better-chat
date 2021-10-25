@@ -21,6 +21,7 @@ class ChatLine
 	bool m_isMention = false;
 	bool m_isFavorite = false;
 	bool m_isFiltered = false;
+	bool m_isJson = false;
 
 	ChatLine(uint id, int64 time, const string &in line)
 	{
@@ -69,6 +70,8 @@ class ChatLine
 		// If the line starts with "$FFFCHAT_JSON:", we have a json object providing us juicy details
 		//NOTE: The "$FFF" at the start is prepended by the game to chat messages sent through XMLRPC (for whatever reason)
 		if (line.StartsWith("$FFFCHAT_JSON:")) {
+			m_isJson = true;
+
 			auto js = Json::Parse(line.SubStr(14));
 
 			if (js.HasKey("login")) {
@@ -89,6 +92,7 @@ class ChatLine
 			}
 
 		} else {
+			m_isJson = false;
 			// We don't have a json object, so we have to extract author & message contents manually
 #if TMNEXT
 			//TODO: This regex only works for basic uplay player names!
