@@ -66,9 +66,10 @@ class ChatLine
 			trace(line);
 		}
 
-		// If the line starts with "CHAT_JSON:", we have a json object providing us juicy details
-		if (line.StartsWith("CHAT_JSON:")) {
-			auto js = Json::Parse(line.SubStr(10));
+		// If the line starts with "$FFFCHAT_JSON:", we have a json object providing us juicy details
+		//NOTE: The "$FFF" at the start is prepended by the game to chat messages sent through XMLRPC (for whatever reason)
+		if (line.StartsWith("$FFFCHAT_JSON:")) {
+			auto js = Json::Parse(line.SubStr(14));
 
 			if (js.HasKey("login")) {
 				authorLogin = js["login"];
