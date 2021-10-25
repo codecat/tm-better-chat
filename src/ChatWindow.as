@@ -161,20 +161,25 @@ class ChatWindow : IChatMessageReceiver
 	bool OnKeyPress(bool down, VirtualKey key)
 	{
 		if (down) {
-			if (key == VirtualKey::F4) {
+			if (key == Setting_KeyToggleVisibility) {
 				m_visible = !m_visible;
 				return false;
-			} else if (key == VirtualKey::C) {
+			} else if (key == Setting_KeyToggleBig) {
 				m_big = !m_big;
 				return false;
 			}
 
 			if (m_visible) {
-				if (key == VirtualKey::Return || key == VirtualKey::T) {
+				if (key == Setting_KeyInput1 || key == Setting_KeyInput2) {
 					ShowInput();
 					return true;
-				} else if (key == VirtualKey::Y) {
+				} else if (key == Setting_KeyInputTeam) {
 					ShowInput("/t ");
+					return true;
+				} else if (Setting_KeyInputSlash && key == VirtualKey::Oem2 /* Forward slash */) {
+					ShowInput("/");
+					m_auto.m_cursorIndex = 0;
+					m_auto.Begin(AutoCompletionType::Command);
 					return true;
 				}
 			}
