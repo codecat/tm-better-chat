@@ -23,6 +23,6 @@ class SendTextCommand : ICommand
 
 	void Run(const string &in text)
 	{
-		g_window.SendChatMessage(m_text);
+		SendChatMessage(m_text);
 	}
 }

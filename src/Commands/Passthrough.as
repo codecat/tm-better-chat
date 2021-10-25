@@ -21,6 +21,6 @@ class PassthroughCommand : ICommand
 
 	void Run(const string &in text)
 	{
-		g_window.SendChatMessage(text);
+		SendChatMessage(text);
 	}
 }

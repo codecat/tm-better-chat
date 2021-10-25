@@ -36,7 +36,7 @@ class TmioCommand : ICommand
 		string url = "https://trackmania.io/#/leaderboard/" + map.IdName;
 
 		if (m_send) {
-			g_window.SendChatMessage("$l[" + url + "]\"" + StripFormatCodes(map.MapName) + "\" on Trackmania.io");
+			SendChatMessage("$l[" + url + "]\"" + StripFormatCodes(map.MapName) + "\" on Trackmania.io");
 		} else {
 			OpenBrowserURL(url);
 		}

@@ -6,6 +6,8 @@ class ChatWindow : IChatMessageReceiver
 	array<ChatLine@> m_lines;
 	uint m_lineIdIterator = 0;
 
+	string m_requestedChatFormat = "text";
+
 	bool m_showInput = false;
 	bool m_focusOnInput = false;
 	string m_input;
@@ -58,21 +60,11 @@ class ChatWindow : IChatMessageReceiver
 		SendChatMessage(text);
 	}
 
-	void SendChatMessage(const string &in text)
+	void SendChatFormat(const string &in format)
 	{
-#if TMNEXT
-		if (!Permissions::InGameChat()) {
-			return;
-		}
-#endif
-
-		auto pg = GetApp().CurrentPlayground;
-		if (pg is null) {
-			//TODO: Queue the message for later
-			warn("Can't send message right now because there's no playground!");
-			return;
-		}
-		pg.Interface.ChatEntry = text;
+		trace("Requesting chat format \"" + format + "\" from server");
+		m_requestedChatFormat = format;
+		SendChatMessage("/chatformat " + format);
 	}
 
 	void ShowInput(const string &in text = "")
@@ -119,7 +111,7 @@ class ChatWindow : IChatMessageReceiver
 			if (m_jsonMessageCount > 0 && --m_jsonMessageCount == 0) {
 				// We seem to have lost chat format, send the command again
 				warn("JSON chat format was lost, requesting it again from server.");
-				SendChatMessage("/chatformat json");
+				SendChatFormat("json");
 			}
 		}
 
@@ -208,8 +200,7 @@ class ChatWindow : IChatMessageReceiver
 		while (GetApp().CurrentPlayground is null) {
 			yield();
 		}
-		trace("Telling server about Better Chat's format");
-		SendChatMessage("/chatformat json");
+		SendChatFormat("json");
 	}
 
 	void OnServerChanged(const string &in login)

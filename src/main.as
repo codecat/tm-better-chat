@@ -18,17 +18,36 @@ bool OnKeyPress(bool down, VirtualKey key)
 
 void OnDisabled()
 {
+	g_window.SendChatFormat("text");
 	ShowNadeoChat(true);
 }
 
 void OnDestroyed()
 {
+	g_window.SendChatFormat("text");
 	ShowNadeoChat(true);
 }
 
 void OnSettingsChanged()
 {
 	Sounds::CheckIfSoundSetChanged();
+}
+
+void SendChatMessage(const string &in text)
+{
+#if TMNEXT
+	if (!Permissions::InGameChat()) {
+		return;
+	}
+#endif
+
+	auto pg = GetApp().CurrentPlayground;
+	if (pg is null) {
+		//TODO: Queue the message for later
+		warn("Can't send message right now because there's no playground!");
+		return;
+	}
+	pg.Interface.ChatEntry = text;
 }
 
 void ShowNadeoChat(bool visible)
@@ -66,12 +85,15 @@ void Main()
 
 	while (true) {
 #if DEVELOPER
-		bool showNadeoChat = Setting_ShowNadeoChat;
+		ShowNadeoChat(Setting_ShowNadeoChat);
 #else
-		bool showNadeoChat = false;
+		ShowNadeoChat(false);
 #endif
 
-		ShowNadeoChat(showNadeoChat);
+		if (g_window.m_requestedChatFormat != "json") {
+			g_window.SendChatFormat("json");
+		}
+
 		yield();
 	}
 }

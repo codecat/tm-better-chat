@@ -73,7 +73,7 @@ class TimeCommand : ICommand
 		}
 
 		if (m_send) {
-			g_window.SendChatMessage(msg);
+			SendChatMessage(msg);
 		} else {
 			g_window.AddSystemLine(msg);
 		}
