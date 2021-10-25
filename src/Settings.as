@@ -32,12 +32,6 @@ bool Setting_ShowNadeoChat = false;
 
 
 
-[Setting category="Keys" name="Toggle chat window visibility"]
-VirtualKey Setting_KeyToggleVisibility = VirtualKey::F4;
-
-[Setting category="Keys" name="Toggle big chat window"]
-VirtualKey Setting_KeyToggleBig = VirtualKey::C;
-
 [Setting category="Keys" name="Primary input"]
 VirtualKey Setting_KeyInput1 = VirtualKey::Return;
 
@@ -49,6 +43,12 @@ VirtualKey Setting_KeyInputTeam = VirtualKey::Y;
 
 [Setting category="Keys" name="Open input on slash key"]
 bool Setting_KeyInputSlash = true;
+
+[Setting category="Keys" name="Toggle chat window visibility"]
+VirtualKey Setting_KeyToggleVisibility = VirtualKey::F4;
+
+[Setting category="Keys" name="Toggle big chat window"]
+VirtualKey Setting_KeyToggleBig = VirtualKey::C;
 
 
 
