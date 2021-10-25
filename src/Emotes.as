@@ -1,13 +1,20 @@
 namespace Emotes
 {
 	dictionary g_emotes;
+	dictionary g_emotesLower;
 	array<Emote@> g_sortedEmotes;
 
-	Emote@ Find(const string &in name)
+	Emote@ Find(const string &in name, bool caseSensitive = true)
 	{
 		Emote@ ret;
-		if (!g_emotes.Get(name, @ret)) {
-			return null;
+		if (caseSensitive) {
+			if (!g_emotes.Get(name, @ret)) {
+				return null;
+			}
+		} else {
+			if (!g_emotesLower.Get(name.ToLower(), @ret)) {
+				return null;
+			}
 		}
 		return ret;
 	}
@@ -44,6 +51,7 @@ namespace Emotes
 
 			Emote@ newEmote = Emote(jsEmote, key, texture, source);
 			g_emotes.Set(key, @newEmote);
+			g_emotesLower.Set(key.ToLower(), @newEmote);
 			g_sortedEmotes.InsertLast(newEmote);
 		}
 	}

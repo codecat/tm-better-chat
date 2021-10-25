@@ -266,13 +266,16 @@ class ChatLine
 		for (uint i = 0; i < parseText.Length; i++) {
 			string word = parseText[i];
 
-			// Strip colons from word if they exist
 			string emoteKey = word;
+			bool emoteCaseSensitive = true;
+
+			// If there are colons on the emote key, strip them, and search emotes case-insensitively
 			if (emoteKey.Length > 2 && emoteKey.StartsWith(":") && emoteKey.EndsWith(":")) {
 				emoteKey = emoteKey.SubStr(1, emoteKey.Length - 2);
+				emoteCaseSensitive = false;
 			}
 
-			auto emote = Emotes::Find(emoteKey);
+			auto emote = Emotes::Find(emoteKey, emoteCaseSensitive);
 			if (emote !is null) {
 				if (buffer != "") {
 					AddText(buffer + " ");
