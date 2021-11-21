@@ -83,6 +83,10 @@ void Main()
 
 	startnew(ChatMessageLoop, @g_window);
 
+	if (!Setting_WizardShown) {
+		Renderables::Add(WizardModalDialog());
+	}
+
 	while (true) {
 #if DEVELOPER
 		ShowNadeoChat(Setting_ShowNadeoChat);

@@ -19,10 +19,23 @@ class ModalDialog : IRenderable
 
 		UI::SetNextWindowSize(int(m_size.x), int(m_size.y));
 
-		if (UI::BeginPopupModal(m_id, m_visible, UI::WindowFlags::NoSavedSettings)) {
+		bool isOpen = false;
+
+		if (CanClose()) {
+			isOpen = UI::BeginPopupModal(m_id, m_visible, UI::WindowFlags::NoSavedSettings);
+		} else {
+			isOpen = UI::BeginPopupModal(m_id, UI::WindowFlags::NoSavedSettings);
+		}
+
+		if (isOpen) {
 			RenderDialog();
 			UI::EndPopup();
 		}
+	}
+
+	bool CanClose()
+	{
+		return true;
 	}
 
 	bool ShouldDisappear()
@@ -32,6 +45,7 @@ class ModalDialog : IRenderable
 
 	void Close()
 	{
+		m_visible = false;
 		UI::CloseCurrentPopup();
 	}
 

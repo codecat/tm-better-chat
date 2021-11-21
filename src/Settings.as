@@ -1,3 +1,8 @@
+[Setting hidden]
+bool Setting_WizardShown = false;
+
+
+
 [Setting category="General" name="Clear chat when switching server"]
 bool Setting_ClearOnLeave = true;
 
