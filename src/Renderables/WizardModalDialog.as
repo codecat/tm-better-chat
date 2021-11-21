@@ -200,7 +200,7 @@ class WizardModalDialog : ModalDialog
 		if (m_stage == 5) {
 			UI::SetCursorPos(vec2(windowSize.x - 82, currentPos.y));
 			if (UI::GreenButton("Finish " + Icons::Check)) {
-				Setting_WizardShown = false;
+				Setting_WizardShown = true;
 				Close();
 			}
 		} else {
