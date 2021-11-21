@@ -52,6 +52,9 @@ VirtualKey Setting_KeyToggleBig = VirtualKey::C;
 
 
 
+[Setting category="Messages" name="Enable emotes"]
+bool Setting_EnableEmotes = true;
+
 [Setting category="Messages" name="Extra mentions" description="Extra names to get mentioned by, seperated by commas."]
 string Setting_ExtraMentions;
 

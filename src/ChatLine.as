@@ -264,39 +264,45 @@ class ChatLine
 	{
 		AddElement(ElementFormatGroup(true));
 
-		string buffer;
+		if (Setting_EnableEmotes) {
+			// Separate text and emote elements if emotes are enabled
+			string buffer;
 
-		auto parseText = text.Split(" ");
-		for (uint i = 0; i < parseText.Length; i++) {
-			string word = parseText[i];
+			auto parseText = text.Split(" ");
+			for (uint i = 0; i < parseText.Length; i++) {
+				string word = parseText[i];
 
-			string emoteKey = word;
-			bool emoteCaseSensitive = true;
+				string emoteKey = word;
+				bool emoteCaseSensitive = true;
 
-			// If there are colons on the emote key, strip them, and search emotes case-insensitively
-			if (emoteKey.Length > 2 && emoteKey.StartsWith(":") && emoteKey.EndsWith(":")) {
-				emoteKey = emoteKey.SubStr(1, emoteKey.Length - 2);
-				emoteCaseSensitive = false;
-			}
-
-			auto emote = Emotes::Find(emoteKey, emoteCaseSensitive);
-			if (emote !is null) {
-				if (buffer != "") {
-					AddText(buffer + " ");
-					buffer = "";
+				// If there are colons on the emote key, strip them, and search emotes case-insensitively
+				if (emoteKey.Length > 2 && emoteKey.StartsWith(":") && emoteKey.EndsWith(":")) {
+					emoteKey = emoteKey.SubStr(1, emoteKey.Length - 2);
+					emoteCaseSensitive = false;
 				}
-				AddElement(ElementEmote(emote));
-				continue;
+
+				auto emote = Emotes::Find(emoteKey, emoteCaseSensitive);
+				if (emote !is null) {
+					if (buffer != "") {
+						AddText(buffer + " ");
+						buffer = "";
+					}
+					AddElement(ElementEmote(emote));
+					continue;
+				}
+
+				if (i > 0) {
+					buffer += " ";
+				}
+				buffer += word;
 			}
 
-			if (i > 0) {
-				buffer += " ";
+			if (buffer != "") {
+				AddText(buffer);
 			}
-			buffer += word;
-		}
-
-		if (buffer != "") {
-			AddText(buffer);
+		} else {
+			// Just add text when emotes are disabled
+			AddText(text);
 		}
 
 		AddElement(ElementFormatGroup(false));
