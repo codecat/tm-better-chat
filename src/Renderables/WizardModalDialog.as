@@ -1,6 +1,5 @@
 class WizardModalDialog : ModalDialog
 {
-	Resources::Font@ m_fontHeader;
 	Resources::Texture@ m_imgEmotes;
 	Resources::Texture@ m_imgEmoteAutocomplete;
 	Resources::Texture@ m_imgCommandAutocomplete;
@@ -16,7 +15,6 @@ class WizardModalDialog : ModalDialog
 
 		m_size = vec2(500, 400);
 
-		@m_fontHeader = Resources::GetFont("DroidSans-Bold.ttf", 22);
 		@m_imgEmotes = Resources::GetTexture("img/wizard-emotes.png");
 		@m_imgEmoteAutocomplete = Resources::GetTexture("img/wizard-emote-autocomplete.png");
 		@m_imgCommandAutocomplete = Resources::GetTexture("img/wizard-command-autocomplete.png");
@@ -165,7 +163,7 @@ class WizardModalDialog : ModalDialog
 
 	void RenderDialog() override
 	{
-		UI::PushFont(m_fontHeader);
+		UI::PushFont(g_fontHeader);
 		UI::Text("Setup wizard (" + (m_stage + 1) + " / 6)");
 		UI::PopFont();
 

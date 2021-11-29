@@ -1,5 +1,7 @@
 ChatWindow g_window;
 
+Resources::Font@ g_fontHeader;
+
 void Update(float dt)
 {
 	g_window.Update(dt);
@@ -78,6 +80,8 @@ void Main()
 	Sounds::Load();
 	Emotes::Load();
 	Commands::Load();
+
+	@g_fontHeader = Resources::GetFont("DroidSans-Bold.ttf", 22);
 
 	g_window.Initialize();
 
