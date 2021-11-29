@@ -176,7 +176,7 @@ class ChatWindow : IChatMessageReceiver
 				return false;
 			}
 
-			if (m_visible) {
+			if (IsVisible()) {
 				if (key == Setting_KeyInput1 || key == Setting_KeyInput2) {
 					ShowInput();
 					return true;
@@ -299,6 +299,25 @@ class ChatWindow : IChatMessageReceiver
 			ret += "##Big";
 		}
 		return ret;
+	}
+
+	bool IsVisible()
+	{
+		if (!m_visible) {
+			return false;
+		}
+
+		if (Setting_FollowHideChat) {
+			auto app = GetApp();
+			auto pg = app.CurrentPlayground;
+			if (pg !is null && pg.UIConfigs.Length > 0) {
+				if (pg.UIConfigs[0].OverlayHideChat) {
+					return false;
+				}
+			}
+		}
+
+		return true;
 	}
 
 	bool CanFocus()
@@ -498,7 +517,7 @@ class ChatWindow : IChatMessageReceiver
 
 	void Render()
 	{
-		if (!m_visible) {
+		if (!IsVisible()) {
 			return;
 		}
 

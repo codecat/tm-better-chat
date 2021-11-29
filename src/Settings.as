@@ -27,6 +27,9 @@ vec2 Setting_DefaultPosition = vec2(5, 50);
 [Setting category="General" name="Default size" description="You can move and resize the chat like a normal window as well!"]
 vec2 Setting_DefaultSize = vec2(800, 200);
 
+[Setting category="General" name="Hide when gamemode hides the chat"]
+bool Setting_FollowHideChat = true;
+
 [Setting category="General" name="Trace full debug lines to the logfile (has no effect when streamer mode is enabled)"]
 bool Setting_TraceToLog = true;
 
