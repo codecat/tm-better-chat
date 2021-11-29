@@ -223,7 +223,7 @@ class ChatWindow : IChatMessageReceiver
 			}
 
 		} else if (data.EventFlag == UI::InputTextFlags::CallbackCharFilter) {
-			if (data.EventChar == 58 /* ':' */) {
+			if (data.EventChar == 58 /* ':' */ && Setting_EnableEmotes) {
 				m_auto.Begin(AutoCompletionType::Emote);
 			} else if (data.EventChar == 64 /* '@' */) {
 				m_auto.Begin(AutoCompletionType::Mention);
