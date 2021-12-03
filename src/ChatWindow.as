@@ -617,6 +617,12 @@ class ChatWindow : IChatMessageReceiver
 				}
 			}
 
+			// Issue: https://github.com/codecat/tm-better-chat/issues/2
+			// Workaround: https://github.com/ocornut/imgui/issues/2620#issuecomment-501136289
+			if (UI::IsItemDeactivated() && UI::IsKeyPressed(UI::Key::Escape)) {
+				shouldHideInput = true;
+			}
+
 			UI::PopStyleColor();
 			UI::PopItemWidth();
 			UI::End();
