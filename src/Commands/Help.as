@@ -1,4 +1,4 @@
-class HelpCommand : ICommand
+class HelpCommand : BetterChat::ICommand
 {
 	string Icon()
 	{

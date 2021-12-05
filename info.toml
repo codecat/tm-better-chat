@@ -8,5 +8,9 @@ version = "0.3.0"
 
 [script]
 dependencies = [ "NadeoServices" ]
+
+exports = [ "src/Export.as" ]
+shared_exports = [ "src/ExportShared.as" ]
+
 imports = [ "Icons.as", "Formatting.as", "Permissions.as", "Time.as" ]
 timeout = 0

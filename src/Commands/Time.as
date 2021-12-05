@@ -9,7 +9,7 @@ enum TimeCommandType
 	Bronze,
 }
 
-class TimeCommand : ICommand
+class TimeCommand : BetterChat::ICommand
 {
 	TimeCommandType m_type;
 	bool m_send;

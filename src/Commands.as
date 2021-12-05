@@ -1,28 +1,23 @@
-interface ICommand
-{
-	string Icon();
-	string Description();
-	void Run(const string &in text);
-}
-
 namespace Commands
 {
 	dictionary g_commands;
 	array<string> g_sortedCommands;
 
-	ICommand@ Find(const string &in name)
+	BetterChat::ICommand@ Find(const string &in name)
 	{
-		ICommand@ ret;
+		BetterChat::ICommand@ ret;
 		if (!g_commands.Get(name, @ret)) {
 			return null;
 		}
 		return ret;
 	}
 
-	void Register(const string &in name, ICommand@ cmd)
+	void Register(const string &in name, BetterChat::ICommand@ cmd)
 	{
 		g_commands.Set(name, @cmd);
-		g_sortedCommands.InsertLast(name);
+		if (g_sortedCommands.Find(name) == -1) {
+			g_sortedCommands.InsertLast(name);
+		}
 	}
 
 	void Load()

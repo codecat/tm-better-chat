@@ -1,4 +1,4 @@
-class EmotesCommand : ICommand
+class EmotesCommand : BetterChat::ICommand
 {
 	string Icon()
 	{

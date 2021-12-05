@@ -1,5 +1,5 @@
 #if TMNEXT
-class TmioCommand : ICommand
+class TmioCommand : BetterChat::ICommand
 {
 	bool m_send;
 

@@ -1,4 +1,4 @@
-class SendTextCommand : ICommand
+class SendTextCommand : BetterChat::ICommand
 {
 	string m_text;
 	string m_description;

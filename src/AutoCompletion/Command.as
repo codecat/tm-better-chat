@@ -4,9 +4,9 @@ class AutoCompletionItemCommand : IAutoCompletionItem
 	string m_nameLower;
 	string m_description;
 	string m_icon;
-	ICommand@ m_command;
+	BetterChat::ICommand@ m_command;
 
-	AutoCompletionItemCommand(const string &in name, ICommand@ cmd)
+	AutoCompletionItemCommand(const string &in name, BetterChat::ICommand@ cmd)
 	{
 		m_name = name;
 		m_nameLower = m_name.ToLower();

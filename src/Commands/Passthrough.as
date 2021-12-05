@@ -1,4 +1,4 @@
-class PassthroughCommand : ICommand
+class PassthroughCommand : BetterChat::ICommand
 {
 	string m_description;
 	string m_icon;
