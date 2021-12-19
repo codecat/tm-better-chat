@@ -74,8 +74,8 @@ void ChatMessageLoop()
 			}
 
 			// Fire off the chat message event
-			for (uint i = 0; i < g_chatMessageListeners.Length; i++) {
-				auto listener = g_chatMessageListeners[i];
+			for (uint j = 0; j < g_chatMessageListeners.Length; j++) {
+				auto listener = g_chatMessageListeners[j];
 				listener.OnChatMessage(line);
 			}
 		}
