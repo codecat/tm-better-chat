@@ -551,7 +551,9 @@ class ChatWindow : IChatMessageReceiver
 			UI::BeginChild("ChatContainer", vec2(), false, childWindowFlags);
 		}
 
+		UI::PushFont(g_fontChat);
 		RenderLines();
+		UI::PopFont();
 
 		// Automatically scroll down if the user can focus, or if the user is at the bottom of the scrolling area
 		if (m_scrollToBottom || !CanFocus() || (UI::GetScrollY() >= UI::GetScrollMaxY())) {
@@ -598,6 +600,7 @@ class ChatWindow : IChatMessageReceiver
 				UI::SetKeyboardFocusHere();
 				m_focusOnInput = false;
 			}
+			UI::PushFont(g_fontChat);
 			m_input = UI::InputText("", m_input, pressedEnter,
 				UI::InputTextFlags::EnterReturnsTrue |
 				UI::InputTextFlags::CallbackAlways |
@@ -606,6 +609,7 @@ class ChatWindow : IChatMessageReceiver
 				UI::InputTextFlags::CallbackHistory,
 				UI::InputTextCallback(InputCallback)
 			);
+			UI::PopFont();
 
 			if (pressedEnter) {
 				if (m_auto.IsVisible()) {

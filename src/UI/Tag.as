@@ -21,14 +21,14 @@ namespace UI
 
 	vec4 DrawTag(const vec2 &in pos, const string &in text, const vec4 &in color = TAG_COLOR)
 	{
-		vec2 textSize = Draw::MeasureString(text);
+		vec2 textSize = Draw::MeasureString(text, g_fontChat);
 		vec2 tagSize = textSize + TAG_PADDING * 2;
 		return DrawTag(vec4(pos.x, pos.y, tagSize.x, tagSize.y), text, color);
 	}
 
 	void Tag(const string &in text, const vec4 &in color = TAG_COLOR)
 	{
-		vec2 textSize = Draw::MeasureString(text);
+		vec2 textSize = Draw::MeasureString(text, g_fontChat);
 		UI::Dummy(textSize + TAG_PADDING * 2, TAG_PADDING.y);
 		DrawTag(UI::GetItemRect(), text, color);
 	}

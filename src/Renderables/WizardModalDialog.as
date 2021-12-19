@@ -2,6 +2,7 @@ class WizardModalDialog : ModalDialog
 {
 	Resources::Texture@ m_imgEmotes;
 	Resources::Texture@ m_imgEmoteAutocomplete;
+	Resources::Texture@ m_imgFont;
 	Resources::Texture@ m_imgCommandAutocomplete;
 	Resources::Texture@ m_imgMentionAutocomplete;
 	Resources::Texture@ m_imgContextMenu;
@@ -17,6 +18,7 @@ class WizardModalDialog : ModalDialog
 
 		@m_imgEmotes = Resources::GetTexture("img/wizard-emotes.png");
 		@m_imgEmoteAutocomplete = Resources::GetTexture("img/wizard-emote-autocomplete.png");
+		@m_imgFont = Resources::GetTexture("img/wizard-font.png");
 		@m_imgCommandAutocomplete = Resources::GetTexture("img/wizard-command-autocomplete.png");
 		@m_imgMentionAutocomplete = Resources::GetTexture("img/wizard-mention-autocomplete.png");
 		@m_imgContextMenu = Resources::GetTexture("img/wizard-context.png");
@@ -107,6 +109,21 @@ class WizardModalDialog : ModalDialog
 		);
 	}
 
+	void RenderFontSettings()
+	{
+		UI::TextWrapped(
+			"You can change the size of the font used by Better Chat, as well as use custom fonts."
+		);
+		UI::NewLine();
+
+		ImageCenter(m_imgFont);
+
+		UI::NewLine();
+
+		RenderSettingsFontName();
+		RenderSettingsFontSize();
+	}
+
 	void RenderCommandHelp()
 	{
 		UI::TextWrapped(
@@ -164,7 +181,7 @@ class WizardModalDialog : ModalDialog
 	void RenderDialog() override
 	{
 		UI::PushFont(g_fontHeader);
-		UI::Text("Setup wizard (" + (m_stage + 1) + " / 6)");
+		UI::Text("Setup wizard (" + (m_stage + 1) + " / 7)");
 		UI::PopFont();
 
 		UI::Separator();
@@ -174,9 +191,10 @@ class WizardModalDialog : ModalDialog
 			case 0: RenderKeySettings(); break;
 			case 1: RenderEmoteSettings(); break;
 			case 2: RenderEmoteHelp(); break;
-			case 3: RenderCommandHelp(); break;
-			case 4: RenderContextHelp(); break;
-			case 5: RenderFinal(); break;
+			case 3: RenderFontSettings(); break;
+			case 4: RenderCommandHelp(); break;
+			case 5: RenderContextHelp(); break;
+			case 6: RenderFinal(); break;
 		}
 		UI::EndChild();
 
@@ -195,7 +213,7 @@ class WizardModalDialog : ModalDialog
 		vec2 currentPos = UI::GetCursorPos();
 		vec2 windowSize = UI::GetWindowSize();
 
-		if (m_stage == 5) {
+		if (m_stage == 6) {
 			UI::SetCursorPos(vec2(windowSize.x - 82, currentPos.y));
 			if (UI::GreenButton("Finish " + Icons::Check)) {
 				Setting_WizardShown = true;

@@ -19,7 +19,7 @@ class ElementLink : Element
 	{
 		const int FRAME_PADDING = 4;
 
-		vec2 textSize = Draw::MeasureString(m_text);
+		vec2 textSize = Draw::MeasureString(m_text, g_fontChat);
 
 		if (UI::InvisibleButton(m_url, textSize + vec2(0, FRAME_PADDING * 2))) {
 			OpenBrowserURL(m_url);

@@ -1,6 +1,7 @@
 ChatWindow g_window;
 
 Resources::Font@ g_fontHeader;
+Resources::Font@ g_fontChat;
 
 void Update(float dt)
 {
@@ -85,6 +86,10 @@ void Main()
 
 	@g_fontHeader = Resources::GetFont("DroidSans-Bold.ttf", 22);
 
+	if (Setting_FontName != "DroidSans.ttf" && Setting_FontSize != 16) {
+		@g_fontChat = Resources::GetFont(Setting_FontName, Setting_FontSize, -1, -1, true, true, true);
+	}
+
 	g_window.Initialize();
 
 	startnew(ChatMessageLoop, @g_window);
@@ -102,6 +107,11 @@ void Main()
 
 		if (g_window.m_requestedChatFormat != "json") {
 			g_window.SendChatFormat("json");
+		}
+
+		if (Setting_FontUpdated) {
+			Setting_FontUpdated = false;
+			@g_fontChat = Resources::GetFont(Setting_FontName, Setting_FontSize, -1, -1, true, true, true);
 		}
 
 		yield();
