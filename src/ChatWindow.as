@@ -62,6 +62,11 @@ class ChatWindow : BetterChat::IChatMessageListener
 
 	void SendChatFormat(const string &in format)
 	{
+		// Can't send chat format when playground is null
+		if (GetApp().CurrentPlayground is null) {
+			return;
+		}
+
 		trace("Requesting chat format \"" + format + "\" from server");
 		m_requestedChatFormat = format;
 		SendChatMessage("/chatformat " + format);
