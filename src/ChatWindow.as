@@ -1,4 +1,4 @@
-class ChatWindow : IChatMessageReceiver
+class ChatWindow : BetterChat::IChatMessageListener
 {
 	bool m_visible = true;
 	bool m_big = false;

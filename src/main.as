@@ -92,7 +92,8 @@ void Main()
 
 	g_window.Initialize();
 
-	startnew(ChatMessageLoop, @g_window);
+	BetterChat::RegisterListener(g_window);
+	startnew(ChatMessageLoop);
 
 	if (!Setting_WizardShown) {
 		Renderables::Add(WizardModalDialog());

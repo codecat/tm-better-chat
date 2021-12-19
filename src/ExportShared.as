@@ -6,4 +6,9 @@ namespace BetterChat
 		string Description();
 		void Run(const string &in text);
 	}
+
+	shared interface IChatMessageListener
+	{
+		void OnChatMessage(const string &in line);
+	}
 }

@@ -1,9 +1,10 @@
 //
-// In case anyone comes across this file trying to implement a hook into chat messages, this file is the only file you need!
-// Here's a quick example of how to use this code.
+// In case anyone comes across this file trying to implement a hook into chat messages, you can either use this file as a starting
+// point (together with the shared interface BetterChat::IChatMessageListener in src/ExportShared.as), or you could add a dependency
+// on BetterChat and use its exported functions:
 //
 //
-// class MyReceiver : IChatMessageReceiver
+// class MyListener : BetterChat::IChatMessageListener
 // {
 //   void OnChatMessage(const string &in line)
 //   {
@@ -11,30 +12,19 @@
 //   }
 // }
 //
-// MyReceiver g_receiver;
+// MyListener@ g_listener;
+//
+// void Destroyed()
+// {
+//   BetterChat::UnregisterListener(g_listener);
+// }
 //
 // void Main()
 // {
-//   ChatMessageLoop(@g_receiver);
+//   @g_listener = MyListener();
+//   BetterChat::RegisterListener(@g_listener);
 // }
 //
-//
-// You can also start ChatMessageLoop via startnew (in case you want to start a new coroutine instead of using Main). For example,
-// it's possible to start the loop from a UI context like this:
-//
-//
-// void RenderInterface()
-// {
-//   if (UI::Begin("My window")) {
-//     if (UI::Button("Begin message loop")) {
-//       startnew(ChatMessageLoop, g_receiver);
-//     }
-//   }
-//   UI::End();
-// }
-//
-//
-// Multiple loops can be running at the same time, but don't go too crazy with this. Prefer to use only 1 loop to save on CPU.
 //
 // Further parsing will be required in order to separate the author and text of a chat message. Some messages don't have an
 // author, so care will need to be taken with this. Below is some very basic code you can take inspiration from:
@@ -49,15 +39,10 @@
 // }
 //
 
-interface IChatMessageReceiver
-{
-	void OnChatMessage(const string &in line);
-}
+array<BetterChat::IChatMessageListener@> g_chatMessageListeners;
 
-void ChatMessageLoop(ref@ receiverUserdata)
+void ChatMessageLoop()
 {
-	auto receiver = cast<IChatMessageReceiver>(receiverUserdata);
-
 	auto network = GetApp().Network;
 
 	uint lastTime = 0;
@@ -89,7 +74,10 @@ void ChatMessageLoop(ref@ receiverUserdata)
 			}
 
 			// Fire off the chat message event
-			receiver.OnChatMessage(line);
+			for (uint i = 0; i < g_chatMessageListeners.Length; i++) {
+				auto listener = g_chatMessageListeners[i];
+				listener.OnChatMessage(line);
+			}
 		}
 
 		if (highestTime > 0) {

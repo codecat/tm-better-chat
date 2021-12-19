@@ -15,8 +15,19 @@ namespace Commands
 	void Register(const string &in name, BetterChat::ICommand@ cmd)
 	{
 		g_commands.Set(name, @cmd);
+
 		if (g_sortedCommands.Find(name) == -1) {
 			g_sortedCommands.InsertLast(name);
+		}
+	}
+
+	void Unregister(const string &in name)
+	{
+		g_commands.Delete(name);
+
+		int index = g_sortedCommands.Find(name);
+		if (index != -1) {
+			g_sortedCommands.RemoveAt(index);
 		}
 	}
 
