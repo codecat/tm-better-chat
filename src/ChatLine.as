@@ -58,7 +58,8 @@ class ChatLine
 		string authorNickname;
 
 		//NOTE: we can't keep this handle around because it will be invalidated on disconnect
-		CGamePlayer@ authorInfo;
+		CGamePlayer@ authorPlayer;
+		CGamePlayerInfo@ authorPlayerInfo;
 
 		string text;
 
@@ -86,9 +87,15 @@ class ChatLine
 				text = js["text"];
 			}
 
-			@authorInfo = FindPlayerByLogin(authorLogin);
-			if (authorInfo !is null) {
-				authorName = authorInfo.User.Name;
+			@authorPlayer = FindPlayerByLogin(authorLogin);
+			if (authorPlayer !is null) {
+				@authorPlayerInfo = authorPlayer.User;
+			} else {
+				@authorPlayerInfo = FindPlayerInfoByLogin(authorLogin);
+			}
+
+			if (authorPlayerInfo !is null) {
+				authorName = authorPlayerInfo.Name;
 			}
 
 		} else {
@@ -119,9 +126,15 @@ class ChatLine
 			}
 
 			// If we have an author display name, find the player associated
-			@authorInfo = FindPlayerByName(authorName);
-			if (authorInfo !is null) {
-				authorLogin = authorInfo.User.Login;
+			@authorPlayer = FindPlayerByName(authorName);
+			if (authorPlayer !is null) {
+				@authorPlayerInfo = authorPlayer.User;
+			} else {
+				@authorPlayerInfo = FindPlayerInfoByName(authorName);
+			}
+
+			if (authorPlayerInfo !is null) {
+				authorLogin = authorPlayerInfo.Login;
 			}
 		}
 
@@ -170,18 +183,16 @@ class ChatLine
 		int teamNumber = 0;
 		float linearHue = 0;
 
-		if (authorInfo !is null) {
-			auto user = authorInfo.User;
-
+		if (authorPlayerInfo !is null) {
 #if TMNEXT
-			authorId = user.WebServicesUserId;
-			authorClubTag = user.ClubTag;
+			authorId = authorPlayerInfo.WebServicesUserId;
+			authorClubTag = authorPlayerInfo.ClubTag;
 #endif
 
-			isLocalPlayer = (user.Login == network.PlayerInfo.Login);
+			isLocalPlayer = (authorPlayerInfo.Login == network.PlayerInfo.Login);
 
 #if !UNITED
-			auto smPlayer = cast<CSmPlayer>(authorInfo);
+			auto smPlayer = cast<CSmPlayer>(authorPlayerInfo);
 			if (smPlayer !is null) {
 				teamNumber = smPlayer.EdClan;
 				linearHue = smPlayer.LinearHue;
@@ -189,7 +200,7 @@ class ChatLine
 #endif
 
 #if !TURBO
-			auto tmPlayer = cast<CTrackManiaPlayer>(authorInfo);
+			auto tmPlayer = cast<CTrackManiaPlayer>(authorPlayerInfo);
 			if (tmPlayer !is null) {
 				// 0 in time attack
 				// 1 in team blue
