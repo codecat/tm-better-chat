@@ -333,7 +333,7 @@ class ChatWindow : BetterChat::IChatMessageListener
 
 	bool CanFocus()
 	{
-		return m_showInput || UI::IsOverlayShown();
+		return m_showInput || m_big || UI::IsOverlayShown();
 	}
 
 	int GetChildWindowFlags()
