@@ -96,6 +96,7 @@ class ChatWindow : BetterChat::IChatMessageListener
 	{
 		string text = "$96f" + Icons::Bolt + " $eee" + line;
 		m_lines.InsertLast(ChatLine(m_lineIdIterator++, Time::Stamp, text));
+		m_lastMessageTime = Time::Now;
 	}
 
 	void AddLine(const string &in line)
@@ -297,6 +298,11 @@ class ChatWindow : BetterChat::IChatMessageListener
 		}
 	}
 
+	uint64 GetTimeSinceLastMessage()
+	{
+		return Time::Now - m_lastMessageTime;
+	}
+
 	string GetWindowTitle()
 	{
 		string ret = "Better Chat";
@@ -386,7 +392,7 @@ class ChatWindow : BetterChat::IChatMessageListener
 			case BackgroundStyle::Transparent: alpha = 0.75f; break;
 			case BackgroundStyle::TransparentLight: alpha = 0.5f; break;
 			case BackgroundStyle::Flashing: {
-				int timeSinceLastMessage = Time::Now - m_lastMessageTime;
+				int timeSinceLastMessage = GetTimeSinceLastMessage();
 				const int FLASH_TIME = 1000;
 				if (timeSinceLastMessage < FLASH_TIME) {
 					alpha = 0.5f * (1.0f - timeSinceLastMessage / float(FLASH_TIME));
@@ -537,6 +543,13 @@ class ChatWindow : BetterChat::IChatMessageListener
 			return;
 		}
 
+		bool canFocus = CanFocus();
+		if (Setting_AutoHide && !canFocus) {
+			if (GetTimeSinceLastMessage() > Setting_AutoHideTime * 1000) {
+				return;
+			}
+		}
+
 		string windowTitle = GetWindowTitle();
 		int windowFlags = GetWindowFlags();
 		int childWindowFlags = GetChildWindowFlags();
@@ -566,7 +579,7 @@ class ChatWindow : BetterChat::IChatMessageListener
 		UI::PopFont();
 
 		// Automatically scroll down if the user can focus, or if the user is at the bottom of the scrolling area
-		if (m_scrollToBottom || !CanFocus() || (UI::GetScrollY() >= UI::GetScrollMaxY())) {
+		if (m_scrollToBottom || !canFocus || (UI::GetScrollY() >= UI::GetScrollMaxY())) {
 			UI::SetScrollHereY(1.0f);
 			m_scrollToBottom = false;
 		}
@@ -577,7 +590,7 @@ class ChatWindow : BetterChat::IChatMessageListener
 		UI::End();
 
 		// Hide the input box if the user can't focus
-		if (!CanFocus()) {
+		if (!canFocus) {
 			m_showInput = false;
 			m_focusOnInput = false;
 		}

@@ -12,6 +12,12 @@ int Setting_MaximumLines = 100;
 [Setting category="General" name="Maximum lines in input history"]
 int Setting_MaximumHistory = 25;
 
+[Setting category="General" name="Automatically hide the chat during inactivity"]
+bool Setting_AutoHide = true;
+
+[Setting category="General" name="Number of seconds of inactivity to hide the chat" min="1" max="120"]
+int Setting_AutoHideTime = 60;
+
 [Setting category="General" name="Enable links"]
 bool Setting_EnableLinks = true;
 
