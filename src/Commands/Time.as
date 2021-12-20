@@ -59,7 +59,6 @@ class TimeCommand : BetterChat::ICommand
 	}
 
 #if TMNEXT
-	/*
 	void RunWorldRecordAsync()
 	{
 		const string audience = "NadeoLiveServices";
@@ -112,18 +111,15 @@ class TimeCommand : BetterChat::ICommand
 			g_window.AddSystemLine(msg);
 		}
 	}
-	*/
 #endif
 
 	void Run(const string &in text)
 	{
 #if TMNEXT
-		/*
 		if (m_type == TimeCommandType::WorldRecord) {
 			startnew(CoroutineFunc(RunWorldRecordAsync));
 			return;
 		}
-		*/
 #endif
 
 #if TURBO || UNITED

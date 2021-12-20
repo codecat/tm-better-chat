@@ -76,9 +76,16 @@ void ShowNadeoChat(bool visible)
 	}
 }
 
+import void UnboundTest() from "NadeoServices";
+
 void Main()
 {
-	//NadeoServices::AddAudience("NadeoLiveServices");
+	try {
+		NadeoServices::AddAudience("NadeoLiveServices");
+	} catch {
+		UI::ShowNotification("Update Openplanet", "You have to update Openplanet to at least 1.21.1 for Better Chat to work properly.", vec4(0.7f, 0, 0, 1), 30000);
+		return;
+	}
 
 	Sounds::Load();
 	Emotes::Load();

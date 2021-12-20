@@ -7,7 +7,7 @@ siteid = 134
 version = "1.0.1"
 
 [script]
-#dependencies = [ "NadeoServices" ]
+dependencies = [ "NadeoServices" ]
 
 exports = [ "src/Export.as" ]
 shared_exports = [ "src/ExportShared.as" ]

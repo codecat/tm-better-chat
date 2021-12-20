@@ -34,7 +34,7 @@ namespace Commands
 	void Load()
 	{
 		// World record
-		//Register("wr", TimeCommand(TimeCommandType::WorldRecord, false));
+		Register("wr", TimeCommand(TimeCommandType::WorldRecord, false));
 
 		// Medal times
 		Register("author", TimeCommand(TimeCommandType::Author, false));
@@ -62,7 +62,7 @@ namespace Commands
 		Register("bc-wizard", WizardCommand());
 
 		// Tell world record
-		//Register("tell-wr", TimeCommand(TimeCommandType::WorldRecord, true));
+		Register("tell-wr", TimeCommand(TimeCommandType::WorldRecord, true));
 
 		// Tell medal times
 		Register("tell-author", TimeCommand(TimeCommandType::Author, true));
