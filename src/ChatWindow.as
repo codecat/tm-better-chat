@@ -411,7 +411,7 @@ class ChatWindow : BetterChat::IChatMessageListener
 
 		// Insert empty space before first messages
 		if (Setting_FirstLineEmptySpace) {
-			UI::SetCursorPos(UI::GetCursorPos() + vec2(0, windowSize.y));
+			UI::SetCursorPos(UI::GetCursorPos() + vec2(0, windowSize.y - m_chatLineFrameHeight));
 		}
 
 		// Decide on start index
