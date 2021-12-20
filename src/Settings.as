@@ -130,6 +130,9 @@ bool Setting_ShowHelp = true;
 [Setting category="Appearance" name="Show scrollbar"]
 bool Setting_ShowScrollbar = true;
 
+[Setting category="Appearance" name="Empty space before first lines"]
+bool Setting_FirstLineEmptySpace = true;
+
 
 
 [Setting category="Streamer" name="Enable streamer mode" description="Enables a global block-list of streamer-unfriendly texts."]

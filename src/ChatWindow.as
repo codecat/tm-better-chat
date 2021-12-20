@@ -403,6 +403,11 @@ class ChatWindow : BetterChat::IChatMessageListener
 	{
 		vec2 windowSize = UI::GetWindowSize();
 
+		// Insert empty space before first messages
+		if (Setting_FirstLineEmptySpace) {
+			UI::SetCursorPos(UI::GetCursorPos() + vec2(0, windowSize.y));
+		}
+
 		// Decide on start index
 		uint startIndex = 0;
 		if (Setting_LimitOnHiddenOverlay && !CanFocus()) {
