@@ -192,7 +192,7 @@ class ChatLine
 			isLocalPlayer = (authorPlayerInfo.Login == network.PlayerInfo.Login);
 
 #if !UNITED
-			auto smPlayer = cast<CSmPlayer>(authorPlayerInfo);
+			auto smPlayer = cast<CSmPlayer>(authorPlayer);
 			if (smPlayer !is null) {
 				teamNumber = smPlayer.EdClan;
 				linearHue = smPlayer.LinearHue;
@@ -200,7 +200,7 @@ class ChatLine
 #endif
 
 #if !TURBO
-			auto tmPlayer = cast<CTrackManiaPlayer>(authorPlayerInfo);
+			auto tmPlayer = cast<CTrackManiaPlayer>(authorPlayer);
 			if (tmPlayer !is null) {
 				// 0 in time attack
 				// 1 in team blue
