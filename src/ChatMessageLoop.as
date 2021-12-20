@@ -39,6 +39,7 @@
 // }
 //
 
+array<BetterChat::IChatMessageFilter@> g_chatMessageFilters;
 array<BetterChat::IChatMessageListener@> g_chatMessageListeners;
 
 void ChatMessageLoop()
@@ -71,6 +72,26 @@ void ChatMessageLoop()
 			// Remember the highest timestamp
 			if (time > highestTime) {
 				highestTime = time;
+			}
+
+			// Go through the chat filters
+			bool canDisplay = true;
+			for (uint j = 0; j < g_chatMessageFilters.Length; j++) {
+				auto filter = g_chatMessageFilters[j];
+
+				// Stop if we can't display the message
+				if (!filter.CanDisplayMessage(line)) {
+					canDisplay = false;
+					break;
+				}
+
+				// Let the filter modify the message text
+				line = filter.GetMessageText(line);
+			}
+
+			// Stop if a filter told us we can't deliver this message
+			if (!canDisplay) {
+				continue;
 			}
 
 			// Fire off the chat message event

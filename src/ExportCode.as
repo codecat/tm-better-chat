@@ -10,6 +10,19 @@ namespace BetterChat
 		Commands::Unregister(name);
 	}
 
+	void RegisterFilter(IChatMessageFilter@ filter)
+	{
+		g_chatMessageFilters.InsertLast(filter);
+	}
+
+	void UnregisterFilter(IChatMessageFilter@ filter)
+	{
+		int index = g_chatMessageFilters.FindByRef(filter);
+		if (index != -1) {
+			g_chatMessageFilters.RemoveAt(index);
+		}
+	}
+
 	void RegisterListener(IChatMessageListener@ listener)
 	{
 		g_chatMessageListeners.InsertLast(listener);

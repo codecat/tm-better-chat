@@ -10,11 +10,20 @@ namespace BetterChat
 
 
 
-	// Registers a new chat listener that will call messages.
+	// Registers a new chat filter that you can use to remove or edit messages.
+	import void RegisterFilter(IChatMessageFilter@ filter) from "BetterChat";
+
+	// Unregisters a chat filter. Call this if you've registered a filter and your
+	// plugin is about to unload!
+	import void UnregisterFilter(IChatMessageFilter@ filter) from "BetterChat";
+
+
+
+	// Registers a new chat listener that will call on any received message.
 	import void RegisterListener(IChatMessageListener@ listener) from "BetterChat";
 
-	// Unregisters a chat listener. Consider calling this if you've registered a listener
-	// and your plugin is about to unload!
+	// Unregisters a chat listener. Call this if you've registered a listener and your
+	// plugin is about to unload!
 	import void UnregisterListener(IChatMessageListener@ listener) from "BetterChat";
 
 
