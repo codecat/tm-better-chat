@@ -57,7 +57,7 @@ class ChatWindow : BetterChat::IChatMessageListener
 			}
 		}
 
-		SendChatMessage(text);
+		BetterChat::SendChatMessage(text);
 	}
 
 	void SendChatFormat(const string &in format)
@@ -69,7 +69,7 @@ class ChatWindow : BetterChat::IChatMessageListener
 
 		trace("Requesting chat format \"" + format + "\" from server");
 		m_requestedChatFormat = format;
-		SendChatMessage("/chatformat " + format);
+		BetterChat::SendChatMessage("/chatformat " + format);
 	}
 
 	void ShowInput(const string &in text = "")

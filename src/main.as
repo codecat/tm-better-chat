@@ -78,7 +78,7 @@ void ShowNadeoChat(bool visible)
 
 void Main()
 {
-	NadeoServices::AddAudience("NadeoLiveServices");
+	//NadeoServices::AddAudience("NadeoLiveServices");
 
 	Sounds::Load();
 	Emotes::Load();

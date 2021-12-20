@@ -4,10 +4,10 @@ author = "Miss"
 category = "Better Suite"
 
 siteid = 134
-version = "1.0.0"
+version = "1.0.1"
 
 [script]
-dependencies = [ "NadeoServices" ]
+#dependencies = [ "NadeoServices" ]
 
 exports = [ "src/Export.as" ]
 shared_exports = [ "src/ExportShared.as" ]

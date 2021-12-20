@@ -59,10 +59,10 @@ class TimeCommand : BetterChat::ICommand
 	}
 
 #if TMNEXT
+	/*
 	void RunWorldRecordAsync()
 	{
 		const string audience = "NadeoLiveServices";
-
 		while (!NadeoServices::IsAuthenticated(audience)) {
 			yield();
 		}
@@ -107,20 +107,23 @@ class TimeCommand : BetterChat::ICommand
 		string msg = "$<$db0" + Icons::Bullseye + "$> World record: $<$bbb" + Time::Format(wrTime) + "$> by $bbb" + wrDisplayName;
 
 		if (m_send) {
-			SendChatMessage(msg);
+			BetterChat::SendChatMessage(msg);
 		} else {
 			g_window.AddSystemLine(msg);
 		}
 	}
+	*/
 #endif
 
 	void Run(const string &in text)
 	{
 #if TMNEXT
+		/*
 		if (m_type == TimeCommandType::WorldRecord) {
 			startnew(CoroutineFunc(RunWorldRecordAsync));
 			return;
 		}
+		*/
 #endif
 
 #if TURBO || UNITED
@@ -142,7 +145,7 @@ class TimeCommand : BetterChat::ICommand
 		}
 
 		if (m_send) {
-			SendChatMessage(msg);
+			BetterChat::SendChatMessage(msg);
 		} else {
 			g_window.AddSystemLine(msg);
 		}

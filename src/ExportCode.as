@@ -27,4 +27,21 @@ namespace BetterChat
 	{
 		g_window.AddSystemLine(text);
 	}
+
+	void SendChatMessage(const string &in text)
+	{
+#if TMNEXT
+		if (!Permissions::InGameChat()) {
+			return;
+		}
+#endif
+
+		auto pg = GetApp().CurrentPlayground;
+		if (pg is null) {
+			//TODO: Queue the message for later
+			warn("Can't send message right now because there's no playground!");
+			return;
+		}
+		pg.Interface.ChatEntry = text;
+	}
 }

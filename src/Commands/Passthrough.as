@@ -21,6 +21,6 @@ class PassthroughCommand : BetterChat::ICommand
 
 	void Run(const string &in text)
 	{
-		SendChatMessage(text);
+		BetterChat::SendChatMessage(text);
 	}
 }

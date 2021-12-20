@@ -17,4 +17,7 @@ namespace BetterChat
 
 	// Adds a system message to the chat window.
 	import void AddSystemLine(const string &in text) from "BetterChat";
+
+	// Sends a message to the server.
+	import void SendChatMessage(const string &in text) from "BetterChat";
 }

@@ -23,6 +23,6 @@ class SendTextCommand : BetterChat::ICommand
 
 	void Run(const string &in text)
 	{
-		SendChatMessage(m_text);
+		BetterChat::SendChatMessage(m_text);
 	}
 }

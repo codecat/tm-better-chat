@@ -36,7 +36,7 @@ class TmioCommand : BetterChat::ICommand
 		string url = "https://trackmania.io/#/leaderboard/" + map.IdName;
 
 		if (m_send) {
-			SendChatMessage("$l[" + url + "]\"" + StripFormatCodes(map.MapName) + "\" on Trackmania.io");
+			BetterChat::SendChatMessage("$l[" + url + "]\"" + StripFormatCodes(map.MapName) + "\" on Trackmania.io");
 		} else {
 			OpenBrowserURL(url);
 		}
