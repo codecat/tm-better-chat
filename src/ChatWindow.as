@@ -189,7 +189,7 @@ class ChatWindow : BetterChat::IChatMessageListener
 				} else if (key == Setting_KeyInputTeam) {
 					ShowInput("/t ");
 					return true;
-				} else if (Setting_KeyInputSlash && key == VirtualKey::Oem2 /* Forward slash */) {
+				} else if (Setting_KeyInputSlash && (key == VirtualKey::Oem2 /* Forward slash */ || key == VirtualKey::Divide /* Numpad slash */)) {
 					ShowInput("/");
 					m_auto.m_cursorIndex = 0;
 					m_auto.Begin(AutoCompletionType::Command);
