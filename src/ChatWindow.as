@@ -312,6 +312,12 @@ class ChatWindow : BetterChat::IChatMessageListener
 			return false;
 		}
 
+		auto network = GetApp().Network;
+		auto serverInfo = cast<CGameCtnNetServerInfo>(network.ServerInfo);
+		if (serverInfo is null || serverInfo.ServerLogin == "") {
+			return false;
+		}
+
 		if (Setting_FollowHideChat) {
 			auto app = GetApp();
 			auto pg = app.CurrentPlayground;
@@ -523,12 +529,6 @@ class ChatWindow : BetterChat::IChatMessageListener
 	void Render()
 	{
 		if (!IsVisible()) {
-			return;
-		}
-
-		auto network = GetApp().Network;
-		auto serverInfo = cast<CGameCtnNetServerInfo>(network.ServerInfo);
-		if (serverInfo is null || serverInfo.ServerLogin == "") {
 			return;
 		}
 
