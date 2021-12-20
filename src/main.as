@@ -76,8 +76,6 @@ void ShowNadeoChat(bool visible)
 	}
 }
 
-import void UnboundTest() from "NadeoServices";
-
 void Main()
 {
 	try {
