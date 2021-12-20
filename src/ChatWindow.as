@@ -545,7 +545,7 @@ class ChatWindow : BetterChat::IChatMessageListener
 
 		bool canFocus = CanFocus();
 		if (Setting_AutoHide && !canFocus) {
-			if (GetTimeSinceLastMessage() > Setting_AutoHideTime * 1000) {
+			if (GetTimeSinceLastMessage() > uint64(Setting_AutoHideTime * 1000)) {
 				return;
 			}
 		}
