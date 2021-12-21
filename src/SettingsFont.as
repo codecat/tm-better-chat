@@ -59,7 +59,7 @@ void RenderSettingsFontName()
 
 void RenderSettingsFontSize()
 {
-	const array<int> availableSizes = { 16, 18, 20, 22 };
+	const array<int> availableSizes = { 16, 18, 20, 22, 24, 26, 28, 30 };
 
 	if (UI::BeginCombo("Font size", tostring(Setting_FontSize))) {
 		for (uint i = 0; i < availableSizes.Length; i++) {
