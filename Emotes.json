@@ -64,6 +64,8 @@
 		"FeelsBadMan": { "pos": [ 226, 114 ], "size": [ 30, 30 ] },
 		"widepeepoHappy": { "pos": [ 146, 121 ], "size": [ 80, 19 ] },
 		"WICKED": { "pos": [ 228, 86 ], "size": [ 28, 28 ] },
+		"WeSmart": { "pos": [ 84, 256 ], "size": [ 28, 28 ] },
+		"WeirdChamp": { "pos": [ 112, 256 ], "size": [ 27, 28 ] },
 
 		"spmW": { "pos": [ 0, 141 ], "size": [ 28, 28 ] },
 		"spmBM": { "pos": [ 28, 138 ], "size": [ 28, 28 ] },
@@ -77,6 +79,9 @@
 		"amater23MEGAMOIN": { "pos": [ 112, 116 ], "size": [ 28, 28 ] },
 		"jnicHey": { "pos": [ 112, 88 ], "size": [ 28, 28 ] },
 		"jnicShy": { "pos": [ 140, 93 ], "size": [ 28, 28 ] },
-		"jnicHeart": { "pos": [ 168, 93 ], "size": [ 28, 28 ] }
+		"jnicHeart": { "pos": [ 168, 93 ], "size": [ 28, 28 ] },
+		"chicke213Love": { "pos": [ 0, 256 ], "size": [ 28, 28 ] },
+		"chicke213Ohnonono": { "pos": [ 28, 256 ], "size": [ 28, 28 ] },
+		"chicke213Hi": { "pos": [ 56, 256 ], "size": [ 28, 28 ] }
 	}
 }
