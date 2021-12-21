@@ -91,7 +91,7 @@ void Main()
 
 	@g_fontHeader = Resources::GetFont("DroidSans-Bold.ttf", 22);
 
-	if (Setting_FontName != "DroidSans.ttf" && Setting_FontSize != 16) {
+	if (Setting_FontName != "DroidSans.ttf" || Setting_FontSize != 16) {
 		@g_fontChat = Resources::GetFont(Setting_FontName, Setting_FontSize, -1, -1, true, true, true);
 	}
 
