@@ -39,10 +39,10 @@ namespace Commands
 		Register("silver", TimeCommand(TimeCommandType::Silver, false));
 		Register("bronze", TimeCommand(TimeCommandType::Bronze, false));
 
+#if TMNEXT
 		// World record
 		Register("wr", TimeCommand(TimeCommandType::WorldRecord, false));
 
-#if TMNEXT
 		// Trackmania.io
 		Register("trackmaniaio", TmioCommand(false));
 		Register("tmio", TmioCommand(false));
@@ -67,10 +67,10 @@ namespace Commands
 		Register("tell-silver", TimeCommand(TimeCommandType::Silver, true));
 		Register("tell-bronze", TimeCommand(TimeCommandType::Bronze, true));
 
+#if TMNEXT
 		// Tell world record
 		Register("tell-wr", TimeCommand(TimeCommandType::WorldRecord, true));
 
-#if TMNEXT
 		// Tell Trackmania.io
 		Register("tell-trackmaniaio", TmioCommand(true));
 		Register("tell-tmio", TmioCommand(true));
