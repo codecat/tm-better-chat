@@ -49,7 +49,7 @@ namespace Commands
 #endif
 
 		// Built-in commands available on all servers
-		Register("version", PassthroughCommand("Prints the dedicated server version."));
+		Register("version", VersionCommand("Prints the dedicated server version as well as the Openplanet version."));
 		Register("serverlogin", PassthroughCommand("Prints the server login."));
 
 		// Help dialog
