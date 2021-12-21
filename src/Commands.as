@@ -33,14 +33,14 @@ namespace Commands
 
 	void Load()
 	{
-		// World record
-		Register("wr", TimeCommand(TimeCommandType::WorldRecord, false));
-
 		// Medal times
 		Register("author", TimeCommand(TimeCommandType::Author, false));
 		Register("gold", TimeCommand(TimeCommandType::Gold, false));
 		Register("silver", TimeCommand(TimeCommandType::Silver, false));
 		Register("bronze", TimeCommand(TimeCommandType::Bronze, false));
+
+		// World record
+		Register("wr", TimeCommand(TimeCommandType::WorldRecord, false));
 
 #if TMNEXT
 		// Trackmania.io
@@ -61,14 +61,14 @@ namespace Commands
 		// Setup wizard dialog
 		Register("bc-wizard", WizardCommand());
 
-		// Tell world record
-		Register("tell-wr", TimeCommand(TimeCommandType::WorldRecord, true));
-
 		// Tell medal times
 		Register("tell-author", TimeCommand(TimeCommandType::Author, true));
 		Register("tell-gold", TimeCommand(TimeCommandType::Gold, true));
 		Register("tell-silver", TimeCommand(TimeCommandType::Silver, true));
 		Register("tell-bronze", TimeCommand(TimeCommandType::Bronze, true));
+
+		// Tell world record
+		Register("tell-wr", TimeCommand(TimeCommandType::WorldRecord, true));
 
 #if TMNEXT
 		// Tell Trackmania.io
