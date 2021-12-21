@@ -1,8 +1,17 @@
+class EmoteFrame
+{
+	uint m_time;
+	vec2 m_pos;
+}
+
 class Emote
 {
 	string m_name;
 	Resources::Texture@ m_texture;
-	vec2 m_pos;
+
+	array<EmoteFrame> m_frames;
+	uint m_framesTime = 0;
+
 	vec2 m_size;
 	EmoteSource@ m_source;
 
@@ -11,9 +20,33 @@ class Emote
 		m_name = name;
 		@m_texture = texture;
 
-		auto jsPos = js["pos"];
-		m_pos.x = jsPos[0];
-		m_pos.y = jsPos[1];
+		auto jsFrames = js["frames"];
+		if (jsFrames.GetType() == Json::Type::Array) {
+			m_frames.Reserve(jsFrames.Length);
+			for (uint i = 0; i < jsFrames.Length; i++) {
+				auto jsFrame = jsFrames[i];
+
+				int time = jsFrame["time"];
+				auto jsPos = jsFrame["pos"];
+
+				EmoteFrame newFrame;
+				newFrame.m_time = uint(time);
+				newFrame.m_pos.x = jsPos[0];
+				newFrame.m_pos.y = jsPos[1];
+				m_frames.InsertLast(newFrame);
+
+				m_framesTime += uint(time);
+			}
+
+		} else {
+			auto jsPos = js["pos"];
+
+			EmoteFrame newFrame;
+			newFrame.m_time = 0;
+			newFrame.m_pos.x = jsPos[0];
+			newFrame.m_pos.y = jsPos[1];
+			m_frames.InsertLast(newFrame);
+		}
 
 		auto jsSize = js["size"];
 		m_size.x = jsSize[0];
@@ -24,9 +57,30 @@ class Emote
 
 	void Render(UI::DrawList@ dl, const vec4 &in rect)
 	{
+		uint frameIndex = 0;
+
+		if (m_frames.Length > 1) {
+			uint time = 0;
+			if (m_framesTime > 0) {
+				time = uint(Time::Now % m_framesTime);
+			}
+			uint timeCounted = 0;
+			for (uint i = 0; i < m_frames.Length; i++) {
+				auto@ frame = m_frames[i];
+				if (time < timeCounted + frame.m_time) {
+					break;
+				}
+				frameIndex++;
+				timeCounted += frame.m_time;
+			}
+		}
+
 		vec4 uv;
-		uv.x = m_pos.x;
-		uv.y = m_pos.y;
+
+		auto@ currentFrame = m_frames[frameIndex];
+		uv.x = currentFrame.m_pos.x;
+		uv.y = currentFrame.m_pos.y;
+
 		uv.z = m_size.x;
 		uv.w = m_size.y;
 		dl.AddImage(m_texture, vec2(Math::Round(rect.x), Math::Round(rect.y)), vec2(rect.z, rect.w), 0xFFFFFFFF, uv);
