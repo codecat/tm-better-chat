@@ -82,6 +82,14 @@
 		"jnicHeart": { "pos": [ 168, 93 ], "size": [ 28, 28 ] },
 		"chicke213Love": { "pos": [ 0, 256 ], "size": [ 28, 28 ] },
 		"chicke213Ohnonono": { "pos": [ 28, 256 ], "size": [ 28, 28 ] },
-		"chicke213Hi": { "pos": [ 56, 256 ], "size": [ 28, 28 ] }
+		"chicke213Hi": { "pos": [ 56, 256 ], "size": [ 28, 28 ] },
+
+		"Clap": {
+			"size": [ 28, 28 ],
+			"frames": [
+				{ "time": 200, "pos": [ 139, 256 ] },
+				{ "time": 200, "pos": [ 167, 256 ] }
+			]
+		}
 	}
 }
