@@ -318,6 +318,10 @@ class ChatWindow : BetterChat::IChatMessageListener
 			return false;
 		}
 
+		if (!UI::IsRendering()) {
+			return false;
+		}
+
 		auto network = GetApp().Network;
 		auto serverInfo = cast<CGameCtnNetServerInfo>(network.ServerInfo);
 		if (serverInfo is null || serverInfo.ServerLogin == "") {
