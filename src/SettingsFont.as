@@ -23,7 +23,7 @@ void RenderSettingsFontName()
 			auto files = IO::IndexFolder(systemFontsFolder, false);
 			for (uint i = 0; i < files.Length; i++) {
 				string filename = files[i].SubStr(systemFontsFolder.Length + 1);
-				if (filename == "ManiaIcons.ttf") {
+				if (filename == "ManiaIcons.ttf" || !filename.EndsWith(".ttf")) {
 					continue;
 				}
 				Setting_AvailableFonts.InsertLast(filename);
@@ -31,7 +31,11 @@ void RenderSettingsFontName()
 
 			files = IO::IndexFolder(userFontsFolder, false);
 			for (uint i = 0; i < files.Length; i++) {
-				Setting_AvailableFonts.InsertLast(files[i].SubStr(userFontsFolder.Length + 1));
+				string filename = files[i].SubStr(userFontsFolder.Length + 1);
+				if (!filename.EndsWith(".ttf")) {
+					continue;
+				}
+				Setting_AvailableFonts.InsertLast(filename);
 			}
 		}
 
