@@ -114,7 +114,7 @@ class ChatWindow : BetterChat::IChatMessageListener
 				m_jsonMessageCount = 3;
 			}
 		} else {
-			if (m_jsonMessageCount > 0 && --m_jsonMessageCount == 0) {
+			if (m_jsonMessageCount > 0 && --m_jsonMessageCount == 0 && Setting_RecoverJsonFormat) {
 				// We seem to have lost chat format, send the command again
 				warn("JSON chat format was lost, requesting it again from server.");
 				SendChatFormat("json");
