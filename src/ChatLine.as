@@ -103,16 +103,16 @@ class ChatLine
 			// We don't have a json object, so we have to extract author & message contents manually
 #if TMNEXT
 			//TODO: This regex only works for basic uplay player names!
-			auto parse = Regex::Match(line, "^([<\\[])\\$<([^\\$]+)\\$>[\\]>] (.*)");
+			auto parse = Regex::Match(line, "^(\\$FFF)?([<\\[])\\$<([^\\$]+)\\$>[\\]>] (.*)");
 #else
-			auto parse = Regex::Match(line, "^([<\\[])\\$<(.+?)\\$>[\\]>] (.*)");
+			auto parse = Regex::Match(line, "^(\\$FFF)?([<\\[])\\$<(.+?)\\$>[\\]>] (.*)");
 #endif
 			if (parse.Length > 0) {
-				if (parse[1] == "<") {
+				if (parse[2] == "<") {
 					teamChat = true;
 				}
-				authorName = parse[2];
-				text = parse[3];
+				authorName = parse[3];
+				text = parse[4];
 			} else {
 				// Check if this is an EvoSC message
 				parse = Regex::Match(line, "^\\$FFF\\$z\\$s(\\$[0-9a-fA-F]{3}.+)\\[\\$<\\$<\\$fff\\$eee(.*)\\$>\\$>\\]\\$z\\$s (.*)");
