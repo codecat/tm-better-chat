@@ -39,6 +39,9 @@ bool Setting_FollowHideChat = false; // NOTE: This is temporary false until Pypl
 [Setting category="General" name="Trace full debug lines to the logfile (has no effect when streamer mode is enabled)"]
 bool Setting_TraceToLog = true;
 
+[Setting category="General" name="Automatically recover json format when lost"]
+bool Setting_RecoverJsonFormat = true;
+
 #if DEVELOPER
 [Setting category="General" name="Also show Nadeo's chat (used for debugging)"]
 bool Setting_ShowNadeoChat = false;
