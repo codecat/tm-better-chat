@@ -173,6 +173,11 @@ class ChatWindow : BetterChat::IChatMessageListener
 
 	bool OnKeyPress(bool down, VirtualKey key)
 	{
+		string actionMap = UI::CurrentActionMap();
+		if (actionMap == "MenuInputsMap") {
+			return false;
+		}
+
 		if (down) {
 			if (key == Setting_KeyToggleVisibility) {
 				m_visible = !m_visible;
@@ -343,6 +348,11 @@ class ChatWindow : BetterChat::IChatMessageListener
 
 	bool CanFocus()
 	{
+		string actionMap = UI::CurrentActionMap();
+		if (actionMap == "MenuInputsMap") {
+			return false;
+		}
+
 		return m_showInput || m_big || UI::IsOverlayShown();
 	}
 
