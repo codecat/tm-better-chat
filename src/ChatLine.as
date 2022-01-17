@@ -349,6 +349,8 @@ class ChatLine
 		//                           ^^^
 		// $l[https://openplanet.nl/]yes$zyes
 		//                           ^^^
+		// $l [https://openplanet.nl/] yes$zyes
+		//                             ^^^
 		int index = text.IndexOfI("$l");
 		if (index == -1) {
 			AddElement(ElementText(text));
@@ -364,7 +366,7 @@ class ChatLine
 
 			// Parse link start
 			string textWithLink = text.SubStr(index);
-			auto parse = Regex::Search(textWithLink, "^\\$[lL](\\[[^\\]]+\\])?(.*?)(\\$[lLzZ>]|$)");
+			auto parse = Regex::Search(textWithLink, "^\\$[lL]\\s*(\\[[^\\]]+\\])?\\s*(.*?)(\\$[lLzZ>]|$)");
 			if (parse.Length == 0) {
 				// Invalid link?
 				warn("Invalid link in text: \"" + text + "\"");
