@@ -6,7 +6,7 @@ class ElementLink : Element
 	ElementLink(const string &in text, const string &in url)
 	{
 		m_text = ColoredString(text);
-		m_url = url;
+		m_url = url.Trim();
 
 		if (!m_url.StartsWith("https://") && !m_url.StartsWith("http://")) {
 			m_url = "https://" + m_url;
