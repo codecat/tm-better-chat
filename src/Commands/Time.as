@@ -27,7 +27,9 @@ class TimeCommand : BetterChat::ICommand
 		}
 
 		switch (m_type) {
+#if TMNEXT
 			case TimeCommandType::WorldRecord: return "\\$db4" + Icons::Bullseye;
+#endif
 			case TimeCommandType::Author:      return "\\$071" + Icons::Trophy;
 			case TimeCommandType::Gold:        return "\\$db4" + Icons::Trophy;
 			case TimeCommandType::Silver:      return "\\$899" + Icons::Trophy;
@@ -40,7 +42,9 @@ class TimeCommand : BetterChat::ICommand
 	{
 		if (m_send) {
 			switch (m_type) {
+#if TMNEXT
 				case TimeCommandType::WorldRecord: return "Tells chat the world record time.";
+#endif
 				case TimeCommandType::Author:      return "Tells chat the author time.";
 				case TimeCommandType::Gold:        return "Tells chat the gold medal time.";
 				case TimeCommandType::Silver:      return "Tells chat the silver medal time.";
@@ -48,7 +52,9 @@ class TimeCommand : BetterChat::ICommand
 			}
 		} else {
 			switch (m_type) {
+#if TMNEXT
 				case TimeCommandType::WorldRecord: return "Prints the world record time.";
+#endif
 				case TimeCommandType::Author:      return "Prints the author time.";
 				case TimeCommandType::Gold:        return "Prints the gold medal time.";
 				case TimeCommandType::Silver:      return "Prints the silver medal time.";
