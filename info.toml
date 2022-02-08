@@ -2,9 +2,7 @@
 name = "Better Chat"
 author = "Miss"
 category = "Better Suite"
-
-siteid = 134
-version = "1.0.3"
+version = "1.0.4"
 
 [script]
 #if TMNEXT
