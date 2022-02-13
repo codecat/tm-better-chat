@@ -55,8 +55,12 @@ void ChatMessageLoop()
 		uint highestTime = 0;
 
 		for (uint i = 0; i < network.ChatHistoryTimestamp.Length; i++) {
-			string line = string(network.ChatHistoryLines[i]).Replace("\n", " ");
+			string line = string(network.ChatHistoryLines[i]);
 			uint time = network.ChatHistoryTimestamp[i];
+
+			if (Setting_ReplaceNewlines) {
+				line = line.Replace("\n", " ");
+			}
 
 			// Sometimes, the most recent message is empty in the history lines for 1 frame, so we ignore any empty lines.
 			// If we do that before we handle timestamps, we can resume on messages that get their line filled in on the next frame.

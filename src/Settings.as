@@ -21,6 +21,9 @@ int Setting_AutoHideTime = 60;
 [Setting category="General" name="Enable links"]
 bool Setting_EnableLinks = true;
 
+[Setting category="General" name="Replace newlines with spaces in messages"]
+bool Setting_ReplaceNewlines = false;
+
 [Setting category="General" name="Limit backlog to visible range when not focused" description="Turning this on can slightly increase performance, but will introduce a small glitch when opening chat."]
 bool Setting_LimitOnHiddenOverlay = false;
 
