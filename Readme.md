@@ -35,3 +35,4 @@ Currently, the following Json object values are handled:
 * `login`: The user's login. Only required if this is a chat message from a player. When the login is not provided, it will be displayed as a system message.
 * `text`: The text of the message. Required.
 * `nickname`: The player's nickname, if set. This is optional.
+* `clubtag`: The player's clubtag, if set. This is optional.
