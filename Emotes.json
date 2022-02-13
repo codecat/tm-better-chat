@@ -66,6 +66,7 @@
 		"WICKED": { "pos": [ 228, 86 ], "size": [ 28, 28 ] },
 		"WeSmart": { "pos": [ 84, 256 ], "size": [ 28, 28 ] },
 		"WeirdChamp": { "pos": [ 112, 256 ], "size": [ 27, 28 ] },
+		"xdd": { "pos": [ 84, 396 ], "size": [ 32, 32 ] },
 
 		"Clap": {
 			"size": [ 28, 28 ],
@@ -150,6 +151,7 @@
 		"chicke213Love": { "pos": [ 0, 256 ], "size": [ 28, 28 ] },
 		"chicke213Ohnonono": { "pos": [ 28, 256 ], "size": [ 28, 28 ] },
 		"chicke213Hi": { "pos": [ 56, 256 ], "size": [ 28, 28 ] },
-		"greepW": { "pos": [ 56, 396 ], "size": [ 28, 28 ] }
+		"greepW": { "pos": [ 56, 396 ], "size": [ 28, 28 ] },
+		"famazoLove": { "pos": [ 116, 396 ], "size": [ 28, 28 ] }
 	}
 }
