@@ -78,7 +78,7 @@ void ShowNadeoChat(bool visible)
 
 void Main()
 {
-#if TMNEXT
+#if TMNEXT && DEPENDENCY_NADEOSERVICES
 	try {
 		NadeoServices::AddAudience("NadeoLiveServices");
 	} catch {

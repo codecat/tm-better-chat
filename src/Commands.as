@@ -40,8 +40,10 @@ namespace Commands
 		Register("bronze", TimeCommand(TimeCommandType::Bronze, false));
 
 #if TMNEXT
+#if DEPENDENCY_NADEOSERVICES
 		// World record
 		Register("wr", TimeCommand(TimeCommandType::WorldRecord, false));
+#endif
 
 		// Trackmania.io
 		Register("trackmaniaio", TmioCommand(false));
@@ -68,8 +70,10 @@ namespace Commands
 		Register("tell-bronze", TimeCommand(TimeCommandType::Bronze, true));
 
 #if TMNEXT
+#if DEPENDENCY_NADEOSERVICES
 		// Tell world record
 		Register("tell-wr", TimeCommand(TimeCommandType::WorldRecord, true));
+#endif
 
 		// Tell Trackmania.io
 		Register("tell-trackmaniaio", TmioCommand(true));
