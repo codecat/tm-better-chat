@@ -58,6 +58,9 @@ class ChatLine
 		string authorLogin;
 		string authorNickname;
 
+		string authorClubTag;
+		bool overrideClubTag = false;
+
 		//NOTE: we can't keep this handle around because it will be invalidated on disconnect
 		CGamePlayer@ authorPlayer;
 		CGamePlayerInfo@ authorPlayerInfo;
@@ -82,6 +85,11 @@ class ChatLine
 
 			if (js.HasKey("nickname")) {
 				authorNickname = js["nickname"];
+			}
+
+			if (js.HasKey("clubtag")) {
+				authorClubTag = js["clubtag"];
+				overrideClubTag = true;
 			}
 
 			if (js.HasKey("text")) {
@@ -179,7 +187,6 @@ class ChatLine
 		auto network = cast<CTrackManiaNetwork>(GetApp().Network);
 
 		string authorId;
-		string authorClubTag;
 		bool isLocalPlayer = false;
 		int teamNumber = 0;
 		float linearHue = 0;
@@ -187,7 +194,9 @@ class ChatLine
 		if (authorPlayerInfo !is null) {
 #if TMNEXT
 			authorId = authorPlayerInfo.WebServicesUserId;
-			authorClubTag = authorPlayerInfo.ClubTag;
+			if (!overrideClubTag) {
+				authorClubTag = authorPlayerInfo.ClubTag;
+			}
 #endif
 
 			isLocalPlayer = (authorPlayerInfo.Login == network.PlayerInfo.Login);
