@@ -144,6 +144,26 @@ bool Setting_FirstLineEmptySpace = true;
 
 
 
+[Setting category="Colors" name="System color" color]
+vec3 Setting_ColorSystem = vec3(0.4f, 0, 0.5f);
+
+[Setting category="Colors" name="Self color" color]
+vec3 Setting_ColorSelf = vec3(0.2f, 0.2f, 0.2f);
+
+[Setting category="Colors" name="Mention color" color]
+vec3 Setting_ColorMention = vec3(0.6f, 0.2f, 0);
+
+[Setting category="Colors" name="Favorite color" color]
+vec3 Setting_ColorFavorite = vec3(0, 0.5f, 1);
+
+[Setting category="Colors" name="Tag element transparency" min=0 max=1]
+float Setting_TagTransparency = 1.0f;
+
+[Setting category="Colors" name="Line border transparency" min=0 max=1]
+float Setting_BorderTransparency = 1.0f;
+
+
+
 [Setting category="Streamer" name="Enable streamer mode" description="Enables a global block-list of streamer-unfriendly texts."]
 bool Setting_StreamerMode = false;
 

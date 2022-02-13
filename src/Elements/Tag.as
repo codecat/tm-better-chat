@@ -19,6 +19,7 @@ class ElementTag : Element
 
 	void Render() override
 	{
+		m_color.w = Setting_TagTransparency;
 		UI::Tag(m_text, m_color);
 	}
 }
