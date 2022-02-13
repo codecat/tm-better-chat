@@ -30,6 +30,8 @@ class ElementPlayerName : ElementTag
 
 	void Render() override
 	{
+		m_color.w = Setting_TagTransparency;
+
 		if (Setting_ShowNickname && m_nickname != "") {
 			UI::Tag(m_nicknameColored, m_color);
 			UI::SetPreviousTooltip(m_nameColored);

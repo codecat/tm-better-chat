@@ -32,13 +32,14 @@ class ChatLine
 
 	vec4 GetHighlightColor(const vec4 &in def = vec4(0, 0, 0, 1))
 	{
+		vec3 ret(def.x, def.y, def.z);
 		switch (m_highlight) {
-			case Highlight::System: return vec4(0.4f, 0, 0.5f, 1);
-			case Highlight::Self: return vec4(0.2f, 0.2f, 0.2f, 1);
-			case Highlight::Mention: return vec4(0.6f, 0.2f, 0, 1);
-			case Highlight::Favorite: return vec4(0, 0.5f, 1, 1);
+			case Highlight::System: ret = Setting_ColorSystem; break;
+			case Highlight::Self: ret = Setting_ColorSelf; break;
+			case Highlight::Mention: ret = Setting_ColorMention; break;
+			case Highlight::Favorite: ret = Setting_ColorFavorite; break;
 		}
-		return def;
+		return vec4(ret.x, ret.y, ret.z, 1);
 	}
 
 	void SetHighlight(Highlight highlight)
@@ -437,6 +438,7 @@ class ChatLine
 			rectPos.y -= UI::GetScrollY();
 
 			vec4 borderColor = GetHighlightColor();
+			borderColor.w = Setting_BorderTransparency;
 
 			dl.AddRectFilled(vec4(
 				rectPos.x, rectPos.y,
