@@ -67,8 +67,14 @@ bool Setting_KeyInputSlash = true;
 [Setting category="Keys" name="Toggle chat window visibility"]
 VirtualKey Setting_KeyToggleVisibility = VirtualKey::F4;
 
+[Setting category="Keys" name="Gamepad: Toggle chat window visibility"]
+CInputScriptPad::EButton Setting_GamepadToggleVisibility = CInputScriptPad::EButton::None;
+
 [Setting category="Keys" name="Toggle big chat window"]
 VirtualKey Setting_KeyToggleBig = VirtualKey::C;
+
+[Setting category="Keys" name="Gamepad: Toggle big chat window"]
+CInputScriptPad::EButton Setting_GamepadToggleBig = CInputScriptPad::EButton::None;
 
 
 

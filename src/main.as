@@ -122,6 +122,19 @@ void Main()
 			@g_fontChat = Resources::GetFont(Setting_FontName, Setting_FontSize, -1, -1, true, true, true);
 		}
 
+		auto inputport = GetApp().InputPort;
+		for (uint i = 0; i < inputport.Script_Pads.Length; i++) {
+			auto pad = inputport.Script_Pads[i];
+			if (pad.Type == CInputScriptPad::EPadType::Keyboard || pad.Type == CInputScriptPad::EPadType::Mouse) {
+				continue;
+			}
+
+			for (uint j = 0; j < pad.ButtonEvents.Length; j++) {
+				auto pressedButton = pad.ButtonEvents[j];
+				g_window.OnGamepadButton(pressedButton);
+			}
+		}
+
 		yield();
 	}
 }
