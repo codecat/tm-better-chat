@@ -1,6 +1,6 @@
 enum TimeCommandType
 {
-#if TMNEXT
+#if TMNEXT && DEPENDENCY_NADEOSERVICES
 	WorldRecord,
 #endif
 	Author,
@@ -27,7 +27,7 @@ class TimeCommand : BetterChat::ICommand
 		}
 
 		switch (m_type) {
-#if TMNEXT
+#if TMNEXT && DEPENDENCY_NADEOSERVICES
 			case TimeCommandType::WorldRecord: return "\\$db4" + Icons::Bullseye;
 #endif
 			case TimeCommandType::Author:      return "\\$071" + Icons::Trophy;
@@ -42,7 +42,7 @@ class TimeCommand : BetterChat::ICommand
 	{
 		if (m_send) {
 			switch (m_type) {
-#if TMNEXT
+#if TMNEXT && DEPENDENCY_NADEOSERVICES
 				case TimeCommandType::WorldRecord: return "Tells chat the world record time.";
 #endif
 				case TimeCommandType::Author:      return "Tells chat the author time.";
@@ -52,7 +52,7 @@ class TimeCommand : BetterChat::ICommand
 			}
 		} else {
 			switch (m_type) {
-#if TMNEXT
+#if TMNEXT && DEPENDENCY_NADEOSERVICES
 				case TimeCommandType::WorldRecord: return "Prints the world record time.";
 #endif
 				case TimeCommandType::Author:      return "Prints the author time.";
@@ -64,7 +64,7 @@ class TimeCommand : BetterChat::ICommand
 		return "";
 	}
 
-#if TMNEXT
+#if TMNEXT && DEPENDENCY_NADEOSERVICES
 	void RunWorldRecordAsync()
 	{
 		const string audience = "NadeoLiveServices";
@@ -121,7 +121,7 @@ class TimeCommand : BetterChat::ICommand
 
 	void Run(const string &in text)
 	{
-#if TMNEXT
+#if TMNEXT && DEPENDENCY_NADEOSERVICES
 		if (m_type == TimeCommandType::WorldRecord) {
 			startnew(CoroutineFunc(RunWorldRecordAsync));
 			return;
