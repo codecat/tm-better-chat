@@ -5,9 +5,7 @@ category = "Better Suite"
 version = "1.0.4"
 
 [script]
-#if TMNEXT
-dependencies = [ "NadeoServices" ]
-#endif
+optionaldependencies = [ "NadeoServices" ]
 
 exports = [ "src/Export.as" ]
 shared_exports = [ "src/ExportShared.as" ]
