@@ -206,6 +206,15 @@ class ChatWindow : BetterChat::IChatMessageListener
 		return false;
 	}
 
+	void OnGamepadButton(CInputScriptPad::EButton button)
+	{
+		if (button == Setting_GamepadToggleVisibility) {
+			m_visible = !m_visible;
+		} else if (button == Setting_GamepadToggleBig) {
+			m_big = !m_big;
+		}
+	}
+
 	void OnNewServerAsync()
 	{
 		while (GetApp().CurrentPlayground is null) {
