@@ -81,7 +81,7 @@ namespace Commands
 #endif
 
 		// Promotion
-		Register("tell-openplanet", SendTextCommand("$<$f39" + Icons::Heartbeat + "$> Openplanet is an extension platform for Trackmania with many plugins: $lhttps://openplanet.nl/", "Tells chat about Openplanet.", Icons::Heartbeat));
-		Register("tell-betterchat", SendTextCommand("$<$96f" + Icons::Bolt + " $ef7Better Chat$> is a complete replacement for the in-game chat: $lhttps://openplanet.nl/files/134", "Tells chat about Better Chat.", Icons::Bolt));
+		Register("tell-openplanet", SendTextCommand("$<$f39" + Icons::Heartbeat + "$> Openplanet is an extension platform for Trackmania with many plugins: $lhttps://openplanet.dev/", "Tells chat about Openplanet.", Icons::Heartbeat));
+		Register("tell-betterchat", SendTextCommand("$<$96f" + Icons::Bolt + " $ef7Better Chat$> is a complete replacement for the in-game chat: $lhttps://openplanet.dev/plugin/betterchat", "Tells chat about Better Chat.", Icons::Bolt));
 	}
 }
