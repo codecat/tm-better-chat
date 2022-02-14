@@ -349,16 +349,16 @@ class ChatLine
 
 	void AddText(const string &in text)
 	{
-		// $lhttps://openplanet.nl/ yes$l ytes
-		//   ^^^^^^^^^^^^^^^^^^^^^^^^^^
-		// $l[https://openplanet.nl/]yes
-		//                           ^^^
-		// $l[https://openplanet.nl/]yes$>yes
-		//                           ^^^
-		// $l[https://openplanet.nl/]yes$lyes
-		//                           ^^^
-		// $l[https://openplanet.nl/]yes$zyes
-		//                           ^^^
+		// $lhttps://openplanet.dev/ yes$l ytes
+		//   ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+		// $l[https://openplanet.dev/]yes
+		//                            ^^^
+		// $l[https://openplanet.dev/]yes$>yes
+		//                            ^^^
+		// $l[https://openplanet.dev/]yes$lyes
+		//                            ^^^
+		// $l[https://openplanet.dev/]yes$zyes
+		//                            ^^^
 		int index = text.IndexOfI("$l");
 		if (index == -1) {
 			AddElement(ElementText(text));

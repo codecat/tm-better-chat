@@ -169,7 +169,7 @@ class WizardModalDialog : ModalDialog
 			OpenBrowserURL("https://github.com/sponsors/codecat");
 		}
 		if (UI::Button(Icons::DiscordAlt + " Join the Openplanet discord")) {
-			OpenBrowserURL("https://openplanet.nl/link/discord");
+			OpenBrowserURL("https://openplanet.dev/link/discord");
 		}
 	}
 
