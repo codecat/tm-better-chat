@@ -647,7 +647,7 @@ class ChatWindow : BetterChat::IChatMessageListener
 				m_focusOnInput = false;
 			}
 			UI::PushFont(g_fontChat);
-			m_input = UI::InputText("", m_input, pressedEnter,
+			m_input = UI::InputText("##ChatInput", m_input, pressedEnter,
 				UI::InputTextFlags::EnterReturnsTrue |
 				UI::InputTextFlags::CallbackAlways |
 				UI::InputTextFlags::CallbackCharFilter |
