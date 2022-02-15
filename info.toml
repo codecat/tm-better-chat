@@ -5,7 +5,7 @@ category = "Better Suite"
 version = "1.0.5"
 
 [script]
-optionaldependencies = [ "NadeoServices" ]
+optional_dependencies = [ "NadeoServices" ]
 
 exports = [ "src/Export.as" ]
 shared_exports = [ "src/ExportShared.as" ]
