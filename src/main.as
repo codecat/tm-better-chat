@@ -125,7 +125,13 @@ void Main()
 		auto inputport = GetApp().InputPort;
 		for (uint i = 0; i < inputport.Script_Pads.Length; i++) {
 			auto pad = inputport.Script_Pads[i];
-			if (pad.Type == CInputScriptPad::EPadType::Keyboard || pad.Type == CInputScriptPad::EPadType::Mouse) {
+
+			if (
+				pad.Type == CInputScriptPad::EPadType::Keyboard
+#if !TURBO
+				|| pad.Type == CInputScriptPad::EPadType::Mouse
+#endif
+				) {
 				continue;
 			}
 
