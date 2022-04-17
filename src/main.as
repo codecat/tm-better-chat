@@ -14,7 +14,7 @@ void Render()
 	Renderables::Render();
 }
 
-bool OnKeyPress(bool down, VirtualKey key)
+UI::InputBlocking OnKeyPress(bool down, VirtualKey key)
 {
 	return g_window.OnKeyPress(down, key);
 }
