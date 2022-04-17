@@ -171,39 +171,39 @@ class ChatWindow : BetterChat::IChatMessageListener
 		AddLine(line);
 	}
 
-	bool OnKeyPress(bool down, VirtualKey key)
+	UI::InputBlocking OnKeyPress(bool down, VirtualKey key)
 	{
 		string actionMap = UI::CurrentActionMap();
 		if (actionMap == "MenuInputsMap") {
-			return false;
+			return UI::InputBlocking::DoNothing;
 		}
 
 		if (down) {
 			if (key == Setting_KeyToggleVisibility) {
 				m_visible = !m_visible;
-				return false;
+				return UI::InputBlocking::DoNothing;
 			} else if (key == Setting_KeyToggleBig) {
 				m_big = !m_big;
-				return false;
+				return UI::InputBlocking::DoNothing;
 			}
 
 			if (IsVisible()) {
 				if (key == Setting_KeyInput1 || key == Setting_KeyInput2) {
 					ShowInput();
-					return true;
+					return UI::InputBlocking::Block;
 				} else if (key == Setting_KeyInputTeam) {
 					ShowInput("/t ");
-					return true;
+					return UI::InputBlocking::Block;
 				} else if (Setting_KeyInputSlash && (key == VirtualKey::Oem2 /* Forward slash */ || key == VirtualKey::Divide /* Numpad slash */)) {
 					ShowInput("/");
 					m_auto.m_cursorIndex = 0;
 					m_auto.Begin(AutoCompletionType::Command);
-					return true;
+					return UI::InputBlocking::Block;
 				}
 			}
 		}
 
-		return false;
+		return UI::InputBlocking::DoNothing;
 	}
 
 	void OnGamepadButton(CInputScriptPad::EButton button)
