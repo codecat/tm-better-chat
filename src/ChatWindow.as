@@ -90,8 +90,6 @@ class ChatWindow : BetterChat::IChatMessageListener
 	void HideInput()
 	{
 		m_showInput = false;
-		// m_input = "";
-		// trace("[HideInput] m_input = `" + m_input + "`");
 	}
 
 	void AddSystemLine(const string &in line)
@@ -236,7 +234,6 @@ class ChatWindow : BetterChat::IChatMessageListener
 
 	void InputCallback(UI::InputTextCallbackData@ data)
 	{
-		trace("[InputCallback|Start] m_input = `" + m_input + "`");
 		if (data.EventFlag == UI::InputTextFlags::CallbackAlways) {
 			m_auto.Update(data);
 
@@ -289,7 +286,6 @@ class ChatWindow : BetterChat::IChatMessageListener
 				}
 			}
 		}
-		trace("[InputCallback|End] m_input = `" + m_input + "`");
 	}
 
 	void Update(float dt)
@@ -650,7 +646,6 @@ class ChatWindow : BetterChat::IChatMessageListener
 				UI::SetKeyboardFocusHere();
 				m_focusOnInput = false;
 			}
-			trace("[Render1] m_input = `" + m_input + "`");
 			UI::PushFont(g_fontChat);
 			m_lastInput = m_input;
 			m_input = UI::InputText("##ChatInput", m_input, pressedEnter,
@@ -662,7 +657,6 @@ class ChatWindow : BetterChat::IChatMessageListener
 				UI::InputTextCallback(InputCallback)
 			);
 			UI::PopFont();
-			trace("[Render2] m_input = `" + m_input + "`");
 
 			if (pressedEnter) {
 				if (m_auto.IsVisible()) {
@@ -670,7 +664,7 @@ class ChatWindow : BetterChat::IChatMessageListener
 					m_focusOnInput = true;
 				} else {
 					OnUserInput(m_input);
-					trace("set m_input='' since chat message was sent.");
+					// reset m_input since chat message was sent.
 					m_input = "";
 					shouldHideInput = true;
 				}
@@ -700,9 +694,7 @@ class ChatWindow : BetterChat::IChatMessageListener
 		}
 
 		if (shouldHideInput) {
-			// m_input already set to '' by now
 			HideInput();
-			trace("[HideInput] m_input = `" + m_input + "`");
 		}
 	}
 }
