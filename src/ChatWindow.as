@@ -11,6 +11,7 @@ class ChatWindow : BetterChat::IChatMessageListener
 	bool m_showInput = false;
 	bool m_focusOnInput = false;
 	string m_input;
+	string m_lastInput;
 	int m_setInputCursor = -1;
 
 	float m_chatLineFrameHeight = 30.0f;
@@ -89,7 +90,8 @@ class ChatWindow : BetterChat::IChatMessageListener
 	void HideInput()
 	{
 		m_showInput = false;
-		m_input = "";
+		// m_input = "";
+		// trace("[HideInput] m_input = `" + m_input + "`");
 	}
 
 	void AddSystemLine(const string &in line)
@@ -189,7 +191,7 @@ class ChatWindow : BetterChat::IChatMessageListener
 
 			if (IsVisible()) {
 				if (key == Setting_KeyInput1 || key == Setting_KeyInput2) {
-					ShowInput();
+					ShowInput(m_input);
 					return UI::InputBlocking::Block;
 				} else if (key == Setting_KeyInputTeam) {
 					ShowInput("/t ");
@@ -234,6 +236,7 @@ class ChatWindow : BetterChat::IChatMessageListener
 
 	void InputCallback(UI::InputTextCallbackData@ data)
 	{
+		trace("[InputCallback|Start] m_input = `" + m_input + "`");
 		if (data.EventFlag == UI::InputTextFlags::CallbackAlways) {
 			m_auto.Update(data);
 
@@ -286,6 +289,7 @@ class ChatWindow : BetterChat::IChatMessageListener
 				}
 			}
 		}
+		trace("[InputCallback|End] m_input = `" + m_input + "`");
 	}
 
 	void Update(float dt)
@@ -646,7 +650,9 @@ class ChatWindow : BetterChat::IChatMessageListener
 				UI::SetKeyboardFocusHere();
 				m_focusOnInput = false;
 			}
+			trace("[Render1] m_input = `" + m_input + "`");
 			UI::PushFont(g_fontChat);
+			m_lastInput = m_input;
 			m_input = UI::InputText("##ChatInput", m_input, pressedEnter,
 				UI::InputTextFlags::EnterReturnsTrue |
 				UI::InputTextFlags::CallbackAlways |
@@ -656,6 +662,7 @@ class ChatWindow : BetterChat::IChatMessageListener
 				UI::InputTextCallback(InputCallback)
 			);
 			UI::PopFont();
+			trace("[Render2] m_input = `" + m_input + "`");
 
 			if (pressedEnter) {
 				if (m_auto.IsVisible()) {
@@ -663,6 +670,8 @@ class ChatWindow : BetterChat::IChatMessageListener
 					m_focusOnInput = true;
 				} else {
 					OnUserInput(m_input);
+					trace("set m_input='' since chat message was sent.");
+					m_input = "";
 					shouldHideInput = true;
 				}
 			}
@@ -671,6 +680,8 @@ class ChatWindow : BetterChat::IChatMessageListener
 			// Workaround: https://github.com/ocornut/imgui/issues/2620#issuecomment-501136289
 			if (UI::IsItemDeactivated() && UI::IsKeyPressed(UI::Key::Escape)) {
 				shouldHideInput = true;
+				// UI::InputText will return "" when Esc is pressed, so let's restore the cached input value
+				m_input = m_lastInput;
 			}
 
 			UI::PopStyleColor();
@@ -689,7 +700,9 @@ class ChatWindow : BetterChat::IChatMessageListener
 		}
 
 		if (shouldHideInput) {
+			// m_input already set to '' by now
 			HideInput();
+			trace("[HideInput] m_input = `" + m_input + "`");
 		}
 	}
 }
