@@ -674,8 +674,10 @@ class ChatWindow : BetterChat::IChatMessageListener
 			// Workaround: https://github.com/ocornut/imgui/issues/2620#issuecomment-501136289
 			if (UI::IsItemDeactivated() && UI::IsKeyPressed(UI::Key::Escape)) {
 				shouldHideInput = true;
-				// UI::InputText will return "" when Esc is pressed, so let's restore the cached input value
-				m_input = m_lastInput;
+				if (Setting_CacheDraftOnEsc) {
+					// UI::InputText will return "" when Esc is pressed, so let's restore the cached input value
+					m_input = m_lastInput;
+				}
 			}
 
 			UI::PopStyleColor();
