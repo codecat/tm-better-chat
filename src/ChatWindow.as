@@ -683,6 +683,36 @@ class ChatWindow : BetterChat::IChatMessageListener
 			UI::PopStyleColor();
 			UI::PopItemWidth();
 			UI::End();
+
+			if (Setting_ObviousChat && !m_big) {
+				// draw a duplication of the InputText in the middle of the screen.
+				float sw = Draw::GetWidth();
+				float sh = Draw::GetHeight();
+				float w = sw/4.;
+				float h = sh/5.;
+
+				UI::SetNextWindowPos(
+					int(sw / 2.0f - w / 2.0f),
+					int(sh / 2.0f - h / 2.0f),
+					UI::Cond::Always
+				);
+				UI::SetNextWindowSize(int(w), int(h), UI::Cond::Always);
+
+				UI::Begin("BC-ObviousChatInput", UI::WindowFlags::NoTitleBar
+					| UI::WindowFlags::NoDecoration
+					| UI::WindowFlags::NoSavedSettings
+					| UI::WindowFlags::NoInputs
+					| UI::WindowFlags::NoFocusOnAppearing );
+
+				UI::PushFont(g_fontObviousChat);
+				// UI::PushStyleColor(UI::Col::FrameBg, vec4(0, 0, 0, 0));
+				UI::Text("CHAT FOCUSED!");
+				UI::Text("> ");
+				UI::TextWrapped(m_input);
+				UI::PopFont();
+
+				UI::End();
+			}
 		}
 
 		UI::PopStyleColor();
