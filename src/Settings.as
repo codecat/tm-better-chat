@@ -154,9 +154,6 @@ bool Setting_ShowScrollbar = true;
 [Setting category="Appearance" name="Empty space before first lines"]
 bool Setting_FirstLineEmptySpace = true;
 
-[Setting category="Appearance" name="Obvious Chat Input" description="When chat input is focused (i.e., you can type a chat msg), this option makes it VERY obvious. Use this option to prevent accidentally being in chat mode at the start of a race."]
-bool Setting_ObviousChat = true;
-
 
 
 [Setting category="Colors" name="System color" color]
