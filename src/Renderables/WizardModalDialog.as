@@ -1,11 +1,11 @@
 class WizardModalDialog : ModalDialog
 {
-	Resources::Texture@ m_imgEmotes;
-	Resources::Texture@ m_imgEmoteAutocomplete;
-	Resources::Texture@ m_imgFont;
-	Resources::Texture@ m_imgCommandAutocomplete;
-	Resources::Texture@ m_imgMentionAutocomplete;
-	Resources::Texture@ m_imgContextMenu;
+	UI::Texture@ m_imgEmotes;
+	UI::Texture@ m_imgEmoteAutocomplete;
+	UI::Texture@ m_imgFont;
+	UI::Texture@ m_imgCommandAutocomplete;
+	UI::Texture@ m_imgMentionAutocomplete;
+	UI::Texture@ m_imgContextMenu;
 
 	int m_stage = 0;
 	int m_keySetup = 0;
@@ -16,15 +16,15 @@ class WizardModalDialog : ModalDialog
 
 		m_size = vec2(500, 400);
 
-		@m_imgEmotes = Resources::GetTexture("img/wizard-emotes.png");
-		@m_imgEmoteAutocomplete = Resources::GetTexture("img/wizard-emote-autocomplete.png");
-		@m_imgFont = Resources::GetTexture("img/wizard-font.png");
-		@m_imgCommandAutocomplete = Resources::GetTexture("img/wizard-command-autocomplete.png");
-		@m_imgMentionAutocomplete = Resources::GetTexture("img/wizard-mention-autocomplete.png");
-		@m_imgContextMenu = Resources::GetTexture("img/wizard-context.png");
+		@m_imgEmotes = UI::LoadTexture("img/wizard-emotes.png");
+		@m_imgEmoteAutocomplete = UI::LoadTexture("img/wizard-emote-autocomplete.png");
+		@m_imgFont = UI::LoadTexture("img/wizard-font.png");
+		@m_imgCommandAutocomplete = UI::LoadTexture("img/wizard-command-autocomplete.png");
+		@m_imgMentionAutocomplete = UI::LoadTexture("img/wizard-mention-autocomplete.png");
+		@m_imgContextMenu = UI::LoadTexture("img/wizard-context.png");
 	}
 
-	void ImageCenter(Resources::Texture@ img)
+	void ImageCenter(UI::Texture@ img)
 	{
 		vec2 imgSize = img.GetSize();
 		vec2 windowSize = UI::GetWindowSize();

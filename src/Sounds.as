@@ -33,10 +33,10 @@ namespace Sounds
 			return;
 		}
 
-		@g_sndChat = Resources::GetAudioSample("audio/" + folder + "/Chat.wav");
-		@g_sndChatMention = Resources::GetAudioSample("audio/" + folder + "/ChatMention.wav");
-		@g_sndChatFavorite = Resources::GetAudioSample("audio/" + folder + "/ChatFavorite.wav");
-		@g_sndChatSystem = Resources::GetAudioSample("audio/" + folder + "/ChatSystem.wav");
+		@g_sndChat = Audio::LoadSample("audio/" + folder + "/Chat.wav");
+		@g_sndChatMention = Audio::LoadSample("audio/" + folder + "/ChatMention.wav");
+		@g_sndChatFavorite = Audio::LoadSample("audio/" + folder + "/ChatFavorite.wav");
+		@g_sndChatSystem = Audio::LoadSample("audio/" + folder + "/ChatSystem.wav");
 	}
 
 	void CheckIfSoundSetChanged()

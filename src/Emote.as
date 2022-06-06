@@ -7,7 +7,7 @@ class EmoteFrame
 class Emote
 {
 	string m_name;
-	Resources::Texture@ m_texture;
+	UI::Texture@ m_texture;
 
 	array<EmoteFrame> m_frames;
 	uint m_framesTime = 0;
@@ -15,7 +15,7 @@ class Emote
 	vec2 m_size;
 	EmoteSource@ m_source;
 
-	Emote(const Json::Value &in js, const string &in name, Resources::Texture@ texture, EmoteSource@ source)
+	Emote(const Json::Value &in js, const string &in name, UI::Texture@ texture, EmoteSource@ source)
 	{
 		m_name = name;
 		@m_texture = texture;

@@ -29,7 +29,7 @@ namespace Emotes
 		//TODO: Check the texture path for a URL
 		string texturePath = js["texture"];
 
-		auto texture = Resources::GetTexture(texturePath);
+		auto texture = UI::LoadTexture(texturePath);
 		if (texture is null) {
 			error("Unable to load emotes texture: \"" + texturePath + "\"");
 			return;
