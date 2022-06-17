@@ -2,7 +2,7 @@
 name = "Better Chat"
 author = "Miss"
 category = "Better Suite"
-version = "1.0.8"
+version = "1.0.9"
 
 [script]
 optional_dependencies = [ "NadeoServices" ]
