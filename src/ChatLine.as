@@ -209,7 +209,7 @@ class ChatLine
 			}
 #endif
 
-#if !TURBO
+#if MP41
 			auto tmPlayer = cast<CTrackManiaPlayer>(authorPlayer);
 			if (tmPlayer !is null) {
 				// 0 in time attack
