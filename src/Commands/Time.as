@@ -30,7 +30,7 @@ class TimeCommand : BetterChat::ICommand
 		switch (m_type) {
 #if TMNEXT && DEPENDENCY_NADEOSERVICES
 			case TimeCommandType::WorldRecord: return "\\$db4" + Icons::Bullseye;
-			case TimeCommandType::Champion:	   return "\\$071" + Icons::Trophy;
+			case TimeCommandType::Champion:	   return "\\$f47" + Icons::Trophy;
 #endif
 			case TimeCommandType::Author:      return "\\$071" + Icons::Trophy;
 			case TimeCommandType::Gold:        return "\\$db4" + Icons::Trophy;
@@ -142,9 +142,9 @@ class TimeCommand : BetterChat::ICommand
 		string msg = "";
 
         if (req.ResponseCode() == 204) {
-            msg += "$<$db0" + Icons::Bullseye + "$> Champion Medal: $<$bbb not found";
+            msg += "$<$f47" + Icons::Bullseye + "$> Champion Medal: $<$bbb not found";
         } else if (req.ResponseCode() != 200) {
-			msg += "$<$db0" + Icons::Bullseye + "$> Champion Medal: $<$bbb error retrieving";
+			msg += "$<$f47" + Icons::Bullseye + "$> Champion Medal: $<$bbb error retrieving";
         }
 
 		// parse champion medal json
