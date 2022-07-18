@@ -138,7 +138,6 @@ class TimeCommand : BetterChat::ICommand
 
         req.Start();
         while (!req.Finished()) yield();
-		print(req.ResponseCode());
 
 		string msg = "";
 
