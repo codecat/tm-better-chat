@@ -43,6 +43,8 @@ namespace Commands
 #if DEPENDENCY_NADEOSERVICES
 		// World record
 		Register("wr", TimeCommand(TimeCommandType::WorldRecord, false));
+		// champion medal
+		Register("champion", TimeCommand(TimeCommandType::Champion, false));
 #endif
 
 		// Trackmania.io
@@ -73,6 +75,8 @@ namespace Commands
 #if DEPENDENCY_NADEOSERVICES
 		// Tell world record
 		Register("tell-wr", TimeCommand(TimeCommandType::WorldRecord, true));
+		// champion medal
+		Register("tell-champion", TimeCommand(TimeCommandType::Champion, true));
 #endif
 
 		// Tell Trackmania.io
