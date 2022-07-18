@@ -117,6 +117,9 @@ bool Setting_SoundFavorite = true;
 [Setting category="Messages" name="Sound volume" min=0 max=1]
 float Setting_SoundGain = 0.15f;
 
+[Setting category="Messages" name="Cache draft messages on <Esc>" description="If Enabled: When a chat message has been drafted, if <Esc> is used to defocus chat then the draft will be kept for next time. Drafted means: written and not yet sent."]
+bool Setting_CacheDraftOnEsc = false;
+
 
 
 enum BackgroundStyle
