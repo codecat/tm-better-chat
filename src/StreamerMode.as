@@ -21,9 +21,9 @@ namespace StreamerMode
 		"(\\b|_)c[^a-z]*h[^a-z]*[i1]+[^a-z]*n[^a-z]*k+(\\b|_)",
 	};
 
-	string Censor(string text)
+	string Censor(string _text)
 	{
-		string textCheck = StripFormatCodes(text);
+		string textCheck = StripFormatCodes(_text);
 
 		int regexFlags = Regex::Flags::ECMAScript | Regex::Flags::CaseInsensitive;
 
@@ -36,10 +36,10 @@ namespace StreamerMode
 				if (!Setting_StreamerCensor) {
 					return "";
 				}
-				text = textCheck = Regex::Replace(textCheck, pattern, "$<" + Setting_StreamerCensorReplace + "$>", regexFlags);
+				_text = textCheck = Regex::Replace(textCheck, pattern, "$<" + Setting_StreamerCensorReplace + "$>", regexFlags);
 			}
 		}
 
-		return text;
+		return _text;
 	}
 }

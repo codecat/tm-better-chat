@@ -197,14 +197,14 @@ class AutoCompletion
 		}
 	}
 
-	void Filter(string text)
+	void Filter(string _text)
 	{
-		text = text.ToLower();
+		_text = _text.ToLower();
 
 		m_itemsFiltered.RemoveRange(0, m_itemsFiltered.Length);
 		for (uint i = 0; i < m_items.Length; i++) {
 			auto item = m_items[i];
-			if (item.Matches(text)) {
+			if (item.Matches(_text)) {
 				m_itemsFiltered.InsertLast(item);
 			}
 		}
@@ -215,7 +215,7 @@ class AutoCompletion
 			return;
 		}
 
-		g_filterListCompare = text;
+		g_filterListCompare = _text;
 		m_itemsFiltered.Sort(function(a, b) {
 			return a.Distance(g_filterListCompare) < b.Distance(g_filterListCompare);
 		});
