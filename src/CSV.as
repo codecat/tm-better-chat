@@ -1,4 +1,4 @@
-bool CsvInText(const string &in csv, string text)
+bool CsvInText(const string &in csv, const string &in text)
 {
 	if (csv == "") {
 		return false;
