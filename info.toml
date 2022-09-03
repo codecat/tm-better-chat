@@ -10,5 +10,4 @@ optional_dependencies = [ "NadeoServices" ]
 exports = [ "src/Export.as" ]
 shared_exports = [ "src/ExportShared.as" ]
 
-imports = [ "Icons.as", "Formatting.as", "Permissions.as", "Time.as" ]
 timeout = 0
