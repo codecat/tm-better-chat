@@ -21,7 +21,7 @@ class Emote
 		@m_texture = texture;
 
 		auto jsFrames = js["frames"];
-		if (jsFrames.GetType() == Json::Type::Array) {
+		if (jsFrames !is null && jsFrames.GetType() == Json::Type::Array) {
 			m_frames.Reserve(jsFrames.Length);
 			for (uint i = 0; i < jsFrames.Length; i++) {
 				auto jsFrame = jsFrames[i];
