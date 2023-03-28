@@ -111,7 +111,7 @@ class ChatLine
 			m_isJson = false;
 			// We don't have a json object, so we have to extract author & message contents manually
 #if TMNEXT
-			//TODO: This regex only works for basic uplay player names!
+			//NOTE: This regex only works for basic uplay player names!
 			auto parse = Regex::Match(line, "^(\\$FFF)?([<\\[])\\$<([^\\$]+)\\$>[\\]>] ([\\S\\s]*)");
 #else
 			auto parse = Regex::Match(line, "^(\\$FFF)?([<\\[])\\$<(.+?)\\$>[\\]>] ([\\S\\s]*)");
