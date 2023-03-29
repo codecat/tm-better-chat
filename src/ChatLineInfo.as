@@ -139,16 +139,16 @@ class ChatLineInfo
 	{
 		/*
 		Global: "$<$BBB[$> $<$<Miss-tm$>$> $<$BBB]$> test"
-		Team:   "$<$fff<$> $<$<Miss-tm$>$> $<$fff>$> test"
+		Team:   "$<$???<$> $<$<Miss-tm$>$> $<$???>$> test"
 		*/
 
 		//NOTE: This regex only works for basic uplay player names!
 		auto parse = Regex::Match(line,
-			"^(\\$FFF)?"                  // "$FFF"             XMLRPC adds $FFF to the start of messages, so we keep this here optionally
-			"\\$<\\$[Bf]{3}([<\\[])\\$> " // "$<$BBB[$> "       First colored bracket, either [ or < in $BBB or $fff for global and team, respectively
-			"\\$<\\$<([^\\$]+)\\$>\\$> "  // "$<$<Miss-tm$>$> " Player name, wrapped in double scopes (likely Nadeo not realizing names are already scoped)
-			"\\$<\\$[Bf]{3}[\\]>]\\$> "   // "$<$BBB]$> "       Second colored bracket, either ] or > in $BBB or $fff for global and team, respectively
-			"([\\S\\s]*)"                 // "test"             The actual chat message text
+			"^(\\$FFF)?"                         // "$FFF"             XMLRPC adds $FFF to the start of messages, so we keep this here optionally
+			"\\$<\\$[A-Fa-f0-9]{3}([<\\[])\\$> " // "$<$BBB[$> "       First colored bracket, either [ or < in $BBB or $fff for global and team, respectively
+			"\\$<\\$<([^\\$]+)\\$>\\$> "         // "$<$<Miss-tm$>$> " Player name, wrapped in double scopes (likely Nadeo not realizing names are already scoped)
+			"\\$<\\$[A-Fa-f0-9]{3}[\\]>]\\$> "   // "$<$BBB]$> "       Second colored bracket, either ] or > in $BBB or $fff for global and team, respectively
+			"([\\S\\s]*)"                        // "test"             The actual chat message text
 		);
 		if (parse.Length == 0) {
 			return false;
