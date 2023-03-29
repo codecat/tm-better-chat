@@ -64,6 +64,10 @@ class ChatLineInfo
 		} else {
 			@m_authorPlayerInfo = FindPlayerInfoByLogin(m_authorLogin);
 		}
+
+		if (m_authorPlayerInfo !is null) {
+			m_authorName = m_authorPlayerInfo.Name;
+		}
 	}
 
 	void ParseFromText(const string &in line)
