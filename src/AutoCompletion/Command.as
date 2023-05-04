@@ -36,8 +36,9 @@ class AutoCompletionItemCommand : IAutoCompletionItem
 	void Render(UI::DrawList@ dl, const vec2 &in pos) const override
 	{
 		const float textOffsetX = 20;
-		dl.AddText(pos + vec2(0, 6), vec4(1, 1, 1, 1), m_icon);
-		dl.AddText(pos + vec2(textOffsetX, -2), vec4(1, 1, 1, 1), m_name);
-		dl.AddText(pos + vec2(textOffsetX, 14), vec4(0.7f, 0.7f, 0.7f, 1), m_description);
+		const float scale = UI::GetScale();
+		dl.AddText(pos + vec2(0, 6) * scale, vec4(1, 1, 1, 1), m_icon);
+		dl.AddText(pos + vec2(textOffsetX, -2) * scale, vec4(1, 1, 1, 1), m_name);
+		dl.AddText(pos + vec2(textOffsetX, 14) * scale, vec4(0.7f, 0.7f, 0.7f, 1), m_description);
 	}
 }

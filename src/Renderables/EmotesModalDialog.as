@@ -9,6 +9,8 @@ class EmotesModalDialog : ModalDialog
 
 	void RenderDialog() override
 	{
+		float scale = UI::GetScale();
+
 		UI::Text("This is a list of all emotes available in Better Chat.");
 
 		UI::Separator();
@@ -20,7 +22,7 @@ class EmotesModalDialog : ModalDialog
 				auto emote = Emotes::g_sortedEmotes[i];
 				auto source = emote.m_source;
 
-				emote.RenderFixed();
+				emote.RenderFixed(24 * scale);
 				UI::SameLine();
 				UI::Text(emote.m_name + " \\$777(" + source.m_name + ")");
 			}

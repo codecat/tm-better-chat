@@ -491,11 +491,12 @@ class ChatWindow : BetterChat::IChatMessageListener
 			// Button to reset position and size
 			UI::BeginDisabled(Setting_LockWindowLocation);
 			if (UI::Button(Icons::Undo)) {
+				float scale = UI::GetScale();
 				UI::SetWindowPos(vec2(
 					Setting_DefaultPosition.x,
-					Draw::GetHeight() - Setting_DefaultSize.y - Setting_DefaultPosition.y
+					Draw::GetHeight() - Setting_DefaultSize.y * scale - Setting_DefaultPosition.y * scale
 				));
-				UI::SetWindowSize(Setting_DefaultSize);
+				UI::SetWindowSize(Setting_DefaultSize * scale);
 			}
 			UI::EndDisabled();
 			UI::SetPreviousTooltip("Reset position & size");
@@ -529,8 +530,10 @@ class ChatWindow : BetterChat::IChatMessageListener
 	void SetNextWindowLocation()
 	{
 		if (m_big) {
-			float screenWidth = Draw::GetWidth();
-			float screenHeight = Draw::GetHeight();
+			float scale = UI::GetScale();
+
+			float screenWidth = Draw::GetWidth() / scale;
+			float screenHeight = Draw::GetHeight() / scale;
 
 			float chatWidth = screenWidth / 2.0f;
 			float chatHeight = screenHeight / 2.0f;
@@ -576,6 +579,7 @@ class ChatWindow : BetterChat::IChatMessageListener
 		string windowTitle = GetWindowTitle();
 		int windowFlags = GetWindowFlags();
 		int childWindowFlags = GetChildWindowFlags();
+		float scale = UI::GetScale();
 
 		UI::PushStyleColor(UI::Col::WindowBg, GetWindowBackground());
 
@@ -593,7 +597,7 @@ class ChatWindow : BetterChat::IChatMessageListener
 			RenderSidebar();
 
 			// Begin second half of the window
-			UI::SetCursorPos(startingCursorPos + vec2(40, 0));
+			UI::SetCursorPos(startingCursorPos + vec2(40, 0) * scale);
 			UI::BeginChild("ChatContainer", vec2(), false, childWindowFlags);
 		}
 
@@ -630,9 +634,10 @@ class ChatWindow : BetterChat::IChatMessageListener
 			if (inputPos.y + 10 > Draw::GetHeight()) {
 				inputPos.y = Draw::GetHeight() - 30;
 			}
+			inputPos /= scale;
 
 			UI::SetNextWindowPos(int(inputPos.x), int(inputPos.y), UI::Cond::Always);
-			UI::SetNextWindowSize(int(windowSize.x), 0, UI::Cond::Always);
+			UI::SetNextWindowSize(int(windowSize.x / scale), 0, UI::Cond::Always);
 
 			UI::Begin("Better Chat Input", UI::WindowFlags::NoTitleBar | UI::WindowFlags::NoDecoration | UI::WindowFlags::NoSavedSettings);
 			inputWindowFocused = UI::IsWindowFocused();

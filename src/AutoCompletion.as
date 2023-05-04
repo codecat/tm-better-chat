@@ -46,13 +46,15 @@ class AutoCompletion
 			return;
 		}
 
-		const float WINDOW_WIDTH = 400;
-		const float WINDOW_SPACING = 4;
-		const float WINDOW_PADDING = 4;
-		const float WINDOW_ROUNDING = 4;
+		const float SCALE = UI::GetScale();
+
+		const float WINDOW_WIDTH = 400 * SCALE;
+		const float WINDOW_SPACING = 4 * SCALE;
+		const float WINDOW_PADDING = 4 * SCALE;
+		const float WINDOW_ROUNDING = 4 * SCALE;
+		const float ITEM_HEIGHT = 32 * SCALE;
+		const float ITEM_ROUNDING = 4 * SCALE;
 		const float WINDOW_ALPHA = 0.9f;
-		const float ITEM_HEIGHT = 32;
-		const float ITEM_ROUNDING = 4;
 
 		vec2 windowPos = chatPos + vec2(
 			WINDOW_SPACING, //chatSize.x / 2.0f - WINDOW_WIDTH / 2.0f,
@@ -82,10 +84,10 @@ class AutoCompletion
 		vec2 pos = windowPos + vec2(0, windowSize.y - ITEM_HEIGHT);
 		for (uint i = 0; i < m_itemsFiltered.Length; i++) {
 			if (int(i) == m_selectedIndex) {
-				dl.AddRectFilled(vec4(pos.x, pos.y, WINDOW_WIDTH, 32), vec4(0.4f, 0, 0.5f, 1), ITEM_ROUNDING);
+				dl.AddRectFilled(vec4(pos.x, pos.y, WINDOW_WIDTH, ITEM_HEIGHT), vec4(0.4f, 0, 0.5f, 1), ITEM_ROUNDING);
 			}
 
-			m_itemsFiltered[i].Render(dl, pos + vec2(2, 2));
+			m_itemsFiltered[i].Render(dl, pos + vec2(2, 2) * SCALE);
 			pos.y -= ITEM_HEIGHT;
 
 			if (pos.y < windowPos.y) {
