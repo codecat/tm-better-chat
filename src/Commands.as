@@ -34,6 +34,7 @@ namespace Commands
 	void Load()
 	{
 		// Medal times
+		Register("at", TimeCommand(TimeCommandType::Author, false));
 		Register("author", TimeCommand(TimeCommandType::Author, false));
 		Register("gold", TimeCommand(TimeCommandType::Gold, false));
 		Register("silver", TimeCommand(TimeCommandType::Silver, false));
@@ -64,6 +65,7 @@ namespace Commands
 		Register("bc-wizard", WizardCommand());
 
 		// Tell medal times
+		Register("tell-at", TimeCommand(TimeCommandType::Author, true));
 		Register("tell-author", TimeCommand(TimeCommandType::Author, true));
 		Register("tell-gold", TimeCommand(TimeCommandType::Gold, true));
 		Register("tell-silver", TimeCommand(TimeCommandType::Silver, true));
