@@ -10,7 +10,7 @@ class ElementEmote : Element
 
 	void Render() override
 	{
-		m_emote.Render();
+		m_emote.Render(24 * UI::GetScale());
 		UI::SetPreviousTooltip(m_emote.m_name);
 	}
 }

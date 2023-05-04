@@ -86,7 +86,7 @@ class Emote
 		dl.AddImage(m_texture, vec2(Math::Round(rect.x), Math::Round(rect.y)), vec2(rect.z, rect.w), 0xFFFFFFFF, uv);
 	}
 
-	vec2 Render(UI::DrawList@ dl, const vec2 &in pos, float maxheight = 24)
+	vec2 Render(UI::DrawList@ dl, const vec2 &in pos, float maxheight)
 	{
 		vec2 size = m_size;
 		if (size.y > maxheight) {
@@ -96,7 +96,7 @@ class Emote
 		return size;
 	}
 
-	void Render(float maxheight = 24)
+	void Render(float maxheight)
 	{
 		vec2 size = m_size;
 		if (size.y > maxheight) {
@@ -107,7 +107,7 @@ class Emote
 		Render(UI::GetWindowDrawList(), UI::GetItemRect());
 	}
 
-	void RenderFixed(float height = 24)
+	void RenderFixed(float height)
 	{
 		vec2 size = m_size;
 		if (size.y > height) {

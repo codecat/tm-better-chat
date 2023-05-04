@@ -31,6 +31,6 @@ class AutoCompletionItemMention : IAutoCompletionItem
 
 	void Render(UI::DrawList@ dl, const vec2 &in pos) const override
 	{
-		dl.AddText(pos + vec2(0, 6), vec4(1, 1, 1, 1), m_nameColored);
+		dl.AddText(pos + vec2(0, 6) * UI::GetScale(), vec4(1, 1, 1, 1), m_nameColored);
 	}
 }

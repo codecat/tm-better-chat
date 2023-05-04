@@ -293,9 +293,10 @@ class ChatLine
 
 	void Render()
 	{
+		float scale = UI::GetScale();
 		vec2 rectPos = UI::GetCursorPos();
 
-		UI::SetCursorPos(rectPos + vec2(8, 0));
+		UI::SetCursorPos(rectPos + vec2(8, 0) * scale);
 
 		UI::AlignTextToFramePadding();
 
@@ -319,7 +320,7 @@ class ChatLine
 
 		vec2 rectSize = vec2(
 			endPos.x - rectPos.x,
-			newLinePos.y - rectPos.y - 6
+			newLinePos.y - rectPos.y - 6 * scale
 		);
 
 		if (endPos.y > rectPos.y) {

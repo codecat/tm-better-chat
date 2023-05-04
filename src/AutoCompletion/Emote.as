@@ -29,7 +29,8 @@ class AutoCompletionItemEmote : IAutoCompletionItem
 
 	void Render(UI::DrawList@ dl, const vec2 &in pos) const override
 	{
-		vec2 size = m_emote.Render(dl, pos, 32);
-		dl.AddText(pos + vec2(size.x + 4, 6), vec4(1, 1, 1, 1), m_emote.m_name);
+		float scale = UI::GetScale();
+		vec2 size = m_emote.Render(dl, pos, 32 * scale);
+		dl.AddText(pos + vec2(size.x + 4, 6) * scale, vec4(1, 1, 1, 1), m_emote.m_name);
 	}
 }
