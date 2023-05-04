@@ -493,7 +493,7 @@ class ChatWindow : BetterChat::IChatMessageListener
 			if (UI::Button(Icons::Undo)) {
 				float scale = UI::GetScale();
 				UI::SetWindowPos(vec2(
-					Setting_DefaultPosition.x,
+					Setting_DefaultPosition.x * scale,
 					Draw::GetHeight() - Setting_DefaultSize.y * scale - Setting_DefaultPosition.y * scale
 				));
 				UI::SetWindowSize(Setting_DefaultSize * scale);
