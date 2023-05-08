@@ -55,6 +55,11 @@ namespace BetterChat
 			warn("Can't send message right now because there's no playground!");
 			return;
 		}
-		pg.Interface.ChatEntry = text;
+
+		if (text.Length > 2000) {
+			pg.Interface.ChatEntry = text.SubStr(0, 2000) + " (...)";
+		} else {
+			pg.Interface.ChatEntry = text;
+		}
 	}
 }
