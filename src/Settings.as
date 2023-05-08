@@ -24,6 +24,9 @@ bool Setting_EnableLinks = true;
 [Setting category="General" name="Replace newlines with spaces in messages"]
 bool Setting_ReplaceNewlines = false;
 
+[Setting category="General" name="Maximum message length limit" description="Incoming messages longer than this length will be cut off."]
+int Setting_MaxMessageLength = 1000;
+
 [Setting category="General" name="Limit backlog to visible range when not focused" description="Turning this on can slightly increase performance, but will introduce a small glitch when opening chat."]
 bool Setting_LimitOnHiddenOverlay = false;
 
