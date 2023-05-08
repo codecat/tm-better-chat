@@ -105,7 +105,12 @@ class ChatWindow : BetterChat::IChatMessageListener
 			return;
 		}
 
-		ChatLine@ newLine = ChatLine(m_lineIdIterator++, Time::Stamp, line);
+		ChatLine@ newLine;
+		if (line.Length > Setting_MaxMessageLength) {
+			@newLine = ChatLine(m_lineIdIterator++, Time::Stamp, line.SubStr(0, Setting_MaxMessageLength) + " (...)");
+		} else {
+			@newLine = ChatLine(m_lineIdIterator++, Time::Stamp, line);
+		}
 
 		// When a servercontroller restarts, it will have forgotten about the chatformat.
 		// We can (try to) detect these cases, by using a count of received json messages.
