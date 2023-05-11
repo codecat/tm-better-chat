@@ -6,7 +6,7 @@ bool CsvInText(const string &in csv, const string &in text)
 
 	auto values = csv.ToLower().Split(",");
 	for (uint i = 0; i < values.Length; i++) {
-		if (text.Contains(values[i])) {
+		if (Regex::Contains(text, "\\b" + values[i] + "\\b", Regex::Flags::CaseInsensitive)) {
 			return true;
 		}
 	}
