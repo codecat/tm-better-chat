@@ -148,6 +148,12 @@ bool Setting_ShowNickname = true;
 [Setting category="Appearance" name="Show text shadow"]
 bool Setting_ShowTextShadow = true;
 
+[Setting category="Appearance" name="Show player name shadow" description="Only applies to new incoming messages."]
+bool Setting_ShowPlayerNameShadow = false;
+
+[Setting category="Appearance" name="Show club tag shadow" description="Only applies to new incoming messages."]
+bool Setting_ShowClubTagShadow = false;
+
 [Setting category="Appearance" name="Display help line on startup"]
 bool Setting_ShowHelp = true;
 
