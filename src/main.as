@@ -79,12 +79,7 @@ void ShowNadeoChat(bool visible)
 void Main()
 {
 #if TMNEXT && DEPENDENCY_NADEOSERVICES
-	try {
-		NadeoServices::AddAudience("NadeoLiveServices");
-	} catch {
-		UI::ShowNotification("Update Openplanet", "You have to update Openplanet to at least 1.21.1 for Better Chat to work properly.", vec4(0.7f, 0, 0, 1), 30000);
-		return;
-	}
+	NadeoServices::AddAudience("NadeoLiveServices");
 #endif
 
 	Sounds::Load();
