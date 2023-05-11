@@ -23,6 +23,11 @@ class ElementPlayerName : ElementTag
 		m_nickname = nickname;
 		m_nicknameColored = ColoredString(nickname);
 
+		if (Setting_ShowPlayerNameShadow) {
+			m_nameColored = "\\$s" + m_nameColored;
+			m_nicknameColored = "\\$s" + m_nicknameColored;
+		}
+
 		m_login = login;
 		m_accountID = accountID;
 		m_clubTag = clubTag;
