@@ -13,23 +13,25 @@ namespace UI
 
 	vec4 DrawTag(const vec4 &in rect, const string &in text, const vec4 &in color = TAG_COLOR)
 	{
+		float scale = UI::GetScale();
 		auto dl = UI::GetWindowDrawList();
-		dl.AddRectFilled(rect, color, TAG_ROUNDING);
-		dl.AddText(vec2(rect.x, rect.y) + TAG_PADDING, vec4(1, 1, 1, 1), text);
+		dl.AddRectFilled(rect, color, TAG_ROUNDING * scale);
+		dl.AddText(vec2(rect.x, rect.y) + TAG_PADDING * scale, vec4(1, 1, 1, 1), text);
 		return rect;
 	}
 
 	vec4 DrawTag(const vec2 &in pos, const string &in text, const vec4 &in color = TAG_COLOR)
 	{
 		vec2 textSize = Draw::MeasureString(text, g_fontChat);
-		vec2 tagSize = textSize + TAG_PADDING * 2;
+		vec2 tagSize = textSize + (TAG_PADDING * 2) * UI::GetScale();
 		return DrawTag(vec4(pos.x, pos.y, tagSize.x, tagSize.y), text, color);
 	}
 
 	void Tag(const string &in text, const vec4 &in color = TAG_COLOR)
 	{
+		float scale = UI::GetScale();
 		vec2 textSize = Draw::MeasureString(text, g_fontChat);
-		UI::Dummy(textSize + TAG_PADDING * 2, TAG_PADDING.y);
+		UI::Dummy(textSize + TAG_PADDING * scale * 2, TAG_PADDING.y * scale);
 		DrawTag(UI::GetItemRect(), text, color);
 	}
 
