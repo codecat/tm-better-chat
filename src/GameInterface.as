@@ -2,30 +2,11 @@ namespace GameInterface
 {
 	CControlContainer@ GetRoot()
 	{
-		auto viewport = GetApp().Viewport;
-
-		for (uint i = 0; i < viewport.Overlays.Length; i++) {
-			auto overlay = viewport.Overlays[i];
-#if TMNEXT
-			if (overlay.m_AdaptRatio != CHmsZoneOverlay::EHmsOverlayAdaptRatio::ShrinkToKeepRatio_OnlyWider) {
-				continue;
-			}
-#else
-			if (overlay.SortOrder != 4) {
-				continue;
-			}
-#endif
-
-			auto sector = cast<CSceneSector>(overlay.UserData);
-			if (sector is null || sector.Scene is null || sector.Scene.Mobils.Length == 0) {
-				continue;
-			}
-
-			auto container = cast<CControlContainer>(sector.Scene.Mobils[0]);
-			return cast<CControlContainer>(ControlFromID(container, "FrameInGameBase"));
+		auto playground = GetApp().CurrentPlayground;
+		if (playground is null) {
+			return null;
 		}
-
-		return null;
+		return playground.Interface.InterfaceRoot;
 	}
 
 	CControlBase@ ControlFromID(CControlContainer@ container, const string &in id)
