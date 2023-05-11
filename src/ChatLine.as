@@ -114,7 +114,7 @@ class ChatLine
 
 		// Highlight if the player's exact name is mentioned
 		string localPlayerName = network.PlayerInfo.Name;
-		if (info.m_text.ToLower().Contains(localPlayerName.ToLower())) {
+		if (Regex::Contains(info.m_text, "\\b" + localPlayerName + "\\b", Regex::Flags::CaseInsensitive)) {
 			m_isMention = true;
 			SetHighlight(Highlight::Mention);
 		}
