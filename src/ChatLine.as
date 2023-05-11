@@ -318,9 +318,11 @@ class ChatLine
 		UI::NewLine();
 		vec2 newLinePos = UI::GetCursorPos();
 
+		vec2 itemSpacing = UI::GetStyleVarVec2(UI::StyleVar::ItemSpacing);
+
 		vec2 rectSize = vec2(
 			endPos.x - rectPos.x,
-			newLinePos.y - rectPos.y - 6 * scale
+			newLinePos.y - rectPos.y - (itemSpacing.y + 2) * scale
 		);
 
 		if (endPos.y > rectPos.y) {
