@@ -27,88 +27,57 @@
 //
 //
 // Further parsing will be required in order to separate the author and text of a chat message. Some messages don't have an
-// author, so care will need to be taken with this. Below is some very basic code you can take inspiration from:
-//
-//
-// auto parse = Regex::Match(line, "^\\[\\$<([^\\$]+)\\$>\\] (.*)"); //NOTE: This regex only works for basic uplay player names!
-// if (parse.Length > 0) {
-//   author = parse[1];
-//   text = parse[2];
-// } else {
-//   text = line;
-// }
+// author, so care will need to be taken with this.
 //
 
 array<BetterChat::IChatMessageFilter@> g_chatMessageFilters;
 array<BetterChat::IChatMessageListener@> g_chatMessageListeners;
 
+NGameScriptChat_SHistory@ g_chatHistory;
+
+NGameScriptChat_SContext@ GetChatContext()
+{
+	auto chatManager = GetApp().ChatManagerScriptV2;
+	return chatManager.Contextes[0];
+}
+
+void ChatMessageEnd()
+{
+	if (g_chatHistory !is null) {
+		GetChatContext().History_Destroy(g_chatHistory);
+		@g_chatHistory = null;
+	}
+}
+
 void ChatMessageLoop()
 {
-	auto network = GetApp().Network;
+	//
+	// Filter is reverse Polish notation:
+	//   "t"  True
+	//   "f"  False
+	//   "+"  Or
+	//   "*"  And
+	//   "!"  Not
+	//   "i"  True for "targeted" messages (whispers or team messages)
+	//   "l"  True if sender matches login. Ex "lgugli;" means "message sent by Gugli"
+	//
+	// For example:
+	//   "t"                All messages
+	//   "f"                No messages
+	//   "i * lgugli;"      Targeted messages sent by gugli
+	//   "lalice; + lbob;"  Messages sent by alice or bob
+	//
 
-	uint lastTime = 0;
-	if (network.ChatHistoryTimestamp.Length > 0) {
-		lastTime = network.ChatHistoryTimestamp[0];
-	}
+	@g_chatHistory = GetChatContext().History_Create("t", 50);
 
 	while (true) {
-		uint highestTime = 0;
-
-		for (uint i = 0; i < network.ChatHistoryTimestamp.Length; i++) {
-			string line = string(network.ChatHistoryLines[i]);
-			uint time = network.ChatHistoryTimestamp[i];
-
-			if (Setting_ReplaceNewlines) {
-				line = line.Replace("\n", " ");
+		for (uint i = 0; i < g_chatHistory.PendingEvents.Length; i++) {
+			auto event = g_chatHistory.PendingEvents[i];
+			auto newEntryEvent = cast<NGameScriptChat_SEvent_NewEntry>(event);
+			if (newEntryEvent !is null) {
+				wstring text = newEntryEvent.Entry.Text;
+				print(text);
 			}
-
-			// Sometimes, the most recent message is empty in the history lines for 1 frame, so we ignore any empty lines.
-			// If we do that before we handle timestamps, we can resume on messages that get their line filled in on the next frame.
-			if (line == "") {
-				continue;
-			}
-
-			// Stop if we've reached the time since the last poll
-			if (time <= lastTime) {
-				break;
-			}
-
-			// Remember the highest timestamp
-			if (time > highestTime) {
-				highestTime = time;
-			}
-
-			// Go through the chat filters
-			bool canDisplay = true;
-			for (uint j = 0; j < g_chatMessageFilters.Length; j++) {
-				auto filter = g_chatMessageFilters[j];
-
-				// Stop if we can't display the message
-				if (!filter.CanDisplayMessage(line)) {
-					canDisplay = false;
-					break;
-				}
-
-				// Let the filter modify the message text
-				line = filter.GetMessageText(line);
-			}
-
-			// Stop if a filter told us we can't deliver this message
-			if (!canDisplay) {
-				continue;
-			}
-
-			// Fire off the chat message event
-			for (uint j = 0; j < g_chatMessageListeners.Length; j++) {
-				auto listener = g_chatMessageListeners[j];
-				listener.OnChatMessage(line);
-			}
-		}
-
-		if (highestTime > 0) {
-			lastTime = highestTime;
-		}
-
 		yield();
 	}
 }

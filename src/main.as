@@ -21,19 +21,24 @@ UI::InputBlocking OnKeyPress(bool down, VirtualKey key)
 
 void OnDisabled()
 {
-	g_window.SendChatFormat("text");
-	ShowNadeoChat(true);
+	Uninitialize();
 }
 
 void OnDestroyed()
 {
-	g_window.SendChatFormat("text");
-	ShowNadeoChat(true);
+	Uninitialize();
 }
 
 void OnSettingsChanged()
 {
 	Sounds::CheckIfSoundSetChanged();
+}
+
+void Uninitialize()
+{
+	g_window.SendChatFormat("text");
+	ShowNadeoChat(true);
+	ChatMessageEnd();
 }
 
 void ShowNadeoChat(bool visible)
@@ -78,7 +83,7 @@ void Main()
 	g_window.Initialize();
 
 	BetterChat::RegisterListener(g_window);
-	startnew(ChatMessageLoop);
+	startnew(ChatMessageLoop).WithRunContext(Meta::RunContext::GameLoop);
 
 	if (!Setting_WizardShown) {
 		Renderables::Add(WizardModalDialog());
