@@ -9,12 +9,19 @@ namespace BetterChat
 
 	shared interface IChatMessageFilter
 	{
-		bool CanDisplayMessage(const string &in text);
-		string GetMessageText(const string &in text);
+#if TMNEXT
+		bool CanDisplayMessage(NGameScriptChat_SEntry@ entry);
+#else
+		bool CanDisplayMessage(const string &in line);
+#endif
 	}
 
 	shared interface IChatMessageListener
 	{
+#if TMNEXT
+		void OnChatMessage(NGameScriptChat_SEntry@ entry);
+#else
 		void OnChatMessage(const string &in line);
+#endif
 	}
 }

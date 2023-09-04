@@ -95,23 +95,28 @@ class ChatWindow : BetterChat::IChatMessageListener
 	void AddSystemLine(const string &in line)
 	{
 		string text = "$96f" + Icons::Bolt + " $eee" + line;
-		m_lines.InsertLast(ChatLine(m_lineIdIterator++, Time::Stamp, text));
+
+		auto newLine = ChatLine(m_lineIdIterator++, Time::Stamp);
+		newLine.AddText(text);
+		m_lines.InsertLast(newLine);
+
 		m_lastMessageTime = Time::Now;
 	}
 
-	void AddLine(const string &in line)
+#if TMNEXT
+	void OnChatMessage(NGameScriptChat_SEntry@ entry) override
 	{
-		if (line == "") {
-			return;
-		}
+		AddChatLine(ChatLine(m_lineIdIterator++, Time::Stamp, entry));
+	}
+#else
+	void OnChatMessage(const string &in line) override
+	{
+		AddChatLine(ChatLine(m_lineIdIterator++, Time::Stamp, line));
+	}
+#endif
 
-		ChatLine@ newLine;
-		if (line.Length > Setting_MaxMessageLength) {
-			@newLine = ChatLine(m_lineIdIterator++, Time::Stamp, line.SubStr(0, Setting_MaxMessageLength) + " (...)");
-		} else {
-			@newLine = ChatLine(m_lineIdIterator++, Time::Stamp, line);
-		}
-
+	void AddChatLine(ChatLine@ newLine)
+	{
 		// When a servercontroller restarts, it will have forgotten about the chatformat.
 		// We can (try to) detect these cases, by using a count of received json messages.
 		if (newLine.m_isJson) {
@@ -169,11 +174,6 @@ class ChatWindow : BetterChat::IChatMessageListener
 		}
 
 		m_historyIndex = -1;
-	}
-
-	void OnChatMessage(const string &in line)
-	{
-		AddLine(line);
 	}
 
 	UI::InputBlocking OnKeyPress(bool down, VirtualKey key)

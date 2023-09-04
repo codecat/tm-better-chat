@@ -1,8 +1,17 @@
+enum ChatLineScope
+{
+	Everyone,
+	SpectatorCurrent,
+	SpectatorAll,
+	Team,
+	YouOnly,
+}
+
 class ChatLineInfo
 {
 	bool m_isJson = false;
 
-	bool m_teamChat = false;
+	ChatLineScope m_scope = ChatLineScope::Everyone;
 	int m_teamNumber = 0;
 
 	bool m_isLocalPlayer = false;
@@ -22,6 +31,36 @@ class ChatLineInfo
 
 	string m_text;
 
+#if TMNEXT
+	ChatLineInfo(NGameScriptChat_SEntry@ entry)
+	{
+		FromEntry(entry);
+		FetchAdditionalPlayerInfo();
+	}
+
+	void FromEntry(NGameScriptChat_SEntry@ entry)
+	{
+		m_authorLogin = entry.SenderLogin;
+		m_authorName = entry.SenderDisplayName;
+		m_text = entry.Text;
+
+		switch (entry.ChatScope) {
+			case EChatScope::ToEveryone: m_scope = ChatLineScope::Everyone; break;
+			case EChatScope::ToSpectatorCurrent: m_scope = ChatLineScope::SpectatorCurrent; break;
+			case EChatScope::ToSpectatorAll: m_scope = ChatLineScope::SpectatorAll; break;
+			case EChatScope::ToTeam: m_scope = ChatLineScope::Team; break;
+			case EChatScope::ToYouOnly: m_scope = ChatLineScope::YouOnly; break;
+			default: error("Unhandled chat scope " + tostring(entry.ChatScope)); break;
+		}
+
+		@m_authorPlayer = FindPlayerByLogin(m_authorLogin);
+		if (m_authorPlayer !is null) {
+			@m_authorPlayerInfo = m_authorPlayer.User;
+		} else {
+			@m_authorPlayerInfo = FindPlayerInfoByLogin(m_authorLogin);
+		}
+	}
+#else
 	ChatLineInfo(const string &in line)
 	{
 		// If the line starts with "$FFFCHAT_JSON:", we have a json object providing us juicy details
@@ -91,13 +130,78 @@ class ChatLineInfo
 		}
 	}
 
+	bool ParseFromNadeo(const string &in line)
+	{
+		/*
+		Global: "$<$BBB[$> $<$<Miss-tm$>$> $<$BBB]$> test"
+		Team:   "$<$???<$> $<$<Miss-tm$>$> $<$???>$> test"
+		*/
+
+		//NOTE: This regex only works for basic uplay player names!
+		auto parse = Regex::Match(line,
+			"^(\\$FFF)?"                         // "$FFF"             XMLRPC adds $FFF to the start of messages, so we keep this here optionally
+			"\\$<\\$[A-Fa-f0-9]{3}([<\\[])\\$> " // "$<$BBB[$> "       First colored bracket, either [ or < in $BBB or $fff for global and team, respectively
+			"\\$<\\$<([^\\$]+)\\$>\\$> "         // "$<$<Miss-tm$>$> " Player name, wrapped in double scopes (likely Nadeo not realizing names are already scoped)
+			"\\$<\\$[A-Fa-f0-9]{3}[\\]>]\\$> "   // "$<$BBB]$> "       Second colored bracket, either ] or > in $BBB or $fff for global and team, respectively
+			"([\\S\\s]*)"                        // "test"             The actual chat message text
+		);
+		if (parse.Length == 0) {
+			return false;
+		}
+
+		if (parse[2] == "<") {
+			m_scope = ChatLineScope::Team;
+		}
+		m_authorName = parse[3];
+		m_text = parse[4];
+
+		return true;
+	}
+
+	bool ParseFromNadeoLegacy(const string &in line)
+	{
+#if TMNEXT
+		//NOTE: This regex only works for basic uplay player names!
+		auto parse = Regex::Match(line, "^(\\$FFF)?([<\\[])\\$<([^\\$]+)\\$>[\\]>] ([\\S\\s]*)");
+#else
+		auto parse = Regex::Match(line, "^(\\$FFF)?([<\\[])\\$<(.+?)\\$>[\\]>] ([\\S\\s]*)");
+#endif
+		if (parse.Length == 0) {
+			return false;
+		}
+
+		if (parse[2] == "<") {
+			m_scope = ChatLineScope::Team;
+		}
+		m_authorName = parse[3];
+		m_text = parse[4];
+
+		return true;
+	}
+
+	bool ParseFromEvoSC(const string &in line)
+	{
+		auto parse = Regex::Match(line, "^\\$FFF\\$z\\$s(\\$[0-9a-fA-F]{3}.+)\\[\\$<\\$<\\$fff\\$eee(.*)\\$>\\$>\\]\\$z\\$s ([\\S\\s]*)");
+		if (parse.Length == 0) {
+			return false;
+		}
+
+		m_authorName = parse[1] + "$z " + parse[2];
+		m_text = parse[3];
+
+		return true;
+	}
+#endif
+
 	void FetchAdditionalPlayerInfo()
 	{
 		if (m_authorPlayerInfo is null) {
 			return;
 		}
 
-		m_authorLogin = m_authorPlayerInfo.Login;
+		if (m_authorLogin == "") {
+			m_authorLogin = m_authorPlayerInfo.Login;
+		}
 
 #if TMNEXT
 		m_authorId = m_authorPlayerInfo.WebServicesUserId;
@@ -133,67 +237,5 @@ class ChatLineInfo
 #endif
 
 		//TODO: What else can we do with the player object here?
-	}
-
-	bool ParseFromNadeo(const string &in line)
-	{
-		/*
-		Global: "$<$BBB[$> $<$<Miss-tm$>$> $<$BBB]$> test"
-		Team:   "$<$???<$> $<$<Miss-tm$>$> $<$???>$> test"
-		*/
-
-		//NOTE: This regex only works for basic uplay player names!
-		auto parse = Regex::Match(line,
-			"^(\\$FFF)?"                         // "$FFF"             XMLRPC adds $FFF to the start of messages, so we keep this here optionally
-			"\\$<\\$[A-Fa-f0-9]{3}([<\\[])\\$> " // "$<$BBB[$> "       First colored bracket, either [ or < in $BBB or $fff for global and team, respectively
-			"\\$<\\$<([^\\$]+)\\$>\\$> "         // "$<$<Miss-tm$>$> " Player name, wrapped in double scopes (likely Nadeo not realizing names are already scoped)
-			"\\$<\\$[A-Fa-f0-9]{3}[\\]>]\\$> "   // "$<$BBB]$> "       Second colored bracket, either ] or > in $BBB or $fff for global and team, respectively
-			"([\\S\\s]*)"                        // "test"             The actual chat message text
-		);
-		if (parse.Length == 0) {
-			return false;
-		}
-
-		if (parse[2] == "<") {
-			m_teamChat = true;
-		}
-		m_authorName = parse[3];
-		m_text = parse[4];
-
-		return true;
-	}
-
-	bool ParseFromNadeoLegacy(const string &in line)
-	{
-#if TMNEXT
-		//NOTE: This regex only works for basic uplay player names!
-		auto parse = Regex::Match(line, "^(\\$FFF)?([<\\[])\\$<([^\\$]+)\\$>[\\]>] ([\\S\\s]*)");
-#else
-		auto parse = Regex::Match(line, "^(\\$FFF)?([<\\[])\\$<(.+?)\\$>[\\]>] ([\\S\\s]*)");
-#endif
-		if (parse.Length == 0) {
-			return false;
-		}
-
-		if (parse[2] == "<") {
-			m_teamChat = true;
-		}
-		m_authorName = parse[3];
-		m_text = parse[4];
-
-		return true;
-	}
-
-	bool ParseFromEvoSC(const string &in line)
-	{
-		auto parse = Regex::Match(line, "^\\$FFF\\$z\\$s(\\$[0-9a-fA-F]{3}.+)\\[\\$<\\$<\\$fff\\$eee(.*)\\$>\\$>\\]\\$z\\$s ([\\S\\s]*)");
-		if (parse.Length == 0) {
-			return false;
-		}
-
-		m_authorName = parse[1] + "$z " + parse[2];
-		m_text = parse[3];
-
-		return true;
 	}
 }
