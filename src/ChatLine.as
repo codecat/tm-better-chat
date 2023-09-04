@@ -23,12 +23,27 @@ class ChatLine
 	bool m_isFiltered = false;
 	bool m_isJson = false;
 
+	ChatLine(uint id, int64 time)
+	{
+		m_id = id;
+		m_time = time;
+	}
+
+#if TMNEXT
+	ChatLine(uint id, int64 time, NGameScriptChat_SEntry@ entry)
+	{
+		m_id = id;
+		m_time = time;
+		FromEntry(entry);
+	}
+#else
 	ChatLine(uint id, int64 time, const string &in line)
 	{
 		m_id = id;
 		m_time = time;
 		ParseLine(line);
 	}
+#endif
 
 	vec4 GetHighlightColor(const vec4 &in def = vec4(0, 0, 0, 1))
 	{
@@ -50,14 +65,29 @@ class ChatLine
 		m_highlight = highlight;
 	}
 
+#if TMNEXT
+	void FromEntry(NGameScriptChat_SEntry@ entry)
+	{
+		// Trace the message to the log if needed by settings (and not in streamer mode)
+		if (Setting_TraceToLog && !Setting_StreamerMode) {
+			trace(entry.SenderDisplayName + ": " + string(entry.Text));
+		}
+		FromChatLineInfo(ChatLineInfo(entry));
+	}
+#else
 	void ParseLine(const string &in line)
 	{
 		// Trace the message to the log if needed by settings (and not in streamer mode)
 		if (Setting_TraceToLog && !Setting_StreamerMode) {
 			trace(line);
 		}
+		FromChatLineInfo(ChatLineInfo(line));
+	}
+#endif
 
-		ChatLineInfo info(line);
+	void FromChatLineInfo(const ChatLineInfo &in info)
+	{
+		string text = info.m_text;
 
 		// Check if this user is timed out
 		if (!m_isFiltered && Timeout::IsTimedOut(info.m_authorName)) {
@@ -71,13 +101,13 @@ class ChatLine
 
 		// Check if the message should be blocked by streamer mode
 		if (!m_isFiltered && Setting_StreamerMode && (info.m_authorName != "" || Setting_StreamerCensorSystem)) {
-			string censored = StreamerMode::Censor(info.m_text);
+			string censored = StreamerMode::Censor(text);
 			if (censored == "") {
 				m_isFiltered = true;
 			}
 
-			if (censored != info.m_text) {
-				info.m_text = censored;
+			if (censored != text) {
+				text = censored;
 				if (Setting_StreamerAutoTimeout) {
 					Timeout::Add(info.m_authorName, 5 * 60 * 1000);
 				}
@@ -87,7 +117,7 @@ class ChatLine
 		// Check if the message matches the filter regex
 		if (!m_isFiltered) {
 			try {
-				if (Setting_FilterRegex != "" && Regex::Contains(info.m_text, Setting_FilterRegex, Regex::Flags::ECMAScript | Regex::Flags::CaseInsensitive)) {
+				if (Setting_FilterRegex != "" && Regex::Contains(text, Setting_FilterRegex, Regex::Flags::ECMAScript | Regex::Flags::CaseInsensitive)) {
 					m_isFiltered = true;
 				}
 			} catch {
@@ -114,13 +144,13 @@ class ChatLine
 
 		// Highlight if the player's exact name is mentioned
 		string localPlayerName = network.PlayerInfo.Name;
-		if (Regex::Contains(info.m_text, "\\b" + localPlayerName + "\\b", Regex::Flags::CaseInsensitive)) {
+		if (Regex::Contains(text, "\\b" + localPlayerName + "\\b", Regex::Flags::CaseInsensitive)) {
 			m_isMention = true;
 			SetHighlight(Highlight::Mention);
 		}
 
 		// Highlight if any extra names are mentioned
-		if (CsvInText(Setting_ExtraMentions, info.m_text)) {
+		if (CsvInText(Setting_ExtraMentions, text)) {
 			m_isMention = true;
 			SetHighlight(Highlight::Mention);
 		}
@@ -135,7 +165,8 @@ class ChatLine
 		AddColorableElement(ElementTimestamp(Time::Stamp), coloredTags, info.m_linearHue);
 
 		// If this is a team chat message, add secret tag here
-		if (info.m_teamChat) {
+		//TODO: Support all scopes
+		if (info.m_scope == ChatLineScope::Team) {
 			AddElement(ElementTag(Icons::UserSecret));
 		}
 
@@ -165,7 +196,7 @@ class ChatLine
 			);
 		}
 
-		ParseMessageText(info.m_text);
+		ParseMessageText(text);
 	}
 
 	void ParseMessageText(const string &in text)
