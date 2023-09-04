@@ -78,6 +78,7 @@ void ChatMessageLoop()
 				wstring text = newEntryEvent.Entry.Text;
 				print(text);
 			}
+		}
 		yield();
 	}
 }
