@@ -80,6 +80,9 @@
 		"fouge": { "pos": [ 252, 32 ], "size": [ 96, 32 ] },
 		"peepoSitBusiness": { "pos": [ 462, 0 ], "size": [ 32, 32 ] },
 		"owo": { "pos": [ 288, 64 ], "size": [ 47, 32 ] },
+		"Susge": { "pos": [ 368, 64 ], "size": [ 42, 32 ] },
+		"Clueless": { "pos": [ 410, 64 ], "size": [ 36, 32 ] },
+		"Aware": { "pos": [ 446, 64 ], "size": [ 35, 32 ] },
 
 		"opTrans": { "pos": [ 348, 32 ], "size": [ 32, 32 ] },
 		"opPride": { "pos": [ 380, 32 ], "size": [ 32, 32 ] },
