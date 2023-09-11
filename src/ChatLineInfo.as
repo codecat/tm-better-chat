@@ -15,6 +15,7 @@ class ChatLineInfo
 	int m_teamNumber = 0;
 	string m_teamColorText;
 
+	bool m_isSystem = false;
 	bool m_isLocalPlayer = false;
 	float m_linearHue = 0;
 
@@ -41,8 +42,13 @@ class ChatLineInfo
 
 	void FromEntry(NGameScriptChat_SEntry@ entry)
 	{
-		m_authorLogin = entry.SenderLogin;
-		m_authorName = entry.SenderDisplayName;
+		m_isSystem = entry.IsSystemMessage;
+
+		if (!m_isSystem) {
+			m_authorLogin = entry.SenderLogin;
+			m_authorName = entry.SenderDisplayName;
+		}
+
 		m_text = Nadeo::Format(entry.Text); //TODO: Remove Nadeo::Format call if Nadeo pre-translates the string for us
 
 		switch (entry.ChatScope) {
@@ -75,6 +81,9 @@ class ChatLineInfo
 			ParseFromText(line);
 		}
 		FetchAdditionalPlayerInfo();
+
+		// This is a system message if there is no author name
+		m_isSystem = (m_authorName == "");
 	}
 
 	void ParseFromJson(const string &in json)
