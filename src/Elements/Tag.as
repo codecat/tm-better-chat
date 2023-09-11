@@ -18,7 +18,8 @@ class ElementTag : Element
 			return;
 		}
 
-		if (info.m_teamColorText != "") {
+		//TODO: The check for $fff is a temporary workaround for 3v3 matchmaking
+		if (info.m_teamColorText != "" && info.m_teamColorText != "$fff") {
 			SetColorFromText(info.m_teamColorText);
 		} else {
 			SetColorFromHue(info.m_linearHue);
