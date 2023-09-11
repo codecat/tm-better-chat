@@ -43,7 +43,7 @@ class ChatLineInfo
 	{
 		m_authorLogin = entry.SenderLogin;
 		m_authorName = entry.SenderDisplayName;
-		m_text = entry.Text;
+		m_text = Nadeo::Format(entry.Text); //TODO: Remove Nadeo::Format call if Nadeo pre-translates the string for us
 
 		switch (entry.ChatScope) {
 			case EChatScope::ToEveryone: m_scope = ChatLineScope::Everyone; break;
