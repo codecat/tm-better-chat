@@ -219,7 +219,7 @@
 				{ "time": 80, "pos": [ 160, 488 ] }
 			]
 		},
-		
+
 		"Hmm": { "pos": [ 0, 503 ], "size": [ 32, 32 ] },
 
 		"Prayge": { "pos": [ 32, 503 ], "size": [ 32, 32 ] },
@@ -253,7 +253,7 @@
 
 		"CACTUS": { "pos": [ 224, 520 ], "size": [ 32, 32] },
 
-		"PETTHEAUTHOR": { 
+		"PETTHEAUTHOR": {
 			"size": [ 32, 32 ],
 			"frames": [
 				{ "time": 65, "pos": [ 0, 539 ] },
@@ -263,7 +263,7 @@
 				{ "time": 65, "pos": [ 32, 539 ] }
 			]
 		},
-		
+
 		"pressF": {
 			"size": [ 32, 32 ],
 			"frames": [
