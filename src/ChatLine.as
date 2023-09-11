@@ -129,7 +129,7 @@ class ChatLine
 		auto network = cast<CTrackManiaNetwork>(GetApp().Network);
 
 		// System message
-		if (info.m_authorName == "") {
+		if (info.m_isSystem) {
 			m_isSystem = true;
 			SetHighlight(Highlight::System);
 		}
