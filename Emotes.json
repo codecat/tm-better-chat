@@ -76,6 +76,7 @@
 		"Happs": { "pos": [ 398, 0 ], "size": [ 32, 32 ] },
 		"Life": { "pos": [ 430, 0 ], "size": [ 32, 32 ] },
 		"fouge": { "pos": [ 252, 32 ], "size": [ 96, 32 ] },
+		"peepoSitBusiness": { "pos": [ 462, 0 ], "size": [ 32, 32 ] },
 
 		"Clap": {
 			"size": [ 28, 28 ],
