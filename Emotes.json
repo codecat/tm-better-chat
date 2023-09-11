@@ -78,6 +78,7 @@
 		"Life": { "pos": [ 430, 0 ], "size": [ 32, 32 ] },
 		"fouge": { "pos": [ 252, 32 ], "size": [ 96, 32 ] },
 		"peepoSitBusiness": { "pos": [ 462, 0 ], "size": [ 32, 32 ] },
+		"owo": { "pos": [ 288, 64 ], "size": [ 47, 32 ] },
 
 		"opTrans": { "pos": [ 348, 32 ], "size": [ 32, 32 ] },
 		"opPride": { "pos": [ 380, 32 ], "size": [ 32, 32 ] },
