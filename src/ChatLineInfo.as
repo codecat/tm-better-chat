@@ -13,6 +13,7 @@ class ChatLineInfo
 
 	ChatLineScope m_scope = ChatLineScope::Everyone;
 	int m_teamNumber = 0;
+	string m_teamColorText;
 
 	bool m_isLocalPlayer = false;
 	float m_linearHue = 0;
@@ -52,6 +53,8 @@ class ChatLineInfo
 			case EChatScope::ToYouOnly: m_scope = ChatLineScope::YouOnly; break;
 			default: error("Unhandled chat scope " + tostring(entry.ChatScope)); break;
 		}
+
+		m_teamColorText = entry.SenderTeamColorText;
 
 		@m_authorPlayer = FindPlayerByLogin(m_authorLogin);
 		if (m_authorPlayer !is null) {
