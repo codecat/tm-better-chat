@@ -78,6 +78,12 @@
 		"fouge": { "pos": [ 252, 32 ], "size": [ 96, 32 ] },
 		"peepoSitBusiness": { "pos": [ 462, 0 ], "size": [ 32, 32 ] },
 
+		"opTrans": { "pos": [ 348, 32 ], "size": [ 32, 32 ] },
+		"opPride": { "pos": [ 380, 32 ], "size": [ 32, 32 ] },
+		"opUkraine": { "pos": [ 412, 32 ], "size": [ 32, 32 ] },
+		"opNadeo": { "pos": [ 444, 32 ], "size": [ 32, 32 ] },
+		"opTeam": { "pos": [ 476, 32 ], "size": [ 32, 32 ] },
+
 		"Clap": {
 			"size": [ 28, 28 ],
 			"frames": [
