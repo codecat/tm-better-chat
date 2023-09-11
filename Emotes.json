@@ -73,6 +73,7 @@
 		"HUH": { "pos": [ 253, 0 ], "size": [ 32, 32 ] },
 		"classic": { "pos": [ 285, 0 ], "size": [ 37, 32 ] },
 		"ReallyMad": { "pos": [ 322, 0 ], "size": [ 34, 32 ] },
+		"Happs": { "pos": [ 398, 0 ], "size": [ 32, 32 ] },
 
 		"Clap": {
 			"size": [ 28, 28 ],
