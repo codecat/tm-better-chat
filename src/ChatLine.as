@@ -128,8 +128,6 @@ class ChatLine
 		// Get some more information about the player
 		auto network = cast<CTrackManiaNetwork>(GetApp().Network);
 
-		bool coloredTags = (info.m_teamNumber > 0);
-
 		// System message
 		if (info.m_authorName == "") {
 			m_isSystem = true;
@@ -162,7 +160,7 @@ class ChatLine
 		}
 
 		// Add timestamp element
-		AddColorableElement(ElementTimestamp(Time::Stamp), coloredTags, info.m_linearHue);
+		AddColorableElement(ElementTimestamp(Time::Stamp), info);
 
 		// If this is a team chat message, add secret tag here
 		//TODO: Support all scopes
@@ -172,28 +170,18 @@ class ChatLine
 
 		// Add club tag
 		if (info.m_authorClubTag != "") {
-			AddColorableElement(
-				ElementClubTag(
-					info.m_authorClubTag
-				),
-				coloredTags,
-				info.m_linearHue
-			);
+			AddColorableElement(ElementClubTag(info.m_authorClubTag), info);
 		}
 
 		if (info.m_authorName != "") {
 			// Add author name
-			AddColorableElement(
-				ElementPlayerName(
-					info.m_authorName,
-					info.m_authorNickname,
-					info.m_authorLogin,
-					info.m_authorId,
-					info.m_authorClubTag
-				),
-				coloredTags,
-				info.m_linearHue
-			);
+			AddColorableElement(ElementPlayerName(
+				info.m_authorName,
+				info.m_authorNickname,
+				info.m_authorLogin,
+				info.m_authorId,
+				info.m_authorClubTag
+			), info);
 		}
 
 		ParseMessageText(text);
@@ -247,15 +235,10 @@ class ChatLine
 		AddElement(ElementFormatGroup(false));
 	}
 
-	//TODO: This can be refactored probably
-	void AddColorableElement(ElementTag@ element, bool colored, float hue)
+	void AddColorableElement(ElementTag@ element, const ChatLineInfo &in info)
 	{
-		@element.m_line = this;
-		if (colored) {
-			element.SetHue(hue);
-		}
-		m_elements.InsertLast(element);
-		element.OnAdded();
+		element.SetColorFromChatLineInfo(info);
+		AddElement(element);
 	}
 
 	void AddElement(Element@ element)
