@@ -42,31 +42,37 @@ class ChatLineInfo
 
 	void FromEntry(NGameScriptChat_SEntry@ entry)
 	{
-		m_isSystem = entry.IsSystemMessage;
-
-		if (!m_isSystem) {
-			m_authorLogin = entry.SenderLogin;
-			m_authorName = entry.SenderDisplayName;
-		}
-
 		m_text = Nadeo::Format(entry.Text); //TODO: Remove Nadeo::Format call if Nadeo pre-translates the string for us
 
-		switch (entry.ChatScope) {
-			case EChatScope::ToEveryone: m_scope = ChatLineScope::Everyone; break;
-			case EChatScope::ToSpectatorCurrent: m_scope = ChatLineScope::SpectatorCurrent; break;
-			case EChatScope::ToSpectatorAll: m_scope = ChatLineScope::SpectatorAll; break;
-			case EChatScope::ToTeam: m_scope = ChatLineScope::Team; break;
-			case EChatScope::ToYouOnly: m_scope = ChatLineScope::YouOnly; break;
-			default: error("Unhandled chat scope " + tostring(entry.ChatScope)); break;
-		}
-
-		m_teamColorText = entry.SenderTeamColorText;
-
-		@m_authorPlayer = FindPlayerByLogin(m_authorLogin);
-		if (m_authorPlayer !is null) {
-			@m_authorPlayerInfo = m_authorPlayer.User;
+		// If the line starts with "$FFFCHAT_JSON:", we have a json object providing us juicy details
+		//NOTE: The "$FFF" at the start is prepended by the game to chat messages sent through XMLRPC (for whatever reason)
+		if (m_text.StartsWith("CHAT_JSON:")) {
+			ParseFromJson(m_text.SubStr(10));
 		} else {
-			@m_authorPlayerInfo = FindPlayerInfoByLogin(m_authorLogin);
+			m_isSystem = entry.IsSystemMessage;
+
+			if (!m_isSystem) {
+				m_authorLogin = entry.SenderLogin;
+				m_authorName = entry.SenderDisplayName;
+			}
+
+			switch (entry.ChatScope) {
+				case EChatScope::ToEveryone: m_scope = ChatLineScope::Everyone; break;
+				case EChatScope::ToSpectatorCurrent: m_scope = ChatLineScope::SpectatorCurrent; break;
+				case EChatScope::ToSpectatorAll: m_scope = ChatLineScope::SpectatorAll; break;
+				case EChatScope::ToTeam: m_scope = ChatLineScope::Team; break;
+				case EChatScope::ToYouOnly: m_scope = ChatLineScope::YouOnly; break;
+				default: error("Unhandled chat scope " + tostring(entry.ChatScope)); break;
+			}
+
+			m_teamColorText = entry.SenderTeamColorText;
+
+			@m_authorPlayer = FindPlayerByLogin(m_authorLogin);
+			if (m_authorPlayer !is null) {
+				@m_authorPlayerInfo = m_authorPlayer.User;
+			} else {
+				@m_authorPlayerInfo = FindPlayerInfoByLogin(m_authorLogin);
+			}
 		}
 	}
 #else
@@ -84,41 +90,6 @@ class ChatLineInfo
 
 		// This is a system message if there is no author name
 		m_isSystem = (m_authorName == "");
-	}
-
-	void ParseFromJson(const string &in json)
-	{
-		m_isJson = true;
-
-		auto js = Json::Parse(json);
-
-		if (js.HasKey("login")) {
-			m_authorLogin = js["login"];
-		}
-
-		if (js.HasKey("nickname")) {
-			m_authorNickname = js["nickname"];
-		}
-
-		if (js.HasKey("clubtag")) {
-			m_authorClubTag = js["clubtag"];
-			m_overrideClubTag = true;
-		}
-
-		if (js.HasKey("text")) {
-			m_text = js["text"];
-		}
-
-		@m_authorPlayer = FindPlayerByLogin(m_authorLogin);
-		if (m_authorPlayer !is null) {
-			@m_authorPlayerInfo = m_authorPlayer.User;
-		} else {
-			@m_authorPlayerInfo = FindPlayerInfoByLogin(m_authorLogin);
-		}
-
-		if (m_authorPlayerInfo !is null) {
-			m_authorName = m_authorPlayerInfo.Name;
-		}
 	}
 
 	void ParseFromText(const string &in line)
@@ -204,6 +175,43 @@ class ChatLineInfo
 		return true;
 	}
 #endif
+
+	void ParseFromJson(const string &in json)
+	{
+		m_isJson = true;
+
+		auto js = Json::Parse(json);
+
+		if (js.HasKey("login")) {
+			m_authorLogin = js["login"];
+		}
+
+		if (js.HasKey("nickname")) {
+			m_authorNickname = js["nickname"];
+		}
+
+		if (js.HasKey("clubtag")) {
+			m_authorClubTag = js["clubtag"];
+			m_overrideClubTag = true;
+		}
+
+		if (js.HasKey("text")) {
+			m_text = js["text"];
+		}
+
+		@m_authorPlayer = FindPlayerByLogin(m_authorLogin);
+		if (m_authorPlayer !is null) {
+			@m_authorPlayerInfo = m_authorPlayer.User;
+		} else {
+			@m_authorPlayerInfo = FindPlayerInfoByLogin(m_authorLogin);
+		}
+
+		if (m_authorPlayerInfo !is null) {
+			m_authorName = m_authorPlayerInfo.Name;
+		}
+
+		m_isSystem = (m_authorPlayer is null);
+	}
 
 	void FetchAdditionalPlayerInfo()
 	{
