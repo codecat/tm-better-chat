@@ -243,7 +243,7 @@ class ChatWindow : BetterChat::IChatMessageListener
 			m_auto.Update(data);
 
 			if (m_setInputCursor != -1) {
-				data.CursorPos = m_setInputCursor;
+				data.SelectionStart = data.SelectionEnd = data.CursorPos = m_setInputCursor;
 				m_setInputCursor = -1;
 			}
 
