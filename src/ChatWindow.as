@@ -3,7 +3,9 @@ class ChatWindow : BetterChat::IChatMessageListener
 	bool m_visible = true;
 	bool m_big = false;
 
-	array<ChatLine@> m_lines;
+	array<ChatChannel@> m_channels;
+	uint m_channelIndex = 0;
+	uint m_autoChannelIndex = 0;
 	uint m_lineIdIterator = 0;
 
 	string m_requestedChatFormat = "text";
@@ -20,7 +22,6 @@ class ChatWindow : BetterChat::IChatMessageListener
 
 	bool m_scrollToBottom = false;
 
-	uint64 m_lastMessageTime = 0;
 	int m_jsonMessageCount = 0;
 
 	AutoCompletion m_auto;
@@ -30,17 +31,56 @@ class ChatWindow : BetterChat::IChatMessageListener
 
 	void Initialize()
 	{
+		m_channels.InsertLast(ChatChannel("Server Chat", ChatMessageSink()));
 	}
 
-	void Clear()
-	{
-		m_lines.RemoveRange(0, m_lines.Length);
+	ChatChannel@ GetActiveChannel() {
+		return m_channels[m_channelIndex];
+	}
+
+	ChatChannel@ GetServerChannel() {
+		return m_channels[0];
+	}
+
+	void AddChannel(ChatChannel@ channel) {
+		m_channels.InsertLast(channel);
+		m_channelIndex = m_channels.Length - 1;
+	}
+
+	void RemoveChannel(ChatChannel@ channel) {
+		int idx = m_channels.FindByRef(channel);
+		if (idx < 0) {
+			return;
+		}
+
+		m_channels.RemoveAt(idx);
+		if (m_channelIndex >= uint(idx)) m_channelIndex--;
+	}
+
+	int GetEnabledChannelsCount() {
+		int count = m_channels.Length;
+		if (!HasServerInfo()) count--;
+		return count;
+	}
+
+	uint NextLineId() {
+		return m_lineIdIterator++;
+	}
+
+	void Clear() {
 		m_history.RemoveRange(0, m_history.Length);
+
+		auto channel = GetActiveChannel();
+		channel.Clear();
 
 		if (Setting_ShowHelp) {
 			auto plugin = Meta::ExecutingPlugin();
-			AddSystemLine("$<$ef7Better Chat " + plugin.Version + "$> - Open the overlay for options");
+			AddSystemLine("$<$ef7Better Chat " + plugin.Version + "$> - Open the overlay for options", channel);
 		}
+	}
+
+	void SendChatMessage(const string&in text) {
+		GetActiveChannel().SendChatMessage(text);
 	}
 
 	void OnUserInput(const string &in text)
@@ -58,7 +98,7 @@ class ChatWindow : BetterChat::IChatMessageListener
 			}
 		}
 
-		BetterChat::SendChatMessage(text);
+		SendChatMessage(text);
 	}
 
 	void SendChatFormat(const string &in format)
@@ -70,7 +110,7 @@ class ChatWindow : BetterChat::IChatMessageListener
 
 		trace("Requesting chat format \"" + format + "\" from server");
 		m_requestedChatFormat = format;
-		BetterChat::SendChatMessage("/chatformat " + format);
+		GetServerChannel().SendChatMessage("/chatformat " + format);
 	}
 
 	void ShowInput(const string &in text = "")
@@ -92,31 +132,38 @@ class ChatWindow : BetterChat::IChatMessageListener
 		m_showInput = false;
 	}
 
-	void AddSystemLine(const string &in line)
+	void AddSystemLine(const string &in line, ChatChannel@ channel = null)
 	{
+		if (@channel is null) {
+			@channel = GetActiveChannel();
+		}
+
 		string text = "$96f" + Icons::Bolt + " $eee" + line;
 
 		auto newLine = ChatLine(m_lineIdIterator++, Time::Stamp);
 		newLine.AddText(text);
-		m_lines.InsertLast(newLine);
-
-		m_lastMessageTime = Time::Now;
+		
+		channel.InsertLine(newLine);
 	}
 
 #if TMNEXT
 	void OnChatMessage(NGameScriptChat_SEntry@ entry) override
 	{
-		AddChatLine(ChatLine(m_lineIdIterator++, Time::Stamp, entry));
+		AddChatLine(ChatLine(m_lineIdIterator++, Time::Stamp, entry), GetServerChannel());
 	}
 #else
 	void OnChatMessage(const string &in line) override
 	{
-		AddChatLine(ChatLine(m_lineIdIterator++, Time::Stamp, line));
+		AddChatLine(ChatLine(m_lineIdIterator++, Time::Stamp, line), GetServerChannel());
 	}
 #endif
 
-	void AddChatLine(ChatLine@ newLine)
+	void AddChatLine(ChatLine@ newLine, ChatChannel@ channel = null)
 	{
+		if (@channel is null) {
+			@channel = GetActiveChannel();
+		}
+
 		// When a servercontroller restarts, it will have forgotten about the chatformat.
 		// We can (try to) detect these cases, by using a count of received json messages.
 		if (newLine.m_isJson) {
@@ -137,13 +184,7 @@ class ChatWindow : BetterChat::IChatMessageListener
 		}
 
 		// Add the line to the list of messages
-		m_lines.InsertLast(newLine);
-		if (m_lines.Length > uint(Setting_MaximumLines)) {
-			m_lines.RemoveRange(0, m_lines.Length - Setting_MaximumLines);
-		}
-
-		// Remember when the last message was received
-		m_lastMessageTime = Time::Now;
+		channel.InsertLine(newLine);
 
 		// Maybe play a sound
 		if (Setting_SoundGain > 0 && Setting_SoundSet != Sounds::SoundSet::None) {
@@ -178,8 +219,7 @@ class ChatWindow : BetterChat::IChatMessageListener
 
 	UI::InputBlocking OnKeyPress(bool down, VirtualKey key)
 	{
-		string actionMap = UI::CurrentActionMap();
-		if (actionMap == "MenuInputsMap") {
+		if (GetEnabledChannelsCount() == 0) {
 			return UI::InputBlocking::DoNothing;
 		}
 
@@ -315,11 +355,20 @@ class ChatWindow : BetterChat::IChatMessageListener
 				OnServerChanged(serverLogin);
 			}
 		}
+
+		uint autoChannelIndex = HasServerInfo() ? 0 : 1;
+		if (autoChannelIndex != m_autoChannelIndex) {
+			if (autoChannelIndex < m_channels.Length) {
+				m_channelIndex = autoChannelIndex;
+			}
+			m_autoChannelIndex = autoChannelIndex;
+		}
 	}
 
 	uint64 GetTimeSinceLastMessage()
 	{
-		return Time::Now - m_lastMessageTime;
+		auto channel = GetActiveChannel();
+		return Time::Now - (channel is null ? 0 : channel.m_lastMessageTime);
 	}
 
 	string GetWindowTitle()
@@ -329,6 +378,12 @@ class ChatWindow : BetterChat::IChatMessageListener
 			ret += "##Big";
 		}
 		return ret;
+	}
+
+	bool HasServerInfo() {
+		auto network = GetApp().Network;
+		auto serverInfo = cast<CGameCtnNetServerInfo>(network.ServerInfo);
+		return !(serverInfo is null || serverInfo.ServerLogin == "");
 	}
 
 	bool IsVisible()
@@ -341,9 +396,7 @@ class ChatWindow : BetterChat::IChatMessageListener
 			return false;
 		}
 
-		auto network = GetApp().Network;
-		auto serverInfo = cast<CGameCtnNetServerInfo>(network.ServerInfo);
-		if (serverInfo is null || serverInfo.ServerLogin == "") {
+		if (GetEnabledChannelsCount() == 0) {
 			return false;
 		}
 
@@ -362,8 +415,7 @@ class ChatWindow : BetterChat::IChatMessageListener
 
 	bool CanFocus()
 	{
-		string actionMap = UI::CurrentActionMap();
-		if (actionMap == "MenuInputsMap") {
+		if (GetEnabledChannelsCount() == 0) {
 			return false;
 		}
 
@@ -435,6 +487,7 @@ class ChatWindow : BetterChat::IChatMessageListener
 
 	void RenderLines()
 	{
+		auto channel = GetActiveChannel();
 		vec2 windowSize = UI::GetWindowSize();
 
 		// Insert empty space before first messages
@@ -444,16 +497,17 @@ class ChatWindow : BetterChat::IChatMessageListener
 
 		// Decide on start index
 		uint startIndex = 0;
+		array<ChatLine@> lines = channel.m_lines;
 		if (Setting_LimitOnHiddenOverlay && !CanFocus()) {
 			int numLines = int(windowSize.y / m_chatLineFrameHeight) + 1;
-			if (uint(numLines) < m_lines.Length) {
-				startIndex = m_lines.Length - numLines;
+			if (uint(numLines) < lines.Length) {
+				startIndex = lines.Length - numLines;
 			}
 		}
 
 		// Render each line
-		for (uint i = startIndex; i < m_lines.Length; i++) {
-			auto line = m_lines[i];
+		for (uint i = startIndex; i < lines.Length; i++) {
+			auto line = lines[i];
 
 			// Hide line if we want to filter out system messages
 			if (!Setting_ShowSystemMessages && line.m_isSystem) {
@@ -474,6 +528,22 @@ class ChatWindow : BetterChat::IChatMessageListener
 			float frameHeight = UI::GetFrameHeightWithSpacing();
 			if (frameHeight != m_chatLineFrameHeight) {
 				m_chatLineFrameHeight = frameHeight;
+			}
+		}
+	}
+
+	void RenderChannelTabs() {
+		for (uint i = 0; i < m_channels.Length; i++) {
+			if (i != 0) {
+				UI::SameLine();
+			}
+			string channelName = m_channels[i].GetTitle() + "##channel" + i;
+			bool clicked;
+			if (i == m_channelIndex) clicked = UI::Button(channelName);
+			else clicked = UI::DarkButton(channelName);
+
+			if (clicked) {
+				m_channelIndex = i;
 			}
 		}
 	}
@@ -598,11 +668,14 @@ class ChatWindow : BetterChat::IChatMessageListener
 
 		if (UI::IsOverlayShown()) {
 			vec2 startingCursorPos = UI::GetCursorPos();
-
 			RenderSidebar();
 
 			// Begin second half of the window
 			UI::SetCursorPos(startingCursorPos + vec2(40, 0) * scale);
+			if (GetEnabledChannelsCount() > 1) {
+				RenderChannelTabs();
+				UI::SetCursorPos(UI::GetCursorPos() + vec2(40, 0) * scale);
+			}
 			UI::BeginChild("ChatContainer", vec2(), false, childWindowFlags);
 		}
 

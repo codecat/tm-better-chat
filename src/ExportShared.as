@@ -24,4 +24,43 @@ namespace BetterChat
 		void OnChatMessage(const string &in line);
 #endif
 	}
+
+	shared interface IChatChannelHook
+	{
+		void AddChatEntry(ChatEntry entry);
+		void Clear();
+	}
+
+	shared interface IChatChannelSink
+	{
+		void SendChatMessage(const string&in text);
+	}
+
+	shared class ChatEntry {
+		string m_text;
+		string m_authorName;
+		string m_clubTag;
+		string m_teamColor;
+		bool m_system;
+		ChatEntryScope m_scope;
+
+		ChatEntry() {}
+
+		ChatEntry(const string&in text, const string&in authorName, const string&in clubTag = "", const string&in teamColor = "", bool system = false, ChatEntryScope scope = BetterChat::ChatEntryScope::Everyone) {
+			m_text = text;
+			m_authorName = authorName;
+			m_clubTag = clubTag;
+			m_teamColor = teamColor;
+			m_system = system;
+			m_scope = scope;
+		}
+	}
+
+	shared enum ChatEntryScope {
+		Everyone,
+		SpectatorCurrent,
+		SpectatorAll,
+		Team,
+		YouOnly,
+	}
 }
