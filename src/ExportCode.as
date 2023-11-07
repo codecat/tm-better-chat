@@ -43,6 +43,12 @@ namespace BetterChat
 
 	void SendChatMessage(const string &in text)
 	{
+#if TMNEXT
+		if (!Permissions::InGameChat()) {
+			return;
+		}
+#endif
+
 		g_window.SendChatMessage(text);
 	}
 
@@ -51,6 +57,7 @@ namespace BetterChat
 		g_window.AddChannel(channel);
 		return ChatChannelHook(channel);
 	}
+
 	void ReleaseChatChannelHook(IChatChannelHook@ hook) {
 		g_window.RemoveChannel(cast<ChatChannelHook@>(hook).m_channel);
 	}
