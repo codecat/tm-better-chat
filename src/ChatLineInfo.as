@@ -42,8 +42,8 @@ class ChatLineInfo
 		m_authorName = entry.m_authorName;
 		m_authorClubTag = entry.m_clubTag;
 		m_overrideClubTag = entry.m_clubTag != "";
-		m_teamColorText = entry.m_teamColor;
-		m_teamNumber = entry.m_teamColor != "" ? 1 : 0;
+		m_linearHue = entry.m_linearHue;
+		m_teamNumber = entry.m_linearHue != 0. ? 1 : 0;
 		m_isSystem = entry.m_system;
 		m_scope = FromSharedScope(entry.m_scope);
 	}

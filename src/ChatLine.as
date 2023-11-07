@@ -99,7 +99,7 @@ class ChatLine
 	void FromSharedEntry(BetterChat::ChatEntry entry) {
 		// Trace the message to the log if needed by settings (and not in streamer mode)
 		if (Setting_TraceToLog && !Setting_StreamerMode) {
-			trace(entry.m_authorName + ", " + entry.m_text);
+			trace(entry.m_text);
 		}
 		FromChatLineInfo(ChatLineInfo(entry));
 	}

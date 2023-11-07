@@ -40,17 +40,17 @@ namespace BetterChat
 		string m_text;
 		string m_authorName;
 		string m_clubTag;
-		string m_teamColor;
+		float m_linearHue;
 		bool m_system;
 		ChatEntryScope m_scope;
 
 		ChatEntry() {}
 
-		ChatEntry(const string&in text, const string&in authorName, const string&in clubTag = "", const string&in teamColor = "", bool system = false, ChatEntryScope scope = BetterChat::ChatEntryScope::Everyone) {
+		ChatEntry(const string&in text, const string&in authorName, const string&in clubTag = "", float linearHue = 0f, bool system = false, ChatEntryScope scope = BetterChat::ChatEntryScope::Everyone) {
 			m_text = text;
 			m_authorName = authorName;
 			m_clubTag = clubTag;
-			m_teamColor = teamColor;
+			m_linearHue = linearHue;
 			m_system = system;
 			m_scope = scope;
 		}

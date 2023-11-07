@@ -31,6 +31,6 @@ class EchoSink: BetterChat::IChatChannelSink {
     }
 
     void SendChatMessage(const string&in text) override {
-        m_hook.AddChatEntry(BetterChat::ChatEntry(text, "", "", "", true));
+        m_hook.AddChatEntry(BetterChat::ChatEntry(text, "", "", 0., true));
     }
 }
