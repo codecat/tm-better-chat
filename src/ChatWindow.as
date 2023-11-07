@@ -70,7 +70,7 @@ class ChatWindow : BetterChat::IChatMessageListener
 	void Clear() {
 		m_history.RemoveRange(0, m_history.Length);
 
-		auto channel = GetActiveChannel();
+		auto channel = GetServerChannel();
 		channel.Clear();
 
 		if (Setting_ShowHelp) {
