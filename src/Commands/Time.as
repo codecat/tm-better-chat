@@ -75,7 +75,7 @@ class TimeCommand : BetterChat::ICommand
 		auto map = GetApp().RootMap;
 		string uid = map.IdName;
 
-		string url = NadeoServices::BaseURL() + "/api/token/leaderboard/group/Personal_Best/map/" + uid + "/top";
+		string url = NadeoServices::BaseURLLive() + "/api/token/leaderboard/group/Personal_Best/map/" + uid + "/top";
 
 		auto req = NadeoServices::Get(audience, url);
 		req.Start();
