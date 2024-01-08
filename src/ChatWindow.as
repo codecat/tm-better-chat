@@ -357,6 +357,14 @@ class ChatWindow : BetterChat::IChatMessageListener
 			}
 		}
 
+		if (Setting_HideWithGame && !UI::IsGameUIVisible()) {
+			return false;
+		}
+
+		if (Setting_HideWithOP && !UI::IsOverlayShown()) {
+			return false;
+		}
+
 		return true;
 	}
 
