@@ -45,6 +45,12 @@ vec2 Setting_DefaultSize = vec2(800, 200);
 [Setting category="General" name="Hide when gamemode hides the chat"]
 bool Setting_FollowHideChat = false; // NOTE: This is temporary false until Pyplanet has better support
 
+[Setting category="General" name="Hide when game UI is hidden"]
+bool Setting_HideWithGame = true;
+
+[Setting category="General" name="Hide when Openplanet UI is hidden"]
+bool Setting_HideWithOP = false;
+
 [Setting category="General" name="Trace full debug lines to the logfile (has no effect when streamer mode is enabled)"]
 bool Setting_TraceToLog = true;
 
