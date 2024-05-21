@@ -18,10 +18,10 @@ class ElementPlayerName : ElementTag
 		super();
 
 		m_name = name;
-		m_nameColored = ColoredString(name);
+		m_nameColored = Text::OpenplanetFormatCodes(name);
 
 		m_nickname = nickname;
-		m_nicknameColored = ColoredString(nickname);
+		m_nicknameColored = Text::OpenplanetFormatCodes(nickname);
 
 		if (Setting_ShowPlayerNameShadow) {
 			m_nameColored = "\\$s" + m_nameColored;

@@ -4,7 +4,7 @@ class ElementText : Element
 
 	ElementText(const string &in text)
 	{
-		m_text = ColoredString(text);
+		m_text = Text::OpenplanetFormatCodes(text);
 		m_spacingAfter = 0;
 	}
 

@@ -23,7 +23,7 @@ namespace StreamerMode
 
 	string Censor(string _text)
 	{
-		string textCheck = StripFormatCodes(_text);
+		string textCheck = Text::StripFormatCodes(_text);
 
 		int regexFlags = Regex::Flags::ECMAScript | Regex::Flags::CaseInsensitive;
 

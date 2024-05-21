@@ -5,7 +5,7 @@ class ElementLink : Element
 
 	ElementLink(const string &in text, const string &in url)
 	{
-		m_text = ColoredString(text);
+		m_text = Text::OpenplanetFormatCodes(text);
 		m_url = url.Trim();
 
 		if (!m_url.StartsWith("https://") && !m_url.StartsWith("http://")) {

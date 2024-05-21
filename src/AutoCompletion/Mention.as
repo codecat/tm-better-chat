@@ -8,7 +8,7 @@ class AutoCompletionItemMention : IAutoCompletionItem
 	{
 		m_name = name;
 		m_nameLower = m_name.ToLower();
-		m_nameColored = ColoredString(m_name);
+		m_nameColored = Text::OpenplanetFormatCodes(m_name);
 	}
 
 	bool Matches(const string &in text) const override
@@ -26,7 +26,7 @@ class AutoCompletionItemMention : IAutoCompletionItem
 
 	string AcceptText() const override
 	{
-		return "@" + StripFormatCodes(m_name);
+		return "@" + Text::StripFormatCodes(m_name);
 	}
 
 	void Render(UI::DrawList@ dl, const vec2 &in pos) const override

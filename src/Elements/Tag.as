@@ -9,7 +9,7 @@ class ElementTag : Element
 
 	ElementTag(const string &in text)
 	{
-		m_text = ColoredString(text).Replace("\n", " ");
+		m_text = Text::OpenplanetFormatCodes(text).Replace("\n", " ");
 	}
 
 	void SetColorFromChatLineInfo(const ChatLineInfo &in info)
