@@ -33,4 +33,10 @@ namespace BetterChat
 
 	// Sends a message to the server.
 	import void SendChatMessage(const string &in text) from "BetterChat";
+
+	// Registers a new chat channel.
+	import IChatChannelHook@ AquireChatChannelHook(const string&in title, IChatChannelSink@ sink) from "BetterChat";
+
+	// Unregisters a chat channel.
+	import void ReleaseChatChannelHook(IChatChannelHook@ hook) from "BetterChat";
 }
