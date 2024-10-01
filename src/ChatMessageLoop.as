@@ -162,9 +162,6 @@ void ChatMessageLoop()
 					canDisplay = false;
 					break;
 				}
-
-				// Let the filter modify the message text
-				line = filter.GetMessageText(line);
 			}
 
 			// Stop if a filter told us we can't deliver this message
