@@ -33,6 +33,36 @@ class ChatLineInfo
 
 	string m_text;
 
+	ChatLineInfo(BetterChat::ChatEntry entry) {
+		FromSharedEntry(entry);
+	}
+
+	void FromSharedEntry(BetterChat::ChatEntry entry) {
+		m_text = entry.m_text;
+		m_authorName = entry.m_authorName;
+		m_authorClubTag = entry.m_clubTag;
+		m_overrideClubTag = entry.m_clubTag != "";
+		m_linearHue = entry.m_linearHue;
+		m_teamNumber = entry.m_linearHue != 0. ? 1 : 0;
+		m_isSystem = entry.m_system;
+		m_scope = FromSharedScope(entry.m_scope);
+	}
+
+	ChatLineScope FromSharedScope(BetterChat::ChatEntryScope scope) {
+		switch (scope) {
+			case BetterChat::ChatEntryScope::Everyone:
+				return ChatLineScope::Everyone;
+			case BetterChat::ChatEntryScope::SpectatorCurrent:
+				return ChatLineScope::SpectatorCurrent;
+			case BetterChat::ChatEntryScope::SpectatorAll:
+				return ChatLineScope::SpectatorAll;
+			case BetterChat::ChatEntryScope::Team:
+				return ChatLineScope::Team;
+			default:
+				return ChatLineScope::YouOnly;
+		}
+	}
+
 #if TMNEXT
 	ChatLineInfo(NGameScriptChat_SEntry@ entry)
 	{

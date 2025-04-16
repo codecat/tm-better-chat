@@ -49,17 +49,16 @@ namespace BetterChat
 		}
 #endif
 
-		auto pg = GetApp().CurrentPlayground;
-		if (pg is null) {
-			//TODO: Queue the message for later
-			warn("Can't send message right now because there's no playground!");
-			return;
-		}
+		g_window.SendChatMessage(text);
+	}
 
-		if (text.Length > 2000) {
-			pg.Interface.ChatEntry = text.SubStr(0, 2000) + " (...)";
-		} else {
-			pg.Interface.ChatEntry = text;
-		}
+	IChatChannelHook@ AquireChatChannelHook(const string&in title, IChatChannelSink@ sink) {
+		auto channel = ChatChannel(title, sink);
+		g_window.AddChannel(channel);
+		return ChatChannelHook(channel);
+	}
+
+	void ReleaseChatChannelHook(IChatChannelHook@ hook) {
+		g_window.RemoveChannel(cast<ChatChannelHook@>(hook).m_channel);
 	}
 }
