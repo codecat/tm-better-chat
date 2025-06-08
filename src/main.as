@@ -83,7 +83,7 @@ void Main()
 	g_window.Initialize();
 
 	BetterChat::RegisterListener(g_window);
-	startnew(ChatMessageLoop).WithRunContext(Meta::RunContext::GameLoop);
+	Meta::StartWithRunContext(Meta::RunContext::GameLoop, ChatMessageLoop);
 
 	if (!Setting_WizardShown) {
 		Renderables::Add(WizardModalDialog());
