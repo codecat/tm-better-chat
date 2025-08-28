@@ -42,6 +42,15 @@ NGameScriptChat_SContext@ GetChatContext()
 }
 #endif
 
+void ChatMessageStart()
+{
+#if TMNEXT
+	if (g_chatHistory is null) {
+		@g_chatHistory = GetChatContext().History_Create("t", 50);
+	}
+#endif
+}
+
 void ChatMessageEnd()
 {
 #if TMNEXT
@@ -73,7 +82,7 @@ void ChatMessageLoop()
 	//   "lalice; + lbob;"  Messages sent by alice or bob
 	//
 
-	@g_chatHistory = GetChatContext().History_Create("t", 50);
+	ChatMessageStart();
 
 	while (true) {
 		for (uint i = 0; i < g_chatHistory.PendingEvents.Length; i++) {

@@ -19,15 +19,9 @@ UI::InputBlocking OnKeyPress(bool down, VirtualKey key)
 	return g_window.OnKeyPress(down, key);
 }
 
-void OnDisabled()
-{
-	Uninitialize();
-}
-
-void OnDestroyed()
-{
-	Uninitialize();
-}
+void OnDisabled() { Uninitialize(); }
+void OnDestroyed() { Uninitialize(); }
+void OnEnabled() { ChatMessageStart(); }
 
 void OnSettingsChanged()
 {
