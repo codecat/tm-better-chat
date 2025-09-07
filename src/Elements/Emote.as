@@ -11,6 +11,11 @@ class ElementEmote : Element
 	void Render() override
 	{
 		m_emote.Render(24 * UI::GetScale());
-		UI::SetPreviousTooltip(m_emote.m_name);
+
+		string tooltip = m_emote.m_name;
+		if (m_emote.m_source !is null) {
+			tooltip += " \\$666(" + m_emote.m_source.m_name + ")";
+		}
+		UI::SetPreviousTooltip(tooltip);
 	}
 }

@@ -7,7 +7,7 @@ class EmoteFrame
 class Emote
 {
 	string m_name;
-	UI::Texture@ m_texture;
+	CachedImage@ m_texture;
 
 	array<EmoteFrame> m_frames;
 	uint m_framesTime = 0;
@@ -15,7 +15,7 @@ class Emote
 	vec2 m_size;
 	EmoteSource@ m_source;
 
-	Emote(const Json::Value &in js, const string &in name, UI::Texture@ texture, EmoteSource@ source)
+	Emote(const Json::Value &in js, const string &in name, CachedImage@ texture, EmoteSource@ source)
 	{
 		m_name = name;
 		@m_texture = texture;
@@ -57,6 +57,10 @@ class Emote
 
 	void Render(UI::DrawList@ dl, const vec4 &in rect)
 	{
+		if (m_texture.m_texture is null) {
+			return;
+		}
+
 		uint frameIndex = 0;
 
 		if (m_frames.Length > 1) {
@@ -83,7 +87,8 @@ class Emote
 
 		uv.z = m_size.x;
 		uv.w = m_size.y;
-		dl.AddImage(m_texture, vec2(Math::Round(rect.x), Math::Round(rect.y)), vec2(rect.z, rect.w), 0xFFFFFFFF, uv);
+
+		dl.AddImage(m_texture.m_texture, vec2(Math::Round(rect.x), Math::Round(rect.y)), vec2(rect.z, rect.w), 0xFFFFFFFF, uv);
 	}
 
 	vec2 Render(UI::DrawList@ dl, const vec2 &in pos, float maxheight)

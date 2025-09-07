@@ -10,6 +10,21 @@ namespace BetterChat
 
 
 
+	// Registers a list of emotes from a file source relative to the root of the plugin
+	// that is the currently executing plugin.
+	import void RegisterEmotesFromFileSource(const string &in path) from "BetterChat";
+
+	// Registers a list of emotes from a json value.
+	import void RegisterEmotesFromJson(const Json::Value &in js) from "BetterChat";
+
+	// Registers a list of emotes from a URL.
+	import void RegisterEmotesFromUrlAsync(const string &in url) from "BetterChat";
+
+	// Starts an awaitable to register a list of emotes from a URL.
+	import awaitable@ RegisterEmotesFromUrl(const string &in url) from "BetterChat";
+
+
+
 	// Registers a new chat filter that you can use to remove or edit messages.
 	import void RegisterFilter(IChatMessageFilter@ filter) from "BetterChat";
 

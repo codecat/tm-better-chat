@@ -10,6 +10,26 @@ namespace BetterChat
 		Commands::Unregister(name);
 	}
 
+	void RegisterEmotesFromFileSource(const string &in path)
+	{
+		Emotes::LoadFromFileSource(path);
+	}
+
+	void RegisterEmotesFromJson(const Json::Value &in js)
+	{
+		Emotes::LoadFromJson(js);
+	}
+
+	void RegisterEmotesFromUrlAsync(const string &in url)
+	{
+		Emotes::LoadFromUrlAsync(url);
+	}
+
+	awaitable@ RegisterEmotesFromUrl(const string &in url)
+	{
+		return Emotes::LoadFromUrl(url);
+	}
+
 	void RegisterFilter(IChatMessageFilter@ filter)
 	{
 		g_chatMessageFilters.InsertLast(filter);

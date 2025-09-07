@@ -26,10 +26,9 @@ namespace Emotes
 			return;
 		}
 
-		//TODO: Check the texture path for a URL
 		string texturePath = js["texture"];
 
-		auto texture = UI::LoadTexture(texturePath);
+		auto texture = CachedImage::FromString(texturePath);
 		if (texture is null) {
 			error("Unable to load emotes texture: \"" + texturePath + "\"");
 			return;
@@ -56,26 +55,30 @@ namespace Emotes
 		}
 	}
 
-	class LoadFromURLUserdata
+	void LoadFromUrlAsync(const string &in url)
 	{
-		string m_url;
+		trace("Loading emote list from URL: \"" + url + "\"");
 
-		LoadFromURLUserdata(const string &in url)
-		{
-			m_url = url;
+		auto req = Net::HttpGet(url);
+		while (!req.Finished()) {
+			yield();
 		}
+
+		int responseCode = req.ResponseCode();
+		if (responseCode == 0) {
+			error("Unable to download emote list at URL \"" + url + "\" due to network error: " + req.Error());
+			return;
+		} else if (responseCode != 200) {
+			error("Unable to download emote list at URL \"" + url + "\" due to response code: " + responseCode);
+			return;
+		}
+
+		LoadFromJson(req.Json());
 	}
 
-	void LoadFromURLAsync(ref@ urlUserdata)
+	awaitable@ LoadFromUrl(const string &in url)
 	{
-		auto url = cast<LoadFromURLUserdata>(urlUserdata).m_url;
-
-		warn("TODO: Load from URL: \"" + url + "\"");
-	}
-
-	void LoadFromURL(const string &in url)
-	{
-		startnew(LoadFromURLAsync, LoadFromURLUserdata(url));
+		return startnew(LoadFromUrlAsync, url);
 	}
 
 	void LoadFromFileSource(const string &in path)
