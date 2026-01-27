@@ -507,7 +507,7 @@ class ChatWindow : BetterChat::IChatMessageListener
 				float scale = UI::GetScale();
 				UI::SetWindowPos(vec2(
 					Setting_DefaultPosition.x * scale,
-					Draw::GetHeight() - Setting_DefaultSize.y * scale - Setting_DefaultPosition.y * scale
+					Display::GetHeight() - Setting_DefaultSize.y * scale - Setting_DefaultPosition.y * scale
 				));
 				UI::SetWindowSize(Setting_DefaultSize * scale);
 			}
@@ -545,8 +545,8 @@ class ChatWindow : BetterChat::IChatMessageListener
 		if (m_big) {
 			float scale = UI::GetScale();
 
-			float screenWidth = Draw::GetWidth() / scale;
-			float screenHeight = Draw::GetHeight() / scale;
+			float screenWidth = Display::GetWidth() / scale;
+			float screenHeight = Display::GetHeight() / scale;
 
 			float chatWidth = screenWidth / 2.0f;
 			float chatHeight = screenHeight / 2.0f;
@@ -565,7 +565,7 @@ class ChatWindow : BetterChat::IChatMessageListener
 		} else {
 			UI::SetNextWindowPos(
 				int(Setting_DefaultPosition.x),
-				int(Draw::GetHeight() - Setting_DefaultSize.y - Setting_DefaultPosition.y),
+				int(Display::GetHeight() - Setting_DefaultSize.y - Setting_DefaultPosition.y),
 				UI::Cond::FirstUseEver
 			);
 			UI::SetNextWindowSize(
@@ -644,8 +644,8 @@ class ChatWindow : BetterChat::IChatMessageListener
 		// Render the input box
 		if (m_showInput) {
 			vec2 inputPos = windowPos + vec2(0, windowSize.y + 4);
-			if (inputPos.y + 10 > Draw::GetHeight()) {
-				inputPos.y = Draw::GetHeight() - 30;
+			if (inputPos.y + 10 > Display::GetHeight()) {
+				inputPos.y = Display::GetHeight() - 30;
 			}
 			inputPos /= scale;
 

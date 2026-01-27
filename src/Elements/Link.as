@@ -19,7 +19,7 @@ class ElementLink : Element
 	{
 		const int FRAME_PADDING = 4;
 
-		vec2 textSize = Draw::MeasureString(m_text, g_fontChat);
+		vec2 textSize = UI::MeasureString(m_text, g_fontChat);
 		if (textSize.x == 0 || textSize.y == 0) {
 			return;
 		}
