@@ -38,10 +38,10 @@ class ElementPlayerName : ElementTag
 		m_color.w = Setting_TagTransparency;
 
 		if (Setting_ShowNickname && m_nickname != "") {
-			UI::Tag(m_nicknameColored, m_color);
+			Controls::Tag(m_nicknameColored, m_color);
 			UI::SetPreviousTooltip(m_nameColored);
 		} else {
-			UI::Tag(m_nameColored, m_color);
+			Controls::Tag(m_nameColored, m_color);
 		}
 
 		if (UI::BeginPopupContextItem(tostring(m_line.m_id) + " " + m_name)) {

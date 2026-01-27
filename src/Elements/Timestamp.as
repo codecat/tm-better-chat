@@ -7,7 +7,7 @@ class ElementTimestamp : ElementTag
 
 	void Render() override
 	{
-		m_color = m_line.GetHighlightColor(UI::TAG_COLOR);
+		m_color = m_line.GetHighlightColor(vec4(Setting_TagColor, 1));
 		ElementTag::Render();
 	}
 

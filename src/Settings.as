@@ -183,6 +183,9 @@ vec3 Setting_ColorMention = vec3(0.6f, 0.2f, 0);
 [Setting category="Colors" name="Favorite color" color]
 vec3 Setting_ColorFavorite = vec3(0, 0.5f, 1);
 
+[Setting category="Colors" name="Tag color" color]
+vec3 Setting_TagColor = vec3(30/255.0f, 32/255.0f, 33/255.0f);
+
 [Setting category="Colors" name="Tag element transparency" min=0 max=1]
 float Setting_TagTransparency = 1.0f;
 

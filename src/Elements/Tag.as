@@ -1,7 +1,7 @@
 class ElementTag : Element
 {
 	string m_text;
-	vec4 m_color = UI::TAG_COLOR;
+	vec4 m_color = vec4(Setting_TagColor, 1);
 
 	ElementTag()
 	{
@@ -63,6 +63,6 @@ class ElementTag : Element
 	void Render() override
 	{
 		m_color.w = Setting_TagTransparency;
-		UI::Tag(m_text, m_color);
+		Controls::Tag(m_text, m_color);
 	}
 }
