@@ -208,8 +208,8 @@ class ChatLineInfo
 			else if (scope == "youOnly") m_scope = ChatLineScope::YouOnly;
 		}
 
-		if (js.HasKey("color")) {
-			string color = js["color"];
+		if (js.HasKey("teamcolor")) {
+			string color = js["teamcolor"];
 			if (Regex::IsMatch(color, "^\\$[0-9a-fA-F]{1,3}$")) m_teamColorText = color;
 			else if (Regex::IsMatch(color, "^[0-9a-fA-F]{1,3}$")) m_teamColorText = "$" + color;
 		}
