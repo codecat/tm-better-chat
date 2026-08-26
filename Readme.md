@@ -36,3 +36,4 @@ Currently, the following Json object values are handled:
 * `text`: The text of the message. Required.
 * `nickname`: The player's nickname, if set. This is optional.
 * `clubtag`: The player's clubtag, if set. This is optional.
+* `scope`: The scope of the message, if set. Possible values are `everyone`, `spectatorCurrent`, `spectatorAll`, `team`, `youOnly`. This is optional.

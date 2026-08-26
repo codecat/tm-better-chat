@@ -199,6 +199,15 @@ class ChatLineInfo
 			m_text = js["text"];
 		}
 
+		if (js.HasKey("scope")) {
+			string scope = js["scope"];
+			if (scope == "everyone") m_scope = ChatLineScope::Everyone;
+			else if (scope == "spectatorCurrent") m_scope = ChatLineScope::SpectatorCurrent;
+			else if (scope == "spectatorAll") m_scope = ChatLineScope::SpectatorAll;
+			else if (scope == "team") m_scope = ChatLineScope::Team;
+			else if (scope == "youOnly") m_scope = ChatLineScope::YouOnly;
+		}
+
 		@m_authorPlayer = FindPlayerByLogin(m_authorLogin);
 		if (m_authorPlayer !is null) {
 			@m_authorPlayerInfo = m_authorPlayer.User;
