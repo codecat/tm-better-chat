@@ -206,7 +206,6 @@ class ChatLineInfo
 			else if (scope == "spectatorAll") m_scope = ChatLineScope::SpectatorAll;
 			else if (scope == "team") m_scope = ChatLineScope::Team;
 			else if (scope == "youOnly") m_scope = ChatLineScope::YouOnly;
-			else m_scope = ChatLineScope::Everyone;
 		}
 
 		@m_authorPlayer = FindPlayerByLogin(m_authorLogin);
