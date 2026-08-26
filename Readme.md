@@ -37,3 +37,4 @@ Currently, the following Json object values are handled:
 * `nickname`: The player's nickname, if set. This is optional.
 * `clubtag`: The player's clubtag, if set. This is optional.
 * `scope`: The scope of the message, if set. Possible values are `everyone`, `spectatorCurrent`, `spectatorAll`, `team`, `youOnly`. This is optional.
+* `color`: The color of the tags, if set. Formatted as Maniaplanet-style, for example: `$f00` (the dollar sign at the start is optional). This is optional.
