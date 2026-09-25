@@ -45,6 +45,12 @@ class ChatLine
 	}
 #endif
 
+	ChatLine(uint id, int64 time, BetterChat::ChatEntry entry) {
+		m_id = id;
+		m_time = time;
+		FromSharedEntry(entry);
+	}
+
 	vec4 GetHighlightColor(const vec4 &in def = vec4(0, 0, 0, 1))
 	{
 		vec3 ret(def.x, def.y, def.z);
@@ -89,6 +95,14 @@ class ChatLine
 		FromChatLineInfo(ChatLineInfo(line));
 	}
 #endif
+
+	void FromSharedEntry(BetterChat::ChatEntry entry) {
+		// Trace the message to the log if needed by settings (and not in streamer mode)
+		if (Setting_TraceToLog && !Setting_StreamerMode) {
+			trace(entry.m_text);
+		}
+		FromChatLineInfo(ChatLineInfo(entry));
+	}
 
 	void FromChatLineInfo(const ChatLineInfo &in info)
 	{
