@@ -78,6 +78,7 @@ void Main()
 
 	BetterChat::RegisterListener(g_window);
 	Meta::StartWithRunContext(Meta::RunContext::GameLoop, ChatMessageLoop);
+	Meta::StartWithRunContext(Meta::RunContext::GameLoop, MessagesQueueLoop);
 
 	if (!Setting_WizardShown) {
 		Renderables::Add(WizardModalDialog());

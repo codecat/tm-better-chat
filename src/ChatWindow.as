@@ -36,6 +36,7 @@ class ChatWindow : BetterChat::IChatMessageListener
 	{
 		m_lines.RemoveRange(0, m_lines.Length);
 		m_history.RemoveRange(0, m_history.Length);
+		g_messagesQueue.RemoveRange(0, g_messagesQueue.Length);
 
 		if (Setting_ShowHelp) {
 			auto plugin = Meta::ExecutingPlugin();

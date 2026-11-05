@@ -32,6 +32,8 @@
 array<BetterChat::IChatMessageFilter@> g_chatMessageFilters;
 array<BetterChat::IChatMessageListener@> g_chatMessageListeners;
 
+array<string> g_messagesQueue;
+
 #if TMNEXT
 NGameScriptChat_SHistory@ g_chatHistory;
 
@@ -194,3 +196,16 @@ void ChatMessageLoop()
 }
 
 #endif
+
+void MessagesQueueLoop() {
+	auto app = GetApp();
+	
+	while (true) {
+		if (app.CurrentPlayground !is null && !g_messagesQueue.IsEmpty()) {
+			app.CurrentPlayground.Interface.ChatEntry = g_messagesQueue[0];
+			g_messagesQueue.RemoveAt(0);
+		}
+
+		yield();
+	}
+}
