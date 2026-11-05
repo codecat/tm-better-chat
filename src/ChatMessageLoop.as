@@ -98,13 +98,18 @@ void ChatMessageLoop()
 
 			// Go through the chat filters
 			bool canDisplay = true;
-			for (uint j = 0; j < g_chatMessageFilters.Length; j++) {
+			for (int j = g_chatMessageFilters.Length - 1; j >= 0; j--) {
 				auto filter = g_chatMessageFilters[j];
 
-				// Stop if we can't display the message
-				if (!filter.CanDisplayMessage(entry)) {
-					canDisplay = false;
-					break;
+				try {
+					// Stop if we can't display the message
+					if (!filter.CanDisplayMessage(entry)) {
+						canDisplay = false;
+						break;
+					}
+				} catch {
+					warn("Error while sending chat filter event to a filter. Unregistering it...");
+					BetterChat::UnregisterFilter(filter);
 				}
 			}
 
@@ -169,13 +174,18 @@ void ChatMessageLoop()
 
 			// Go through the chat filters
 			bool canDisplay = true;
-			for (uint j = 0; j < g_chatMessageFilters.Length; j++) {
+			for (int j = g_chatMessageFilters.Length - 1; j >= 0; j--) {
 				auto filter = g_chatMessageFilters[j];
 
-				// Stop if we can't display the message
-				if (!filter.CanDisplayMessage(line)) {
-					canDisplay = false;
-					break;
+				try {
+					// Stop if we can't display the message
+					if (!filter.CanDisplayMessage(line)) {
+						canDisplay = false;
+						break;
+					}
+				} catch {
+					warn("Error while sending chat filter event to a filter. Unregistering it...");
+					BetterChat::UnregisterFilter(filter);
 				}
 			}
 
