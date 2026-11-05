@@ -197,7 +197,8 @@ void ChatMessageLoop()
 
 #endif
 
-void MessagesQueueLoop() {
+void MessagesQueueLoop()
+{
 	auto app = GetApp();
 	
 	while (true) {
