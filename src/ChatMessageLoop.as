@@ -114,9 +114,15 @@ void ChatMessageLoop()
 			}
 
 			// Fire off the chat message event
-			for (uint j = 0; j < g_chatMessageListeners.Length; j++) {
+			for (int j = g_chatMessageListeners.Length - 1; j >= 0; j--) {
 				auto listener = g_chatMessageListeners[j];
-				listener.OnChatMessage(entry);
+				
+				try {
+					listener.OnChatMessage(entry);
+				} catch {
+					warn("Error while sending chat message event to a listener. Unregistering it...");
+					BetterChat::UnregisterListener(listener);
+				}
 			}
 		}
 		yield();
@@ -179,9 +185,15 @@ void ChatMessageLoop()
 			}
 
 			// Fire off the chat message event
-			for (uint j = 0; j < g_chatMessageListeners.Length; j++) {
+			for (int j = g_chatMessageListeners.Length - 1;; j >= 0; j--) {
 				auto listener = g_chatMessageListeners[j];
-				listener.OnChatMessage(line);
+				
+				try {
+					listener.OnChatMessage(line);
+				} catch {
+					warn("Error while sending chat message event to a listener. Unregistering it...");
+					BetterChat::UnregisterListener(listener);
+				}
 			}
 		}
 
